@@ -210,12 +210,14 @@
 
 **Files:**
 - Create: `engine-system/src/main/kotlin/com/sentinel/system/di/SystemModule.kt`
+- Create: `engine-system/src/main/kotlin/com/sentinel/system/di/SystemEntry.kt`
+- Create: `engine-system/src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry`
 - Create: `engine-system/src/main/kotlin/com/sentinel/system/SystemActionReceiver.kt`
 
-**Tests:** 由 UT-AP-1-01（全部 Koin 模块校验）覆盖。
+**Tests:** 由 UT-AP-1-01～03（全部入口与 Koin 模块校验）覆盖。
 
 **Interfaces:**
-- Produces: `val systemModule: Module`，提供 `ShizukuGateway`、`OpExecutor`、`AppOpsSync`、`DriftInspector`，以及当前档案 `ColorOsProfile?`。`SentinelApp` 中启动 `AppOpsSync`、`SystemStatusReporter`，并注册两个周期 Worker（见 `app/PLAN.md` Task 1）。
+- Produces: `val systemModule: Module`，提供 `ShizukuGateway`、`OpExecutor`、`AppOpsSync`、`DriftInspector`，以及当前档案 `ColorOsProfile?`。`class SystemEntry : ModuleEntry`（id = `"system"`，processes = `{MAIN}`）的 `start` 负责：创建通知渠道 `system`；启动 `AppOpsSync` 与 `SystemStatusReporter`；注册周期任务 `system-drift`（每天）与 `system-dropbox`（每 30 分钟）。**这些都不写进 app**（见 `docs/CONTRACTS.md` C5）。
 
 - [ ] **Step 1:** 接线；`./gradlew :engine-system:assembleDebug` 成功。
 - [ ] **Step 2:** 提交 `feat(engine-system): wiring`。

@@ -265,13 +265,15 @@
 - Create: `engine-a11y/src/main/kotlin/com/sentinel/a11y/service/A11yActionReceiver.kt`
 - Create: `engine-a11y/src/main/res/xml/sentinel_accessibility.xml`
 - Create: `engine-a11y/src/main/kotlin/com/sentinel/a11y/di/A11yModule.kt`
+- Create: `engine-a11y/src/main/kotlin/com/sentinel/a11y/di/A11yEntry.kt`
+- Create: `engine-a11y/src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry`
 - Modify: `engine-a11y/src/main/AndroidManifest.xml`
 
 **Tests:** UT-AY-8-01
 
 **Interfaces:**
 - Consumes: Task 1–7；data 的 `RuleStore.loadUiIndex`、`GlobalStateRepository`（ruleVersion）、`AppConfigRepository`、`OverrideRepository`、`JumpExceptionRepository`、`RewardWindowRepository`、`EventRepository`、`SignalRepository`、`EngineStatusRepository`、`UserRuleRepository`、`SubscriptionUpdater.rebuildFromCache`。
-- Produces: `A11yActions` 常量：`LEARN_ACCEPT`（extra `ruleJson`）、`LEARN_REJECT`、`JUMP_UNDO`（extra `source`、`target`）。
+- Produces: `A11yActions` 常量：`LEARN_ACCEPT`（extra `ruleJson`）、`LEARN_REJECT`、`JUMP_UNDO`（extra `source`、`target`）；`val a11yModule: Module`；`class A11yEntry : ModuleEntry`（id = `"a11y"`，processes = `{MAIN}`，`start`：创建通知渠道 `a11y`）。
 
 配置：`accessibilityEventTypes = typeWindowStateChanged|typeWindowContentChanged|typeViewClicked|typeViewScrolled|typeViewLongClicked`；`canRetrieveWindowContent=true`；`accessibilityFlags = flagReportViewIds|flagIncludeNotImportantViews`；`notificationTimeout=100`。
 
@@ -280,7 +282,7 @@
 - 事件 → `UiInput` → `A11yBrain.onInput`；`WindowChanged` 的 activity 用 `PackageManager.getActivityInfo` 校验是否真的是 Activity；当前包无规则且不在启动窗口、激励等待、摇一摇跟踪中时不获取节点树（`root` 传 null）。
 - `Click`：对节点或最近的可点击祖先 `performAction(ACTION_CLICK)`，失败则在节点中心用 `dispatchGesture` 点击；记事件。
 - `Revert`：`getLaunchIntentForPackage(source)` + `FLAG_ACTIVITY_NEW_TASK` 启动，抛异常则 `performGlobalAction(GLOBAL_ACTION_BACK)`；记 `JUMP_REVERTED`（ruleId `builtin:jumpback`）；显示撤销提示。撤销：启动目标 App、`JumpExceptionRepository.add`、`SignalRepository.emit(source, USER_UNDO)`（ruleId 为空）。
-- `OpenRewardWindow` → `RewardWindowRepository.open(pkg)`；`AskRewarded` → 小窗「静默播完 / 正常观看 / ☐记住」，勾选记住且选静默时 `setRewarded(pkg, SILENT)`。
+- `OpenRewardWindow` → `RewardWindowRepository.open(pkg)`（默认时长即 `RewardWindowContract.TTL_MS`，不另写数值；契约见 `docs/CONTRACTS.md` C1）；`AskRewarded` → 小窗「静默播完 / 正常观看 / ☐记住」，勾选记住且选静默时 `setRewarded(pkg, SILENT)`。
 - `ProposeRule` → 通知「刚才关闭的弹窗，以后自动关？」；接受时 `UserRuleRepository.add(rule, LEARNED)`，然后 `rebuildFromCache()`。
 - `Signal` → `SignalRepository.emit`。
 - 每秒调用一次 `A11yBrain.onTick()`（仅在激励等待中）。

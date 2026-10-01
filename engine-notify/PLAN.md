@@ -109,13 +109,15 @@
 - Create: `engine-notify/src/main/kotlin/com/sentinel/notify/service/SentinelNotificationListener.kt`
 - Create: `engine-notify/src/main/kotlin/com/sentinel/notify/service/NotifyLearnReceiver.kt`
 - Create: `engine-notify/src/main/kotlin/com/sentinel/notify/di/NotifyModule.kt`
+- Create: `engine-notify/src/main/kotlin/com/sentinel/notify/di/NotifyEntry.kt`
+- Create: `engine-notify/src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry`
 - Modify: `engine-notify/src/main/AndroidManifest.xml`（`BIND_NOTIFICATION_LISTENER_SERVICE`）
 
 **Tests:** UT-NT-4-01
 
 **Interfaces:**
 - Consumes: Task 3；data 的 `RuleStore.loadNotifyRules`、`AppConfigRepository`、`OverrideRepository`、`EventRepository`、`EngineStatusRepository`、`UserRuleRepository`、`SubscriptionUpdater.rebuildFromCache`、`GlobalStateRepository`（ruleVersion）。
-- Produces: `fun StatusBarNotification.toPosted(): PostedNotification`；动作 `com.sentinel.notify.LEARN_ACCEPT` / `LEARN_REJECT`（extra `ruleJson`）。
+- Produces: `fun StatusBarNotification.toPosted(): PostedNotification`；动作 `com.sentinel.notify.LEARN_ACCEPT` / `LEARN_REJECT`（extra `ruleJson`）；`val notifyModule: Module`；`class NotifyEntry : ModuleEntry`（id = `"notify"`，processes = `{MAIN}`，`start`：创建通知渠道 `notify-learn`）。
 
 接线：
 - `onListenerConnected` 上报 `RUNNING`，`onListenerDisconnected` 上报 `STOPPED`；

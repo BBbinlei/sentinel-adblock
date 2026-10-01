@@ -6,8 +6,8 @@
 
 | 板块 | 计划文档 | 测什么 | 不测什么 | 运行环境 | 代码位置 |
 |---|---|---|---|---|---|
-| ① 单元测试 | `unit/PLAN.md` | **单元级**：单个类/函数的逻辑；**模块级**：一个模块通过对外接口整体工作（相邻模块用假实现或内存数据库代替） | 真实系统服务（VPN、无障碍、Shizuku、通知）的行为；跨进程 | 电脑 JVM（纯 Kotlin 或 Robolectric） | 各模块自己的 `src/test/`（需要访问模块内部类，Gradle 要求放在模块内） |
-| ② 规则回归 | `rule-regression/PLAN.md` | 规则与真实数据的匹配质量：录制的页面快照、真实订阅文件、常用域名、ColorOS 配置档案 | 引擎运行时行为 | 电脑 JVM | Gradle 子模块 `:testing:rule-regression` |
+| ① 单元测试 | `unit/PLAN.md` | **单元级**：单个类/函数的逻辑；**模块级**：一个模块通过对外接口整体工作（相邻模块用假实现或内存数据库代替）；**契约级（MT-CT）**：多个模块的真实实现按 `docs/CONTRACTS.md` 协作 | 真实系统服务（VPN、无障碍、Shizuku、通知）的行为；跨进程 | 电脑 JVM（纯 Kotlin 或 Robolectric） | 单元级、模块级在各模块自己的 `src/test/`（需要访问模块内部类）；契约级需要依赖全部模块，放在 `:testing:rule-regression` 的 `contract/` 目录 |
+| ② 规则回归 | `rule-regression/PLAN.md` | 规则与真实数据的匹配质量：录制的页面快照、真实订阅文件、常用域名、ColorOS 配置档案 | 引擎运行时行为（含跨模块契约，归板块①） | 电脑 JVM | Gradle 子模块 `:testing:rule-regression`（与板块①的契约测试共用该子模块，目录分开） |
 | ③ 设备集成 | `device-integration/PLAN.md` | 真实系统服务与多进程：模拟器自动化 + Find X7 Ultra 真机检查单 | 长期稳定性、拦截率统计 | Android 模拟器 + 真机 | Gradle 子模块 `:testing:device-integration`（自动化部分）；真机记录在 `device-integration/reports/` |
 | ④ 实际验收 | `acceptance/PLAN.md` | 规格第 8 节的验收标准：30 个 App 一周实测、拦截率、耗电、误判、易用性 | 新功能开发 | 真机 | `acceptance/`（检查单、脚本、报告） |
 
@@ -21,7 +21,7 @@
 | `DI-<序号>` | 设备集成 | `DI-11` |
 | `AC-<序号>` | 实际验收 | `AC-06` |
 
-模块缩写：`CR` core-rules、`DA` data、`GD` guard、`VP` engine-vpn、`AY` engine-a11y、`NT` engine-notify、`SY` engine-system、`AP` app。
+模块缩写：`CR` core-rules、`DA` data、`GD` guard、`VP` engine-vpn、`AY` engine-a11y、`NT` engine-notify、`SY` engine-system、`AP` app、`CT` 跨模块契约（见 `docs/CONTRACTS.md`）。
 
 ## 3. 与开发流程的关系
 
@@ -32,17 +32,17 @@
 |---|---|---|
 | G1 | M1 core-rules | `UT-CR-*`、`MT-CR-*`、`RR-01`、`RR-04`、`RR-05`（需先完成 `rule-regression/PLAN.md` Task 1 中的子模块搭建；快照录制工具留到 M4） |
 | G2 | M2 data | `UT-DA-*`、`MT-DA-*` |
-| G3 | M3 engine-vpn + app 最小壳 | `UT-VP-*`、`MT-VP-*`、`UT-AP-1-*`、`UT-AP-2-*`、`DI-01`～`DI-03`、`DI-11`～`DI-14`、`DI-51` |
+| G3 | M3 engine-vpn + app 最小壳 | `UT-VP-*`、`MT-VP-*`、`UT-AP-1-01`～`UT-AP-1-03`、`UT-AP-2-*`、`DI-01`～`DI-03`、`DI-11`～`DI-14`、`DI-51` |
 | G4 | M4 engine-a11y | `UT-AY-*`、`MT-AY-*`、`RR-02`、`RR-03`、`DI-05`、`DI-21`～`DI-25` |
 | G5 | M5 engine-system | `UT-SY-*`、`MT-SY-*`、`RR-06`、`DI-31`、`DI-32` |
 | G6 | M6 engine-notify | `UT-NT-*`、`MT-NT-*`、`DI-07`、`DI-41` |
-| G7 | M7 guard | `UT-GD-*`、`MT-GD-*` |
+| G7 | M7 guard | `UT-GD-*`、`MT-GD-*`、`MT-CT-01`～`MT-CT-04` |
 | G8 | M8 app 完整界面 | `UT-AP-*`、`MT-AP-*`、`DI-52`、`DI-61` |
 | G9 | M9 验收 | `AC-01`～`AC-07` |
 
 关卡结果写入 `testing/reports/<关卡>-<日期>.md`：通过/失败的编号、失败原因、修复提交。
 
-## 4. Review Focus（最容易出问题、需要专门测试的 5 种情况）
+## 4. Review Focus（最容易出问题、需要专门测试的 6 种情况）
 
 | # | 情况 | 期望 | 对应测试 |
 |---|---|---|---|
@@ -51,6 +51,7 @@
 | 3 | 重启后 Shizuku 未激活 | 已生效改动保持、不重复执行、首页提示 | `UT-SY-5-03`、`MT-SY-03`、`UT-AP-4-03`、`DI-32` |
 | 4 | 设置完成后新装银行 App | 立即排除出 VPN，各引擎不生效 | `UT-DA-3-01`、`UT-VP-5-02`、`MT-DA-02` |
 | 5 | 激励视频静默中途离开 / 服务被杀 | 媒体音量一定恢复 | `UT-AY-5-02`、`UT-AY-5-06`、`MT-AY-02`、`DI-24` |
+| 6 | 奖励窗口表读不到或为空（契约 C1 故障路径） | 视为窗口关闭：`AD_SDK` 域名继续拦截，不漏拦、不崩溃、不断网 | `UT-VP-5-07`、`MT-CT-01` |
 
 ## 5. 通用约定
 

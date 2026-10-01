@@ -35,28 +35,31 @@
 - Create: `app/src/main/kotlin/com/sentinel/app/ui/theme/Theme.kt`
 - Create: `app/src/main/kotlin/com/sentinel/app/ui/nav/SentinelNavHost.kt`
 - Create: `app/src/main/kotlin/com/sentinel/app/di/AppModule.kt`
-- Create: `app/src/main/kotlin/com/sentinel/app/NotificationChannels.kt`
+- Create: `app/src/main/kotlin/com/sentinel/app/di/ModuleLoader.kt`
+- Create: `app/proguard-rules.pro`（保留 `ModuleEntry` 的所有实现类）
 
-**Tests:** UT-AP-1-01
+**Tests:** UT-AP-1-01～03（UT-AP-1-04 在 M8 全部入口到齐后补跑）
 
 **Interfaces:**
-- Consumes: `dataModule`、`guardModule`、`vpnModule`、`a11yModule`、`notifyModule`、`systemModule`。
-- Produces: 路由常量 `Routes.ONBOARDING`、`HOME`、`APPS`、`APP_DETAIL/{pkg}`、`RULES`、`SYSTEM_CLEANUP`、`ENGINE_LOG/{engine}`、`OP_LOG`；`SentinelTheme { }`；`object VpnStarter { fun intentToPrepare(ctx): Intent?; fun start(ctx) }`。
+- Consumes: `dataModule`、`ModuleEntry`、`ProcessKind`（data）。**不直接引用任何引擎或 guard 模块的类**。
+- Produces: 路由常量 `Routes.ONBOARDING`、`HOME`、`APPS`、`APP_DETAIL/{pkg}`、`RULES`、`SYSTEM_CLEANUP`、`ENGINE_LOG/{engine}`、`OP_LOG`；`SentinelTheme { }`；`object VpnStarter { fun intentToPrepare(ctx): Intent?; fun start(ctx) }`；
+  ```kotlin
+  object ModuleLoader { fun load(process: ProcessKind, loader: ClassLoader = ...): List<ModuleEntry> }   // ServiceLoader 发现，按 processes 过滤，id 重复则抛异常
+  ```
 
-`SentinelApp.onCreate` 在主进程（用 `Application.getProcessName()` 判断）中执行：
-- 启动 Koin；
-- 创建通知渠道 `vpn`、`guard`、`notify-learn`、`a11y`、`system`；
-- 启动 `GuardRunner`、`AppOpsSync`、`SystemStatusReporter`；
-- 注册周期任务 `rule-update`、`observation-check`、`system-drift`、`system-dropbox`；
-- 首次运行时 `AppRegistry.syncInstalled(initial = true)`，之后每次启动 `syncInstalled(initial = false)`。
+`SentinelApp.onCreate`：
+1. 用 `Application.getProcessName()` 判断进程（以 `:vpn` 结尾为 `VPN`，否则 `MAIN`）；
+2. `entries = ModuleLoader.load(process)`；`startKoin { modules(dataModule + entries.map { it.koinModule }) }`；
+3. 对每个入口调用 `start(context, appScope, koin)`（单个入口失败只记日志，不影响其他入口与界面）；
+4. 仅 `MAIN` 进程：首次运行时 `AppRegistry.syncInstalled(initial = true)`，之后每次启动 `syncInstalled(initial = false)`。
 
-`:vpn` 进程只启动 Koin（data + vpn 模块）。界面是 3 个底部页签（首页 / 应用 / 规则），本任务先放占位页。
+app **不再**创建通知渠道、不再启动 `GuardRunner`/`AppOpsSync`/`SystemStatusReporter`、不再注册周期任务——这些全部由各模块的 `ModuleEntry.start` 负责（见 `docs/CONTRACTS.md` C5）。因此 guard 模块在 M7 之前不存在入口也不影响 app 启动。`:vpn` 进程只启动 `data` 与 `vpn` 入口对应的内容。界面是 3 个底部页签（首页 / 应用 / 规则），本任务先放占位页。
 
-- [ ] **Step 1:** 编写 UT-AP-1-01。
+- [ ] **Step 1:** 编写 UT-AP-1-01～03。
 - [ ] **Step 2:** 运行，期望 FAIL。
 - [ ] **Step 3:** 实现骨架。
 - [ ] **Step 4:** 重跑，期望 PASS；`./gradlew :app:assembleDebug` 成功。
-- [ ] **Step 5:** 提交 `feat(app): skeleton, theme, navigation and global wiring`。
+- [ ] **Step 5:** 提交 `feat(app): skeleton, theme, navigation and module loader`。
 
 ### Task 2: 最小首页（M3 可用版本）
 

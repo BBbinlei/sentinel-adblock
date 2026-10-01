@@ -91,7 +91,7 @@
 2. `cfg?.level == OFF` → FORWARD
 3. 命中 STRONG 规则而 App 为 STANDARD（`cfg == null` 视为 STANDARD）→ FORWARD
 4. `hit.ruleId in disabledRules` → FORWARD
-5. `hit.tag == AD_SDK && rewardWindowOpen` → FORWARD
+5. `hit.tag in RewardWindowContract.RELEASED_TAGS && rewardWindowOpen` → FORWARD（常量见 data 的 `contract` 包）
 6. `cfg?.observing == true` → WOULD_BLOCK
 7. 否则 BLOCK
 
@@ -173,9 +173,11 @@
 - Create: `engine-vpn/src/main/kotlin/com/sentinel/vpn/service/VpnNotification.kt`
 - Create: `engine-vpn/src/main/kotlin/com/sentinel/vpn/service/BootReceiver.kt`
 - Create: `engine-vpn/src/main/kotlin/com/sentinel/vpn/di/VpnModule.kt`
+- Create: `engine-vpn/src/main/kotlin/com/sentinel/vpn/di/VpnEntry.kt`
+- Create: `engine-vpn/src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry`
 - Modify: `engine-vpn/src/main/AndroidManifest.xml`（服务 `android:process=":vpn"`、`foregroundServiceType="specialUse"`、`BIND_VPN_SERVICE` 权限；`BootReceiver`）
 
-**Tests:** UT-VP-5-01～06
+**Tests:** UT-VP-5-01～07
 
 **Interfaces:**
 - Consumes: Task 1–4；data 的 `AppConfigRepository.observeExcluded/observeAll`、`GlobalStateRepository`、`OverrideRepository.observeDisabled`、`RewardWindowRepository.observeOpen`、`RuleStore`、`EventRepository`、`SignalRepository`、`EngineStatusRepository`、`PackageWatcher`、`EffectivePolicy`。
@@ -189,7 +191,10 @@
   }
   class EventBatcher(events: EventRepository, intervalMs: Long = 2_000)  { fun offer(e: LoopEvent) }
   object VpnActions { const val PAUSE = "com.sentinel.vpn.PAUSE"; const val START = "com.sentinel.vpn.START" }
+  val vpnModule: Module
+  class VpnEntry : ModuleEntry      // id = "vpn"，processes = {VPN}，start：创建通知渠道 `vpn`
   ```
+  对 app 暴露的只有 `VpnStarter` 需要的 Service 类名常量（`VpnActions`）；`:vpn` 进程由 `ModuleEntry` 机制启动，主进程不加载 `vpnModule`。
 
 行为：
 - `start()` 订阅排除名单，变化后防抖 2 秒；**先 establish 新 TUN、启动新 PacketLoop，再关闭旧 TUN**。
@@ -200,7 +205,7 @@
 - 前台通知的「暂停 5 分钟」按钮发送 `VpnActions.PAUSE` → `GlobalStateRepository.pauseFor()`。
 - `BootReceiver` 收到 `BOOT_COMPLETED`，且全局开启、`VpnService.prepare()==null` 时启动服务。
 
-- [ ] **Step 1:** 编写 UT-VP-5-01～06。
+- [ ] **Step 1:** 编写 UT-VP-5-01～07。
 - [ ] **Step 2:** 运行，期望 FAIL。
 - [ ] **Step 3:** 实现。
 - [ ] **Step 4:** 重跑，期望 PASS。

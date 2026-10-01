@@ -4,7 +4,7 @@
 
 **Goal:** 用真实数据（录制的页面快照、真实订阅文件、常用域名表、ColorOS 配置档案）持续验证规则「该拦的拦得住、不该拦的不误拦」。
 
-**Architecture:** Gradle 子模块 `:testing:rule-regression`，类型为 Android library（只有测试源码），依赖 `core-rules`、`engine-a11y`（使用其 `core` 包）、`engine-system`（`ProfileLoader`）。测试数据放在 `testing/rule-regression/fixtures/`。快照由 engine-a11y 调试版的录制功能采集。
+**Architecture:** Gradle 子模块 `:testing:rule-regression`，类型为 Android library（只有测试源码），依赖 `core-rules`、`data`、`guard`、`engine-vpn`、`engine-a11y`（使用其 `core` 包）、`engine-notify`、`engine-system`（`ProfileLoader`）；其中 `contract/` 目录下的跨模块契约测试（MT-CT-*，见 `testing/unit/PLAN.md` Task CT）需要全部依赖。测试数据放在 `testing/rule-regression/fixtures/`。快照由 engine-a11y 调试版的录制功能采集。
 
 **Tech Stack:** JUnit4 + kotlin.test（Android library 单元测试，JVM 运行）、kotlinx.serialization。
 
@@ -14,6 +14,7 @@
 
 - **测**：规则与真实数据的匹配结果，包括域名规则 vs 常用域名、UI 规则/点击判定 vs 真实页面快照、真实订阅文件的解析质量、ColorOS 配置档案的完整性。
 - **不测**：引擎运行时行为（→ ①③）、真机上的广告是否真的消失（→ ③④）。
+- **共用说明**：本子模块的 `src/test/.../contract/` 目录存放板块①的跨模块契约测试（MT-CT-*），它们的边界、编号和关卡（G7）按 `testing/unit/PLAN.md` Task CT 执行，不属于本板块；本板块的测试放在 `contract/` 以外的目录。
 - **何时运行**：G1（RR-01、RR-04、RR-05）、G4（RR-02、RR-03）、G5（RR-06）关卡；此后**每次**修改规则、选择器、点击判定、内置目录、配置档案，以及每次更新 fixtures 时都要运行。命令：`./gradlew :testing:rule-regression:testDebugUnitTest`。
 
 ## 目录结构

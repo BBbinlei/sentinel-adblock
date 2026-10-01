@@ -14,6 +14,7 @@
 
 - **单元级（UT）**：一个类或一个函数；依赖一律用假实现；不启动 Koin、不访问真实文件系统（RuleStore 等文件类用临时目录）、不访问网络（用 MockWebServer）。
 - **模块级（MT）**：一个模块的公开接口整体运行；本模块内部全部用真实实现；相邻模块用内存数据库、假 Shell、假 TunFactory、假 Notifier 代替；**不**使用真实系统服务。
+- **跨模块契约级（MT-CT）**：属于本板块（见 Task CT）。用两个或多个模块的真实实现 + 内存 data 验证 `docs/CONTRACTS.md` 的约定；**不**使用真实系统服务。因为需要依赖全部模块，代码放在 `:testing:rule-regression` 子模块的 `contract/` 目录，但测试边界、编号、关卡归属都按本板块执行。
 - **不在本板块**：规则质量（→ ②）、真实 VPN/无障碍/Shizuku/通知/多进程（→ ③）、长期稳定性与拦截率（→ ④）。
 
 ## 运行命令约定
@@ -112,9 +113,12 @@
 | UT-DA-2-04 | 钉住的规则 | `disable` 返回 false |
 | UT-DA-2-05 | `observeDisabled` | 按 pkg 分组 |
 | UT-DA-2-06 | `rulesHitSince` | 去重 |
-| UT-DA-2-07 | 奖励窗口 | `until == now + 60_000` |
+| UT-DA-2-07 | 奖励窗口 | `until == now + RewardWindowContract.TTL_MS` |
 | UT-DA-2-08 | 用户规则 | 经 `JsonRuleParser` 往返一致 |
 | UT-DA-2-09 | `observeRecent(since)` | 只返回 since 之后的停用记录 |
+| UT-DA-2-10 | `RewardWindowContract` | `TTL_MS == 60_000`；`RELEASED_TAGS == {AD_SDK}`；`open(pkg)` 不传时长时用 `TTL_MS` |
+| UT-DA-2-11 | `SignalContract.EMITTERS` | 键集合 == `SignalKind.entries`（每个信号类型都声明了发出方） |
+| UT-DA-2-12 | 重复开窗 | 同一 App 再次 `open`，`until` 以最新一次为准（不叠加、不缩短到旧值之前） |
 
 ### UT-DA-3 App 配置与登记（`apps/AppRegistryTest.kt`、`repo/AppConfigRepositoryTest.kt`）
 | 编号 | 用例 | 断言 |
@@ -145,9 +149,11 @@
 | UT-DA-5-04 | 304 | 保留缓存 |
 | UT-DA-5-05 | 构建异常 | 不安装，`ruleVersion` 不变 |
 
-### UT-DA-6 Koin（`di/DataModuleTest.kt`）
-| UT-DA-6-01 | `dataModule` 通过 Koin `verify()` | 无缺失依赖 |
+### UT-DA-6 Koin 与模块入口（`di/DataModuleTest.kt`）
+| 编号 | 用例 | 断言 |
 |---|---|---|
+| UT-DA-6-01 | `dataModule` 通过 Koin `verify()` | 无缺失依赖 |
+| UT-DA-6-02 | `DataEntry` | 能被 `ServiceLoader` 发现；`id == "data"`；`processes == {MAIN}`；`start` 后 `rule-update` 周期任务已登记 |
 
 ### MT-DA 模块级（`DataModuleIntegrationTest.kt`）
 | 编号 | 用例 | 断言 |
@@ -258,6 +264,7 @@
 | UT-VP-5-04 | 拦截事件 | 记 `DNS_BLOCKED`；第 10 次触发 `RETRY_STORM` 信号 |
 | UT-VP-5-05 | 批量写库 | 每 2 秒一批；HTTPDNS 同 (pkg, IP) 每分钟 1 条 |
 | UT-VP-5-06 | 事件 detail | 为实际查询的域名 |
+| UT-VP-5-07 | 奖励窗口读取失败（C1 故障路径） | `RewardWindowRepository.observeOpen()` 抛异常或无数据 → `DecisionSource.context(pkg).rewardWindowOpen == false`，`AD_SDK` 域名仍 BLOCK；PacketLoop 不中断、控制器状态不变 |
 
 ### UT-VP-6 健康检查（`health/PrivateDnsDetectorTest.kt`、`health/ServiceWatchdogTest.kt`）
 | 编号 | 用例 | 断言 |
@@ -482,9 +489,13 @@
 
 测试目录：`app/src/test/kotlin/com/sentinel/app/`（ViewModel 用假仓库；界面用 Robolectric Compose）
 
-### UT-AP-1 骨架（`di/AllModulesTest.kt`）
-| UT-AP-1-01 | 全部 Koin 模块 `verify()` | 无缺失依赖 |
+### UT-AP-1 骨架（`di/AllModulesTest.kt`、`di/ModuleLoaderTest.kt`）
+| 编号 | 用例 | 断言 |
 |---|---|---|
+| UT-AP-1-01 | `dataModule` + classpath 上全部 `ModuleEntry.koinModule` 通过 Koin `verify()` | 无缺失依赖 |
+| UT-AP-1-02 | 进程过滤 | `load(VPN)` 只含 `processes` 包含 `VPN` 的入口，且不含 `a11y`/`notify`/`system`/`guard`；`load(MAIN)` 不含 `vpn` |
+| UT-AP-1-03 | 加载健壮性 | 入口 `id` 重复 → 抛异常；某入口 `start` 抛异常 → 其他入口仍被启动，不影响界面 |
+| UT-AP-1-04 | 入口齐全（**仅 G8 执行**） | 全部模块到齐后，主进程入口 id 集合 == `{data, a11y, notify, system, guard}`，`:vpn` 进程入口 id 集合 == `{vpn}` |
 
 ### UT-AP-2 首页（`home/HomeViewModelTest.kt`）
 | 编号 | 用例 | 断言 |
@@ -541,3 +552,19 @@
 | MT-AP-05 | 触控尺寸 | 所有可点击元素 ≥ 48dp |
 
 - [ ] **关卡步骤：** 运行 `./gradlew :app:testDebugUnitTest`，期望全部通过。
+
+---
+
+## Task CT: 跨模块契约
+
+测试目录：`testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/`（该模块依赖全部模块，用真实的双方实现 + 内存 data + 可控 `Clock`，不使用真实系统服务）。契约定义见 `docs/CONTRACTS.md`。
+
+### MT-CT 契约（`ContractTest.kt`）
+| 编号 | 用例 | 断言 |
+|---|---|---|
+| MT-CT-01 | 奖励窗口端到端（C1） | `A11yBrain` 收到匹配 `rewardEntry` 的点击（模式非 BLOCK）→ 产生 `OpenRewardWindow` → 写入 `RewardWindowRepository` → vpn 的 `DecisionSource` 对该 App 的 `AD_SDK` 域名 FORWARD、普通 `AD` 域名仍 BLOCK；时钟推进 `TTL_MS + 1` → `AD_SDK` 域名恢复 BLOCK；模式为 BLOCK → 不开窗；表读取失败 → 视为窗口关闭 |
+| MT-CT-02 | 信号闭环（C2） | 对每个 `SignalKind`：由 `SignalContract.EMITTERS` 声明的发出方真实产生一次（a11y→`CRASH_DIALOG`/`COLD_START_LOOP`/`USER_UNDO`；vpn→`RETRY_STORM`；system→`DROPBOX_CRASH`；`tempAllow`→`TEMP_ALLOW`），经 `GuardPolicy` 处理都不抛异常且得到明确结果（`Decision` 或 `null`）；生效级别 OFF 的 App 不产生信号 |
+| MT-CT-03 | 规则热更新（C3） | `rebuildFromCache()` 成功 → `ruleVersion` +1 → vpn matcher、a11y `UiIndex`、notify 规则都换成新版；构建异常 → `ruleVersion` 不变，三个引擎仍用旧规则 |
+| MT-CT-04 | 引擎状态（C4） | 引擎正常停用后状态为 `STOPPED`、不会回到 `NOT_SETUP`；`ServiceWatchdog.userWantsA11y()/userWantsNotify()` 仍为 true；`DEGRADED` 必带 `message` |
+
+- [ ] **关卡步骤：** 作为 G7 的一部分运行 `./gradlew :testing:rule-regression:testDebugUnitTest --tests "com.sentinel.regression.contract.*"`，期望全部通过。

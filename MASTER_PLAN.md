@@ -4,7 +4,7 @@
 
 **Goal:** 按里程碑顺序调度 8 个模块的实施，最终在 OPPO Find X7 Ultra 上交付一个不 root、覆盖 27 种广告套路、且不影响原软件正常使用的广告拦截 App。
 
-**Architecture:** Gradle 多模块 Android 项目，两个进程（主进程 + `:vpn`）。纯 Kotlin 核心（core-rules、guard 决策）→ 数据层（Room 多进程共享）→ 四个引擎（VPN / 无障碍 / 通知 / Shizuku 系统）→ Compose 界面。引擎之间不互相调用，只通过数据层交换信息。
+**Architecture:** Gradle 多模块 Android 项目，两个进程（主进程 + `:vpn`）。纯 Kotlin 核心（core-rules、guard 决策）→ 数据层（Room 多进程共享）→ 四个引擎（VPN / 无障碍 / 通知 / Shizuku 系统）→ Compose 界面。引擎之间不互相调用，只通过数据层交换信息；跨模块的行为约定见 `docs/CONTRACTS.md`。各模块通过 `ModuleEntry`（ServiceLoader）自己接线，app 不在代码里列举模块。
 
 **Tech Stack:** Kotlin、协程/Flow、Jetpack Compose + Material 3、VpnService、AccessibilityService、NotificationListenerService、Shizuku、Room、WorkManager、Koin、kotlinx.serialization。
 
@@ -17,6 +17,8 @@
 - 包名根：`com.sentinel`；applicationId：`com.sentinel.adblock`；应用名：「哨兵」。
 - minSdk 30（Android 11，无线调试激活 Shizuku 的下限）；targetSdk/compileSdk = 脚手架时最新稳定版；目标设备 Android 15/16（ColorOS 15/16）。
 - 不依赖 root；不做 HTTPS 中间人解密；不做云端服务器、不做账号、不对外分发规则。
+- 模块接线：每个模块自己导出 `ModuleEntry`（定义在 data），自己负责创建通知渠道、启动协程、注册周期任务；`:app` 用 `ServiceLoader` 发现入口，**代码中不引用任何引擎/guard 的类**（构建上仍依赖，以便打包）。新增引擎不改 app。
+- 跨模块行为契约（奖励窗口、误伤信号、规则热更新、引擎状态）定义在 `docs/CONTRACTS.md`，数值与枚举落成 data 的 `contract` 包常量；引擎不得写字面量。
 - 进程：只有主进程与 `:vpn` 两个；进程间只通过 Room（`enableMultiInstanceInvalidation()`）+ 规则二进制文件交换数据，不写 AIDL。
 - 依赖方向只能自上而下：`app → engine-* / guard → data → core-rules`；引擎之间、引擎与 guard 之间互不依赖。
 - `core-rules` 与 guard 的决策包 `com.sentinel.guard.policy` 必须是纯 Kotlin（不引用 `android.*`）。
@@ -29,7 +31,7 @@
 
 ## Review Focus
 
-最容易出问题的 5 种情况及其对应测试，统一定义在 `testing/README.md` 第 4 节。
+最容易出问题的 6 种情况及其对应测试，统一定义在 `testing/README.md` 第 4 节。
 
 ## 测试总则
 
@@ -52,6 +54,8 @@
 8. **观察期只作用于网络层**：界面引擎点「跳过」、关弹窗的风险很低，观察期内照常工作。
 9. **NotifyRule 内置规则**放在 engine-notify（`BuiltInNotifyRules`），只针对 ColorOS 自带的 6 个 App，按营销关键词过滤。
 10. **编排器**：为了能做模块级测试，engine-a11y 新增 `A11yBrain`、engine-notify 新增 `NotifyEngine`，把各子组件串起来、返回要执行的动作列表；系统服务只负责适配和执行。
+11. **模块接线分散到各模块**：原计划把通知渠道、周期任务、`GuardRunner`/`AppOpsSync` 启动都集中写在 `SentinelApp`，导致 app 要引用 M7 才有的 `guardModule`，并行开发时也要多方改同一文件。改为每个模块导出 `ModuleEntry`，app 用 `ServiceLoader` 发现并按进程启动。
+12. **跨模块契约文档化并常量化**：引擎之间靠表交换信息、行为靠约定。约定写在 `docs/CONTRACTS.md`，数值与枚举落成 data 的 `contract` 包常量，并有契约测试 `MT-CT-*`（G7）。
 
 ---
 
@@ -67,6 +71,7 @@
 | engine-notify | `engine-notify/README.md` | `engine-notify/PLAN.md` |
 | engine-system | `engine-system/README.md` | `engine-system/PLAN.md` |
 | app | `app/README.md` | `app/PLAN.md` |
+| **跨模块契约** | `docs/CONTRACTS.md` | — |
 | **testing** | `testing/README.md` | `testing/unit/PLAN.md`、`testing/rule-regression/PLAN.md`、`testing/device-integration/PLAN.md`、`testing/acceptance/PLAN.md` |
 
 ---
@@ -113,7 +118,7 @@ M0 骨架 + 实机核实 ──► M1 core-rules ─G1─► M2 data ─G2─┬
 
 - [ ] **Step 1:** `git init`，写 `.gitignore`（Android Studio 标准模板 + `local.properties`）。
 - [ ] **Step 2:** 写 `settings.gradle.kts`，include 上述 10 个模块；`libs.versions.toml` 写入 AGP、Kotlin、Compose BOM、Room、WorkManager、Koin、kotlinx.serialization、OkHttp、Shizuku（`dev.rikka.shizuku:api`、`dev.rikka.shizuku:provider`）、JUnit5、kotlin.test、Robolectric、Turbine、MockWebServer、AndroidX Test、UiAutomator 的最新稳定版本。
-- [ ] **Step 3:** 按 Global Constraints 设置 minSdk 30、applicationId；按依赖方向配置各模块的 `dependencies`。
+- [ ] **Step 3:** 按 Global Constraints 设置 minSdk 30、applicationId；按依赖方向配置各模块的 `dependencies`。 `:app` 对所有引擎与 guard 保持 `implementation` 依赖（只为打包，代码不引用）；`:testing:rule-regression` 的 `testImplementation` 依赖全部功能模块。
 - [ ] **Step 4:** 运行 `./gradlew assembleDebug :core-rules:test :testing:rule-regression:testDebugUnitTest`，期望 BUILD SUCCESSFUL（此时 0 个测试）。
 - [ ] **Step 5:** 提交：`git add -A && git commit -m "chore: scaffold sentinel multi-module project"`。
 

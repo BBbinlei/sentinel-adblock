@@ -46,7 +46,7 @@
   }
   object GuardPolicy {
       fun hitWindowMs(kind: SignalKind): Long          // CRASH_DIALOG/COLD_START_LOOP/DROPBOX_CRASH → 120_000；其余 → 600_000
-      fun onSignal(signal: SignalEntity, recentHits: List<String>, sameKindCount24h: Int): Decision?
+      fun onSignal(signal: SignalEntity, recentHits: List<String>, sameKindCount24h: Int): Decision?   // 对 SignalKind 的 when 必须穷举（无 else），新增信号类型时编译即失败；契约见 docs/CONTRACTS.md C2
       fun evaluateObservation(cfg: AppConfigEntity, undoOrAllowCount: Int): Decision
   }
   ```
@@ -76,6 +76,8 @@
 - Create: `guard/src/main/kotlin/com/sentinel/guard/runtime/GuardActionReceiver.kt`
 - Create: `guard/src/main/kotlin/com/sentinel/guard/runtime/ObservationWorker.kt`
 - Create: `guard/src/main/kotlin/com/sentinel/guard/di/GuardModule.kt`
+- Create: `guard/src/main/kotlin/com/sentinel/guard/di/GuardEntry.kt`
+- Create: `guard/src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry`
 - Modify: `guard/src/main/AndroidManifest.xml`（注册 `GuardActionReceiver`，`exported=false`）
 
 **Tests:** UT-GD-2-01～06
@@ -90,6 +92,7 @@
   class AndroidGuardNotifier(context: Context) : GuardNotifier
   class ObservationWorker : CoroutineWorker   // 唯一周期任务名 "observation-check"，间隔 1h
   val guardModule: Module
+  class GuardEntry : ModuleEntry      // id = "guard"，processes = {MAIN}，start：创建通知渠道 `guard`、启动 GuardRunner、注册周期任务 "observation-check"
   ```
   通知「撤销」按钮：action `com.sentinel.guard.UNDO`，extra `pkg: String`、`ruleIds: Array<String>`。
 

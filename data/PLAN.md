@@ -14,7 +14,7 @@
 
 ## Global Constraints
 
-见 `MASTER_PLAN.md`。本模块固定值：观察期 3 天（`259_200_000` ms）；临时放行 24 小时；暂停 5 分钟；奖励窗口 60 秒；事件保留 30 天；数据库文件名 `sentinel.db`；规则目录 `filesDir/rules/`。
+见 `MASTER_PLAN.md`。本模块固定值：观察期 3 天（`259_200_000` ms）；临时放行 24 小时；暂停 5 分钟；奖励窗口 60 秒（取自 `RewardWindowContract.TTL_MS`）；事件保留 30 天；数据库文件名 `sentinel.db`；规则目录 `filesDir/rules/`。
 
 ## 每个任务的通用步骤
 
@@ -110,8 +110,10 @@
 - Create: `data/src/main/kotlin/com/sentinel/data/repo/RewardWindowRepository.kt`
 - Create: `data/src/main/kotlin/com/sentinel/data/repo/EngineStatusRepository.kt`
 - Create: `data/src/main/kotlin/com/sentinel/data/repo/UserRuleRepository.kt`
+- Create: `data/src/main/kotlin/com/sentinel/data/contract/RewardWindowContract.kt`
+- Create: `data/src/main/kotlin/com/sentinel/data/contract/SignalContract.kt`
 
-**Tests:** UT-DA-2-01～09
+**Tests:** UT-DA-2-01～12
 
 **Interfaces:**
 - Produces:
@@ -133,12 +135,18 @@
   class OpLogRepository { suspend fun append(e: OpLogEntity): Long; fun observeAll(): Flow<List<OpLogEntity>>
       suspend fun latestApplied(opId: String): OpLogEntity?; suspend fun markUndone(id: Long) }
   class JumpExceptionRepository { suspend fun isExcepted(src: String, tgt: String): Boolean; suspend fun add(src: String, tgt: String) }
-  class RewardWindowRepository { suspend fun open(pkg: String, ms: Long = 60_000); fun observeOpen(): Flow<Map<String, Long>> }
+  class RewardWindowRepository { suspend fun open(pkg: String, ms: Long = RewardWindowContract.TTL_MS); fun observeOpen(): Flow<Map<String, Long>> }
   class EngineStatusRepository { suspend fun report(engine: EngineId, state: EngineState, message: String? = null)
       fun observeAll(): Flow<Map<EngineId, EngineStatusEntity>> }
   class UserRuleRepository { suspend fun add(rule: Rule, origin: RuleOrigin); fun observeAll(): Flow<List<Rule>>; suspend fun delete(id: String) }
   ```
   所有仓库的构造参数为对应 DAO（或 `SentinelDatabase`）+ `Clock`。「今日」以本地时区零点为界。
+- Produces（跨模块契约常量，行为说明见 `docs/CONTRACTS.md` C1、C2；引擎一律引用常量，不写字面量）：
+  ```kotlin
+  object RewardWindowContract { const val TTL_MS = 60_000L; val RELEASED_TAGS: Set<DomainTag> = setOf(DomainTag.AD_SDK) }
+  object SignalContract { val EMITTERS: Map<SignalKind, EngineId?> }   // null = 由 data/app 层发出；每个 SignalKind 必须有一项
+  ```
+  `RewardWindowRepository.open` 的默认时长取 `RewardWindowContract.TTL_MS`，不再另写 `60_000`。
 
 - [ ] **Step 1:** 编写 UT-DA-2-01～09。
 - [ ] **Step 2:** 运行，期望 FAIL。
@@ -247,21 +255,40 @@
 - [ ] **Step 4:** 重跑，期望 PASS。
 - [ ] **Step 5:** 提交 `feat(data): subscription update pipeline`。
 
-### Task 6: Koin 模块
+### Task 6: Koin 模块与模块接线入口
 
 **Files:**
 - Create: `data/src/main/kotlin/com/sentinel/data/di/DataModule.kt`
+- Create: `data/src/main/kotlin/com/sentinel/data/module/ModuleEntry.kt`
+- Create: `data/src/main/kotlin/com/sentinel/data/module/DataEntry.kt`
+- Create: `data/src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry`（内容：`com.sentinel.data.module.DataEntry`）
 
-**Tests:** UT-DA-6-01
+**Tests:** UT-DA-6-01～02
 
 **Interfaces:**
 - Produces: `val dataModule: Module`，提供 `SentinelDatabase`（单例）、`Clock`（`System::currentTimeMillis`）、Task 2–5 的全部仓库，以及 `RuleStore`、`SubscriptionUpdater`、`AppRegistry`。
+- Produces（模块接线约定，见 `docs/CONTRACTS.md` C5）：
+  ```kotlin
+  enum class ProcessKind { MAIN, VPN }
+  interface ModuleEntry {
+      val id: String                       // "data" / "vpn" / "a11y" / "notify" / "system" / "guard"，全局唯一
+      val processes: Set<ProcessKind>      // 在哪些进程里启动
+      val koinModule: Module               // 本模块的依赖注入定义（dataModule 本身由 app 直接加载，DataEntry 返回空模块）
+      fun start(context: Context, scope: CoroutineScope, koin: Koin)   // 创建本模块用到的通知渠道、启动协程、注册周期任务；不得抛异常
+  }
+  class DataEntry : ModuleEntry        // id = "data"，processes = {MAIN}，start 注册周期任务 "rule-update"
+  ```
 
-- [ ] **Step 1:** 编写 UT-DA-6-01。
+约定：
+- 每个引擎/guard 在自己模块的 `src/main/resources/META-INF/services/com.sentinel.data.module.ModuleEntry` 登记自己的入口类；app 用 `ServiceLoader` 发现，**不在代码里列举模块**。
+- `start` 内部的任何异常必须自行捕获并上报对应引擎 `DEGRADED`，不得影响其他模块启动。
+- `:app` 的 R8 规则保留 `ModuleEntry` 的所有实现类（`-keep class * implements com.sentinel.data.module.ModuleEntry`）。
+
+- [ ] **Step 1:** 编写 UT-DA-6-01～02。
 - [ ] **Step 2:** 运行，期望 FAIL。
 - [ ] **Step 3:** 实现。
 - [ ] **Step 4:** 重跑，期望 PASS。
-- [ ] **Step 5:** 提交 `feat(data): koin module`。
+- [ ] **Step 5:** 提交 `feat(data): koin module and module entry`。
 
 ### 模块完成 → 关卡 G2
 
