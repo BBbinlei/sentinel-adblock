@@ -5,7 +5,7 @@ if [[ $# != 1 || ! $1 =~ ^[A-Za-z0-9][A-Za-z0-9_-]*$ ]]; then
     echo '用法：pull-snapshot.sh <name>（字母、数字、下划线、连字符；设备上须为新名称）' >&2
     exit 2
 fi
-command -v adb >/dev/null
+command -v adb >/dev/null || { echo "未找到 adb，请先安装 Android platform-tools。" >&2; exit 1; }
 name=$1
 remote_root=/sdcard/Android/data/com.sentinel.adblock/files/snapshots
 fixture_root=$(cd "$(dirname "$0")/../fixtures/snapshots" && pwd)
