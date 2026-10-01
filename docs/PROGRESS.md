@@ -19,18 +19,18 @@
 - 下一步：G1 已通过；本通道在 main 上完成，可启动 data（G2）。MT-CR 提交 8bc9562；RR-01 7caea70；RR-04 14ae1d5；RR-05 e162c6c。报告：testing/reports/G1-2026-10-02.md。
 - 已知问题：无阻塞项。本次允许正常运行 Gradle，已通过 :core-rules:test（27 项）、:testing:rule-regression:testDebugUnitTest（8 项）及全量 test，失败/跳过均为 0；历史并发会话 120dea3、9d184cc 的沙箱阻塞记录已被实际结果取代，未改写其提交。现有 top-domains fixture 为 987 条，按当前用户指令保持只读，STANDARD/STRONG 命中均为 0。RR-05 使用学习风格合成样本，未执行真机学习录制。
 
-## [data] 状态: 待办 | 负责方: codex | 关卡: G2
+## [data] 状态: 进行中 | 负责方: codex | 关卡: G2
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 数据库、实体与生效配置 | 待办 | — |
-| Task 2: 通用仓库 | 待办 | — |
+| Task 1: 数据库、实体与生效配置 | 完成 | 本提交（Task 1） |
+| Task 2: 通用仓库 | 进行中 | — |
 | Task 3: App 配置仓库与 App 登记 | 待办 | — |
 | Task 4: 规则存储 | 待办 | — |
 | Task 5: 规则构建与订阅更新 | 待办 | — |
 | Task 6: Koin 模块与模块接线入口 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：Task 2：先编写 UT-DA-2-01～12，确认失败后实现通用仓库与契约常量。
 - 已知问题：无
 
 ## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3
