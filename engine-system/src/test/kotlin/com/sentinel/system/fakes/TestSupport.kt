@@ -81,6 +81,9 @@ abstract class MemoryDataTest {
         )
     }
 
+    protected fun appSync(shell: Shell, executor: OpExecutor, profile: ColorOsProfile?, state: MutableStateFlow<ShizukuState>) =
+        AppOpsSync(shell, executor, profile, configs, logs, state)
+
     @After fun closeMemoryData() {
         try { if (::db.isInitialized) db.close() } finally { Dispatchers.resetMain() }
     }
