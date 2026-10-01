@@ -42,10 +42,10 @@
 | Task 3: 上游解析与缓存 | 完成（UT 5/5） | b31d7cd |
 | Task 4: TUN 配置与报文循环 | 完成（UT 7/7） | 本提交 |
 | Task 5: VpnController 与服务接线 | 完成（UT 7/7） | 本提交 |
-| Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
+| Task 6: 私人 DNS 检测与服务守护 | 完成（UT 3/3） | 本提交 |
 | Task 7: 故障安全 | 待办 | — |
 
-- 下一步：Task 6：导入 health 测试，实现 PrivateDnsDetector 与 ServiceWatchdog 并接入服务。
+- 下一步：Task 7：导入 VpnFailSafeTest，补 onRevoked 与各退出路径。
 - 已知问题：原启动命令含损坏的绝对路径，按目标模块执行 :engine-vpn:assembleDebug；worktree 无 SDK 配置，通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 运行。暂存 WireFixtures.kt 的 EffectiveConfig 导入包为 policy，冻结实现实际在 db，仅修正 import，未改断言。
 
 - Task 4 接线说明：暂存 TunFakes 同时使用 Task 5 的 TunFactory/TunHandle，因此提前落成这两个既定接口于 service/TunFactory.kt；未改测试。

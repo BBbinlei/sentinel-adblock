@@ -2,7 +2,12 @@ package com.sentinel.vpn.service
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.LinkProperties
+import android.net.Network
+import android.provider.Settings
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import android.util.Log
@@ -11,6 +16,9 @@ import com.sentinel.data.apps.AppRegistry
 import com.sentinel.data.apps.PackageWatcher
 import com.sentinel.data.repo.*
 import com.sentinel.data.rules.RuleStore
+import com.sentinel.data.db.EngineId
+import com.sentinel.data.db.EngineState
+import com.sentinel.vpn.health.*
 import com.sentinel.vpn.dns.DohUdpResolver
 import com.sentinel.vpn.dns.DnsCache
 import com.sentinel.vpn.tun.ConnectionPackageResolver
@@ -20,6 +28,7 @@ import java.io.FileOutputStream
 import java.net.InetSocketAddress
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import org.koin.core.Koin
 import org.koin.core.context.GlobalContext
 
@@ -51,6 +60,46 @@ class SentinelVpnService : VpnService() {
         override fun close() { try { fd.close() } catch (_: Exception) { } }
     }
 
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
+
+    private class SettingsChecker(private val context: Context, private val wanted: Set<EngineId>) : EnabledServicesChecker {
+        private fun listed(key: String) = Settings.Secure.getString(context.contentResolver, key)
+            .orEmpty().split(':').any { it.startsWith(context.packageName + "/") }
+        override fun accessibilityEnabled() = listed(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+        override fun notificationListenerEnabled() = listed("enabled_notification_listeners")
+        override fun userWantsA11y() = EngineId.A11Y in wanted
+        override fun userWantsNotify() = EngineId.NOTIFY in wanted
+    }
+
+    private fun startHealth(koin: Koin, c: VpnController) {
+        val manager = getSystemService(ConnectivityManager::class.java)
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onLinkPropertiesChanged(network: Network, lp: LinkProperties) {
+                val warning = PrivateDnsDetector.evaluate(lp.isPrivateDnsActive, lp.privateDnsServerName)
+                scope.launch { c.onPrivateDns(warning) }
+            }
+        }
+        try { manager.registerDefaultNetworkCallback(callback); networkCallback = callback }
+        catch (e: Exception) { Log.w("SentinelVpn", "网络回调登记失败", e) }
+        val status = koin.get<EngineStatusRepository>()
+        scope.launch {
+            while (true) {
+                try {
+                    val wanted = status.observeAll().first().filterValues { it.state == EngineState.RUNNING }.keys
+                    ServiceWatchdog(SettingsChecker(this@SentinelVpnService, wanted), status, ::notifyLost).checkOnce()
+                } catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "守护检查失败", e) }
+                delay(5 * 60_000L)
+            }
+        }
+    }
+
+    private fun notifyLost(engine: EngineId) {
+        val text = if (engine == EngineId.A11Y) "无障碍服务已被关闭，请重新开启" else "通知使用权已被关闭，请重新开启"
+        getSystemService(NotificationManager::class.java).notify(1000 + engine.ordinal + 2,
+            Notification.Builder(this, VpnNotification.CHANNEL_ID).setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setContentTitle("哨兵").setContentText(text).setAutoCancel(true).build())
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val koin = GlobalContext.getOrNull()
         if (koin == null) { stopSelf(); return START_NOT_STICKY }
@@ -73,6 +122,7 @@ class SentinelVpnService : VpnService() {
             koin.get<RuleStore>(), koin.get(), koin.get(), koin.get(), resolver, ConnectionPackageResolver(this), clock,
             { scope.launch { stopSelf() } })
         controller = c
+        startHealth(koin, c)
         scope.launch {
             try { watcher = PackageWatcher(this@SentinelVpnService, koin.get<AppRegistry>(), scope).also { it.start() } }
             catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "App 监听启动失败", e) }
@@ -91,6 +141,7 @@ class SentinelVpnService : VpnService() {
         // 任何退出路径都先关闭 TUN。
         val c = controller; controller = null
         runCatching { watcher?.stop() }
+        networkCallback?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }
         if (c != null) runBlocking { c.stop("服务已停止") }
         scope.cancel()
         super.onDestroy()

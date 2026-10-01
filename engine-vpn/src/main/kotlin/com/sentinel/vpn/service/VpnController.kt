@@ -57,6 +57,16 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "状态写入失败", e) }
         mutableState.value = state
     }
+    @Volatile private var privateDnsWarning: String? = null
+    private suspend fun reportHealth() {
+        val warning = privateDnsWarning
+        if (warning != null) report(EngineState.DEGRADED, warning) else report(EngineState.RUNNING)
+    }
+    /** 系统「私人 DNS」警告变化（null 表示恢复）；只在运行中改变上报状态。 */
+    suspend fun onPrivateDns(warning: String?) = lifecycle.withLock {
+        privateDnsWarning = warning
+        if (active) reportHealth()
+    }
     private fun onEvent(e: LoopEvent) {
         batcher.offer(e)
         if (e is LoopEvent.Dns && e.decision.verdict == DnsVerdict.BLOCK && !e.pkg.isNullOrBlank()) {
@@ -89,7 +99,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         if (!replace(apps.observeExcluded().first())) {
             active = false; report(EngineState.NOT_SETUP); stopService(); return@withLock
         }
-        report(EngineState.RUNNING)
+        reportHealth()
         fun <T> watch(flow: Flow<T>, update: suspend (T) -> Unit) {
             watchers += scope.launch {
                 try { flow.collect { update(it) } }
