@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="a11y_service_description">哨兵通过无障碍服务识别并点击开屏跳过、弹窗关闭等界面元素，只处理广告相关界面，不读取或上传屏幕内容。</string>
+</resources>

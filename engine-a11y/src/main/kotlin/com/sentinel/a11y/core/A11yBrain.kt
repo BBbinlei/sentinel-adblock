@@ -49,6 +49,9 @@ class A11yBrain(
     private val autoClickAt = HashMap<String, Long>()
     private val warnedAt = HashMap<String, Long>()
 
+    /** 激励视频处理中（询问/静音等待/收尾），服务据此决定是否每秒 tick。 */
+    val rewardedActive: Boolean get() = rewarded.active
+
     /** 服务据此决定是否需要获取节点树。 */
     fun wantsTree(pkg: String, activity: String?): Boolean = try {
         when {
