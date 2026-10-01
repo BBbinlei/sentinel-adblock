@@ -30,7 +30,7 @@
 | Task 5: 规则构建与订阅更新 | 待办 | — |
 | Task 6: Koin 模块与模块接线入口 | 待办 | — |
 
-- 下一步：完成 RR-05 提交与 G1 全量构建；RR-01/RR-04 已通过。anti-AD 跳过 113/98,827（0.1143%），AWAvenue 4/965（0.4145%），GKD 接受 459/1,971（23.2877%），输出 535 条；订阅域名编译 2,584,546 字节。
+- 下一步：执行 ./gradlew --no-daemon test，汇总 G1 报告并标记完成；:core-rules:test（27 项）与 :testing:rule-regression:testDebugUnitTest（8 项）已通过，RR-05 的 10 条学习风格 + 10 条手写规则均可解析，invalidCount=0。
 - 已知问题：无
 
 ## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3
