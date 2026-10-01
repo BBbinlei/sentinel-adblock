@@ -137,12 +137,18 @@ class SentinelVpnService : VpnService() {
         }
     }
 
+    override fun onRevoke() {
+        controller?.onRevoked() ?: stopSelf()
+        super.onRevoke()
+    }
+
     override fun onDestroy() {
         // 任何退出路径都先关闭 TUN。
         val c = controller; controller = null
         runCatching { watcher?.stop() }
         networkCallback?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }
-        if (c != null) runBlocking { c.stop("服务已停止") }
+        // 已因故障/撤销停止的不再覆盖其上报原因。
+        if (c != null && c.state.value.let { it == EngineState.RUNNING || it == EngineState.DEGRADED }) runBlocking { c.stop("服务已停止") }
         scope.cancel()
         super.onDestroy()
     }

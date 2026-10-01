@@ -23,6 +23,11 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     private val status: EngineStatusRepository, private val resolver: UpstreamResolver,
     private val pkgs: PackageResolver, private val clock: Clock, private val stopService: () -> Unit,
     decisionSourceDecorator: (DecisionSource) -> DecisionSource = { it }) {
+    private companion object {
+        const val UNEXPECTED_STOP = "网络拦截意外停止，网络已恢复直连"
+        const val REVOKED = "VPN 授权被撤销或被其他 VPN 取代"
+        const val RULES_UNAVAILABLE = "规则不可用，暂停网络拦截"
+    }
     private val mutableState = MutableStateFlow(EngineState.NOT_SETUP)
     val state: StateFlow<EngineState> = mutableState.asStateFlow()
     private val lifecycle = Mutex()
@@ -59,7 +64,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     }
     @Volatile private var privateDnsWarning: String? = null
     private suspend fun reportHealth() {
-        val warning = privateDnsWarning
+        val warning = if (rules == null) RULES_UNAVAILABLE else privateDnsWarning
         if (warning != null) report(EngineState.DEGRADED, warning) else report(EngineState.RUNNING)
     }
     /** 系统「私人 DNS」警告变化（null 表示恢复）；只在运行中改变上报状态。 */
@@ -83,7 +88,14 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         val new = tunFactory.establish(next) ?: return false
         val old = handle; val oldLoop = loop
         handle = new; spec = next
-        loop = scope.launch(Dispatchers.IO) { PacketLoop(new.input, new.output, resolver, decisions, pkgs, ::onEvent).run() }
+        loop = scope.launch(Dispatchers.IO) {
+            val failure = try { PacketLoop(new.input, new.output, resolver, decisions, pkgs, ::onEvent).run(); null }
+            catch (e: CancellationException) { throw e }
+            catch (e: Exception) { Log.w("SentinelVpn", "报文循环异常", e); e }
+            // 被替换或主动停止时 handle 已不是它，不算意外。
+            if (handle === new && active) stop(UNEXPECTED_STOP)
+            else if (failure != null) Log.w("SentinelVpn", "旧报文循环结束", failure)
+        }
         old?.close(); oldLoop?.cancel()
         return true
     }
@@ -94,7 +106,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         try { applyWindows(rewards.observeOpen().first()) } catch (e: Exception) {
             currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "奖励窗口读取失败，按关闭处理", e); windows = emptyMap()
         }
-        rules = withContext(Dispatchers.IO) { ruleStore.loadDomainMatcher() }
+        rules = loadRules()
         active = true
         if (!replace(apps.observeExcluded().first())) {
             active = false; report(EngineState.NOT_SETUP); stopService(); return@withLock
@@ -119,7 +131,8 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
             }.collect { applyWindows(it) }
         }
         watch(global.observe().map { it.ruleVersion }.distinctUntilChanged().drop(1)) {
-            rules = withContext(Dispatchers.IO) { ruleStore.loadDomainMatcher() }
+            rules = loadRules()
+            if (active) reportHealth()
         }
         watch(apps.observeExcluded().debounce(2000)) {
             lifecycle.withLock {
@@ -127,6 +140,10 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
             }
         }
     }
+    private suspend fun loadRules(): DomainMatcher? = try { withContext(Dispatchers.IO) { ruleStore.loadDomainMatcher() } }
+    catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "规则加载失败", e); null }
+    /** 系统撤销 VPN 授权（VpnService.onRevoke）；关闭 TUN 并上报原因。 */
+    fun onRevoked() { scope.launch { stop(REVOKED) } }
     suspend fun stop(reason: String) = withContext(NonCancellable) {
         lifecycle.withLock {
             active = false
