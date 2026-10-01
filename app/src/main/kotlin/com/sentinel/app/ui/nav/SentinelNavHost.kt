@@ -24,7 +24,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sentinel.app.R
+import com.sentinel.app.apps.AppDetailScreen
+import com.sentinel.app.apps.AppsScreen
 import com.sentinel.app.home.HomeScreen
+import com.sentinel.app.rules.RulesScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.sentinel.app.onboarding.OnboardingScreen
 
 object Routes {
@@ -87,15 +92,12 @@ fun SentinelNavHost(navController: NavHostController, startDestination: String =
                 })
             }
             composable(Routes.HOME) { HomeScreen() }
-            composable(Routes.APPS) { Placeholder("screen:apps", R.string.tab_apps) }
-            composable(Routes.RULES) { Placeholder("screen:rules", R.string.tab_rules) }
+            composable(Routes.APPS) { AppsScreen(onOpen = { navController.navigate(Routes.appDetail(it)) }) }
+            composable(Routes.APP_DETAIL, arguments = listOf(navArgument("pkg") { type = NavType.StringType })) { entry ->
+                AppDetailScreen(pkg = entry.arguments?.getString("pkg").orEmpty())
+            }
+            composable(Routes.RULES) { RulesScreen() }
         }
     }
 }
 
-@Composable
-private fun Placeholder(tag: String, label: Int) {
-    Box(Modifier.fillMaxSize().testTag(tag), contentAlignment = Alignment.Center) {
-        Text(stringResource(label), style = MaterialTheme.typography.titleMedium)
-    }
-}

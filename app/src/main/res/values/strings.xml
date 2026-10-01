@@ -38,4 +38,46 @@
     <string name="step_notify_body">允许哨兵读取通知，用来过滤系统自带 App 的营销推送。通知内容只在本机处理。</string>
     <string name="step_battery_title">允许后台运行</string>
     <string name="step_battery_body">把哨兵加入电池优化白名单，避免被系统清理后台导致保护中断。</string>
+
+    <string name="apps_search">搜索应用名或包名</string>
+    <string name="apps_empty">没有找到应用</string>
+    <string name="apps_default_allowed">敏感应用，默认放行</string>
+    <string name="apps_blocked_7d">近 7 天拦截 %1$d 次</string>
+    <string name="level_off">关闭</string>
+    <string name="level_standard">标准</string>
+    <string name="level_strong">强力</string>
+
+    <string name="detail_temp_allow">一键临时放行（24 小时）</string>
+    <string name="detail_temp_allowed_until">已临时放行，到 %1$s 自动恢复</string>
+    <string name="detail_level">保护级别</string>
+    <string name="detail_observing">观察期还剩 %1$d 天</string>
+    <string name="detail_observing_hint">观察期内只记录、不拦截网络。下面是它「将要拦截」的域名，确认没问题再放心使用。</string>
+    <string name="detail_would_block_empty">最近 3 天还没有记录</string>
+    <string name="detail_advanced">高级选项</string>
+    <string name="detail_expand">展开</string>
+    <string name="detail_collapse">收起</string>
+    <string name="detail_rewarded">激励视频</string>
+    <string name="toggle_splash">自动跳过开屏广告</string>
+    <string name="toggle_shake">处理「摇一摇」跳转</string>
+    <string name="toggle_jump_back">无交互跳转时自动返回</string>
+    <string name="toggle_notify">过滤营销通知</string>
+    <string name="toggle_limit_overlay">限制悬浮窗与后台弹窗</string>
+    <string name="toggle_deny_clipboard">禁止读取剪贴板</string>
+    <string name="rewarded_silent">静默播完</string>
+    <string name="rewarded_block">直接拦截</string>
+    <string name="rewarded_ask">每次询问</string>
+
+    <string name="rules_subscriptions">订阅规则</string>
+    <string name="rules_update_now">立即更新</string>
+    <string name="rules_updating">正在更新…</string>
+    <string name="rules_never_updated">尚未更新</string>
+    <string name="rules_sub_meta">%1$d 条规则 · 上次更新 %2$s</string>
+    <string name="rules_user">我的规则</string>
+    <string name="rules_user_empty">还没有自己的规则。学习模式确认过的规则会出现在这里。</string>
+    <string name="rules_delete">删除</string>
+    <string name="rules_add">添加订阅</string>
+    <string name="rules_name">名称</string>
+    <string name="rules_url">订阅地址（必须是 https）</string>
+    <string name="rules_add_button">添加并更新</string>
+    <string name="tile_label">暂停哨兵</string>
 </resources>

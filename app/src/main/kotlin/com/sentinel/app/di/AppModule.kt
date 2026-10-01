@@ -3,10 +3,17 @@ package com.sentinel.app.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.provider.Settings
+import com.sentinel.app.apps.AppDetailViewModel
+import com.sentinel.app.apps.AppsViewModel
 import com.sentinel.app.home.HomeViewModel
+import com.sentinel.app.rules.RulesViewModel
+import com.sentinel.data.db.SubscriptionDao
+import com.sentinel.data.rules.SubscriptionUpdater
 import com.sentinel.app.onboarding.AndroidSetupChecker
 import com.sentinel.app.onboarding.OnboardingViewModel
 import com.sentinel.app.onboarding.SetupChecker
+import com.sentinel.system.shell.ShizukuGateway
+import com.sentinel.system.shell.ShizukuState
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -26,11 +33,31 @@ fun privateDnsWarning(context: Context): String? = try {
 
 val appModule = module {
     single<SharedPreferences> { androidContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE) }
-    // Shizuku 就绪状态在 engine-system 合并进 main 后接上（M5），此前该步骤始终显示「未完成」
-    single<SetupChecker> { AndroidSetupChecker(androidContext(), shizukuReady = { false }) }
+    single<SetupChecker> {
+        // engine-system 的入口在主进程加载；取不到网关时 Shizuku 步骤显示「未完成」，不影响其他步骤
+        val gateway = getOrNull<ShizukuGateway>()
+        AndroidSetupChecker(
+            androidContext(),
+            shizukuReady = { gateway?.state() == ShizukuState.READY },
+            requestShizuku = { gateway?.requestPermission() },
+        )
+    }
     factory { OnboardingViewModel(get(), get()) }
     factory {
         val context = androidContext()
         HomeViewModel(get(), get(), get(), get(), get(), get(), privateDnsWarning = { privateDnsWarning(context) })
+    }
+    factory { AppsViewModel(get(), get(), get()) }
+    factory { (pkg: String) -> AppDetailViewModel(pkg, get(), get(), get()) }
+    factory {
+        val dao = get<SubscriptionDao>()
+        val updater = get<SubscriptionUpdater>()
+        RulesViewModel(
+            subscriptions = dao.observeAll(),
+            userRules = get(),
+            saveSubscription = { dao.upsert(it) },
+            updateAll = { updater.updateAll() },
+            rebuildFromCache = { updater.rebuildFromCache() },
+        )
     }
 }

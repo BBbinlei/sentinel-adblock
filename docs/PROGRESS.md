@@ -114,18 +114,20 @@
 | Task 2: 最小首页（M3 可用版本） | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
 | Task 3: 引导向导 | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
 | Task 4: 完整首页、引擎日志、系统净化与撤销记录 | 待办 | — |
-| Task 5: 应用页与应用详情 | 待办 | — |
-| Task 6: 规则页 | 待办 | — |
-| Task 7: 快捷开关 | 待办 | — |
+| Task 5: 应用页与应用详情 | 代码完成（测试被夹具问题阻塞） | — |
+| Task 6: 规则页 | 代码完成（测试被夹具问题阻塞） | — |
+| Task 7: 快捷开关 | 代码完成（测试被夹具问题阻塞） | — |
 
-- 下一步：Task 4（等 guard 合并）、Task 5/6/7（只依赖 data，可继续做）。夹具问题解决后重跑 UT-AP-1/2/3，再过 G3 的 app 部分。
+- 下一步：Task 4（等 guard 合并后接 `GuardRunner.undo`、`OpExecutor`、`ColorOsProfile`）。夹具问题（见已知问题 1、2、6）由测试模块修复后，重跑全部 UT-AP 与 MT-AP，再过 G3 的 app 部分和 G8。
 - 已知问题：
   1. **测试夹具与 data 实际构造器不符（阻塞 UT-AP-2-01～03、UT-AP-1-03）**：`FakeData.construct` 假设仓库用 DAO 构造（README A02），但 data 里 `GlobalStateRepository`、`AppConfigRepository`、`AppRegistry`、`OverrideRepository`、`SignalRepository` 实际用 `SentinelDatabase` + `Clock` 构造，夹具报 `No unique DAO-based constructor`。需要测试模块改夹具（例如用 Robolectric 的内存 Room 数据库）。我没有改。
   2. **UT-AP-1-01 的 Koin verify 缺 `File`**：`RuleStore(File, ...)` 需要在测试的 `extraTypes` 里加入 `File::class`。需要测试模块改。
   3. **UT-AP-1-03 的 `Robolectric.buildApplication` 在 Robolectric 4.17 不存在**：只做了让它能编译的最小改动（`ReflectionHelpers` 调 `Application.attach` 再 `onCreate`），断言未变。
   4. UT-AP-1-04 为 G8 专属，已在 `app/build.gradle.kts` 用 JUnit Category 排除，M8 结束时删除该排除。
-  5. 向导的 Shizuku 步骤暂时恒为「未完成」（`AppModule` 里 `shizukuReady = { false }`），engine-system 合并进 main 后接上 `ShizukuGateway`。
-  6. 向导图示是通用矢量图，未按 DI-21 记录的真实 ColorOS 路径绘制（真机核实后再换）。
+  5. 向导的 Shizuku 步骤已接到 engine-system 的 `ShizukuGateway`（经 Koin `getOrNull`，取不到时显示「未完成」）。
+  6. **UT-AP-7-01/02 的 `service.onDestroy()` 在 Robolectric 4.17 抛 `ClassCastException`**（`ShadowTileService` 不是 `ShadowService` 的子类），发生在测试的 finally 里，与生产代码无关。需要测试模块改（例如不直接调用 onDestroy）。
+  7. UT-AP-5-*、UT-AP-7-* 和 UT-AP-2-* 都因问题 1 无法运行；Task 5/6/7 的业务逻辑（排序/搜索、观察期天数向上取整、`wouldBlock` 去重、https 校验、暂停磁贴）**目前只做过编译和人工对照，没有经过测试验证**。夹具修好后必须重跑。UT-AP-6-01～03 已通过。
+  8. 向导图示是通用矢量图，未按 DI-21 记录的真实 ColorOS 路径绘制（真机核实后再换）。
 
 ## [merge] 状态: 待办 | 负责方: claude | 关卡: —
 
