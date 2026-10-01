@@ -1,0 +1,6 @@
+# 导出的事件与数据库副本含隐私数据，不入库；只跟踪 Markdown 报告
+*.csv
+*-summary.txt
+*.db
+*.db-wal
+*.db-shm
