@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node class="android.widget.FrameLayout">
+  <node class="android.widget.TextView" text="已阅读并同意用户协议" checked="true"/>
+</node>
