@@ -63,17 +63,17 @@
 - 下一步：从 Task 1 开始。
 - 已知问题：无
 
-## [engine-notify] 状态: 待办 | 负责方: codex | 关卡: G6
+## [engine-notify] 状态: 进行中 | 负责方: codex | 关卡: G6
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 判定与内置规则 | 待办 | — |
-| Task 2: 划除学习 | 待办 | — |
+| Task 1: 判定与内置规则 | 完成 | 本次提交 |
+| Task 2: 划除学习 | 进行中 | — |
 | Task 3: 编排器 NotifyEngine | 待办 | — |
 | Task 4: 服务接线 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
-- 已知问题：无
+- 下一步：Task 1 的 UT-NT-1-01～06 已红绿验证通过；继续 Task 2，迁入学习器测试。
+- 已知问题：暂存共享辅助文件 NotifyFakes.kt 的 EffectiveConfig 导入为 com.sentinel.data.policy.EffectiveConfig，但冻结实现位于 com.sentinel.data.db；仅将本模块副本导入修正为 db，未改断言或暂存源。共享辅助文件同时引用 Task 2/3 接口，Task 1 先声明 PLAN 已规定的 LearnerStore / NotifyState，使辅助文件编译，行为实现仍按 Task 顺序。用户给出的基线 Gradle task 含另一项目的绝对路径及拼写错误，按目标使用 :engine-notify:assembleDebug；SDK 通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，不写 local.properties。实机核实报告尚不存在，保留 PLAN 六个包名，等用户真机核对。
 
 ## [engine-a11y] 状态: 待办 | 负责方: codex | 关卡: G4
 
