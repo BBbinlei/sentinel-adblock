@@ -40,3 +40,10 @@
 
 ## 依赖
 `core-rules`。
+
+## 实施约定
+
+- 固定时长集中在 `contract/DataContract`；奖励窗口和信号发出方分别由 `RewardWindowContract`、`SignalContract` 定义。
+- `RuleStore` 读取损坏文件时直接加载上一版；不会由 VPN 读取进程改写文件。安装失败会恢复当前和上一版，并保持版本号。
+- `BuiltRules.stats`：`builtin:domains`、`builtin:httpdns`、`builtin:ui`、`user` 为来源条数；`subscription:<id>` 与 `subscription:<id>:skipped` 为各订阅解析/跳过数；`domains`、`ui`、`notify` 为去重后的条数，`duplicates`、`skipped` 为重复/跳过总数。
+- 默认订阅地址于 2026-10-02 核对：[anti-AD README](https://github.com/privacy-protection-tools/anti-AD#快速使用使用官网地址速度更稳定)、[AWAvenue README](https://github.com/TG-Twilight/AWAvenue-Ads-Rule#订阅规则)、[GKD README](https://github.com/gkd-kit/subscription#readme)。GKD README 标明暂时停止维护；按计划保留其官方地址。
