@@ -101,20 +101,26 @@
 - 下一步：从 Task 1 开始。
 - 已知问题：无
 
-## [app] 状态: 待办 | 负责方: claude | 关卡: G3(Task 1–2) / G8
+## [app] 状态: 进行中 | 负责方: claude | 关卡: G3(Task 1–2) / G8
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 应用骨架与全局接线 | 待办 | — |
-| Task 2: 最小首页（M3 可用版本） | 待办 | — |
-| Task 3: 引导向导 | 待办 | — |
+| Task 1: 应用骨架与全局接线 | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
+| Task 2: 最小首页（M3 可用版本） | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
+| Task 3: 引导向导 | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
 | Task 4: 完整首页、引擎日志、系统净化与撤销记录 | 待办 | — |
 | Task 5: 应用页与应用详情 | 待办 | — |
 | Task 6: 规则页 | 待办 | — |
 | Task 7: 快捷开关 | 待办 | — |
 
-- 下一步：Task 1–2（M3）；Task 5、6、7 只依赖 data，可提前做；Task 3 等 engine-system 合并，Task 4 等 guard 合并（此时把状态改为 `等待`）。
-- 已知问题：无
+- 下一步：Task 4（等 guard 合并）、Task 5/6/7（只依赖 data，可继续做）。夹具问题解决后重跑 UT-AP-1/2/3，再过 G3 的 app 部分。
+- 已知问题：
+  1. **测试夹具与 data 实际构造器不符（阻塞 UT-AP-2-01～03、UT-AP-1-03）**：`FakeData.construct` 假设仓库用 DAO 构造（README A02），但 data 里 `GlobalStateRepository`、`AppConfigRepository`、`AppRegistry`、`OverrideRepository`、`SignalRepository` 实际用 `SentinelDatabase` + `Clock` 构造，夹具报 `No unique DAO-based constructor`。需要测试模块改夹具（例如用 Robolectric 的内存 Room 数据库）。我没有改。
+  2. **UT-AP-1-01 的 Koin verify 缺 `File`**：`RuleStore(File, ...)` 需要在测试的 `extraTypes` 里加入 `File::class`。需要测试模块改。
+  3. **UT-AP-1-03 的 `Robolectric.buildApplication` 在 Robolectric 4.17 不存在**：只做了让它能编译的最小改动（`ReflectionHelpers` 调 `Application.attach` 再 `onCreate`），断言未变。
+  4. UT-AP-1-04 为 G8 专属，已在 `app/build.gradle.kts` 用 JUnit Category 排除，M8 结束时删除该排除。
+  5. 向导的 Shizuku 步骤暂时恒为「未完成」（`AppModule` 里 `shizukuReady = { false }`），engine-system 合并进 main 后接上 `ShizukuGateway`。
+  6. 向导图示是通用矢量图，未按 DI-21 记录的真实 ColorOS 路径绘制（真机核实后再换）。
 
 ## [merge] 状态: 待办 | 负责方: claude | 关卡: —
 

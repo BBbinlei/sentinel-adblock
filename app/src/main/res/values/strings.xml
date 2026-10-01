@@ -1,4 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">哨兵</string>
+
+    <string name="tab_home">首页</string>
+    <string name="tab_apps">应用</string>
+    <string name="tab_rules">规则</string>
+
+    <string name="home_shield_on">保护中</string>
+    <string name="home_shield_off">已关闭</string>
+    <string name="home_shield_paused">已暂停</string>
+    <string name="home_shield_tap_off">点击关闭保护</string>
+    <string name="home_shield_tap_on">点击开启保护</string>
+    <string name="home_today_blocked">今天已拦截 %1$d 次</string>
+
+    <string name="engine_vpn">网络拦截</string>
+    <string name="engine_a11y">界面处理</string>
+    <string name="engine_notify">通知过滤</string>
+    <string name="engine_system">系统净化</string>
+
+    <string name="state_running">运行中</string>
+    <string name="state_stopped">已停止</string>
+    <string name="state_degraded">能力下降</string>
+    <string name="state_not_setup">未开启</string>
+
+    <string name="onboarding_progress">第 %1$d 步，共 %2$d 步</string>
+    <string name="onboarding_step_done">这一步已完成</string>
+    <string name="onboarding_next">下一步</string>
+    <string name="onboarding_skip">先跳过</string>
+    <string name="onboarding_go">去设置</string>
+    <string name="step_shizuku_title">激活 Shizuku</string>
+    <string name="step_shizuku_body">系统净化需要 Shizuku 授权。打开 Shizuku，按它的提示用无线调试激活，再回到这里授权哨兵。不激活也可以先使用网络拦截与界面处理。</string>
+    <string name="step_vpn_title">开启网络拦截</string>
+    <string name="step_vpn_body">哨兵用本机 VPN 在 DNS 层拦截广告域名，不会上传你的流量。建议在系统 VPN 设置里开启「始终开启的 VPN」，但请不要开启「屏蔽未使用 VPN 的连接」，否则一旦哨兵停止会导致断网。</string>
+    <string name="step_a11y_title">开启界面处理</string>
+    <string name="step_a11y_body">在系统「无障碍」里找到「哨兵」并开启，用于自动跳过开屏广告、关闭弹窗。哨兵只在检测到广告时才会点击。</string>
+    <string name="step_notify_title">开启通知过滤</string>
+    <string name="step_notify_body">允许哨兵读取通知，用来过滤系统自带 App 的营销推送。通知内容只在本机处理。</string>
+    <string name="step_battery_title">允许后台运行</string>
+    <string name="step_battery_body">把哨兵加入电池优化白名单，避免被系统清理后台导致保护中断。</string>
 </resources>
