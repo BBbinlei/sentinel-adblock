@@ -1,1 +1,14 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- FixtureNotifier 在 Android 13+ 发通知需要此权限（测试前用 pm grant 或 GrantPermissionRule 授予）。 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <!-- 开屏页夹具（DI-05）：exported 以便 UiAutomator / am start 从外部启动。 -->
+        <activity
+            android:name="com.sentinel.di.FixtureSplashActivity"
+            android:exported="true"
+            android:label="开屏夹具"
+            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar" />
+    </application>
+</manifest>
