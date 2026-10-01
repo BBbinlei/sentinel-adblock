@@ -19,7 +19,7 @@
 - 下一步：G1 已通过；本通道在 main 上完成，可启动 data（G2）。MT-CR 提交 8bc9562；RR-01 7caea70；RR-04 14ae1d5；RR-05 e162c6c。报告：testing/reports/G1-2026-10-02.md。
 - 已知问题：无阻塞项。本次允许正常运行 Gradle，已通过 :core-rules:test（27 项）、:testing:rule-regression:testDebugUnitTest（8 项）及全量 test，失败/跳过均为 0；历史并发会话 120dea3、9d184cc 的沙箱阻塞记录已被实际结果取代，未改写其提交。现有 top-domains fixture 为 987 条，按当前用户指令保持只读，STANDARD/STRONG 命中均为 0。RR-05 使用学习风格合成样本，未执行真机学习录制。
 
-## [data] 状态: 进行中 | 负责方: codex | 关卡: G2
+## [data] 状态: 完成 | 负责方: codex | 关卡: G2
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -30,7 +30,7 @@
 | Task 5: 规则构建与订阅更新 | 完成 | 6314051 |
 | Task 6: Koin 模块与模块接线入口 | 完成 | 2c1b83e |
 
-- 下一步：G2 data 全部 46 项测试已通过（含 MT-DA-01～03 与 4 项补充检查）；配置变化时读取当前时间的边界问题已修复。执行 ./gradlew test、check-merge.sh data，再写报告并标记完成。
+- 下一步：G2 已通过：data 46/46、./gradlew test 全量 81/81、check-merge.sh data 全部通过；报告 testing/reports/G2-2026-10-02.md。等待合并通道确认并登记 g2-frozen，再放行后续引擎开发。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
 ## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3

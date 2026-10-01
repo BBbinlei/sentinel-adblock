@@ -1,0 +1,660 @@
+{
+  "gate": "G2",
+  "date": "2026-10-02",
+  "timezone": "Asia/Shanghai",
+  "data_code_commit": "0f78dbb",
+  "branch": "main",
+  "commands": [
+    {
+      "phase": "Task 1 TDD",
+      "red": "BUILD FAILED：实现缺失，引用无法解析",
+      "missing": [
+        "db",
+        "policy",
+        "AppConfigEntity"
+      ],
+      "green": "BUILD SUCCESSFUL"
+    },
+    {
+      "phase": "Task 2 TDD",
+      "red": "BUILD FAILED：实现缺失，引用无法解析",
+      "missing": [
+        "contract",
+        "repo",
+        "GlobalStateRepository"
+      ],
+      "green": "BUILD SUCCESSFUL"
+    },
+    {
+      "phase": "Task 3 TDD",
+      "red": "BUILD FAILED：实现缺失，引用无法解析",
+      "missing": [
+        "apps",
+        "AppConfigRepository",
+        "AppRegistry"
+      ],
+      "green": "BUILD SUCCESSFUL"
+    },
+    {
+      "phase": "Task 4 TDD",
+      "red": "BUILD FAILED：实现缺失，引用无法解析",
+      "missing": [
+        "rules",
+        "RuleStore",
+        "BuiltRules"
+      ],
+      "green": "BUILD SUCCESSFUL"
+    },
+    {
+      "phase": "Task 5 TDD",
+      "red": "BUILD FAILED：实现缺失，引用无法解析",
+      "missing": [
+        "SubscriptionUpdater",
+        "RuleBuilder",
+        "updateAll"
+      ],
+      "green": "BUILD SUCCESSFUL"
+    },
+    {
+      "phase": "Task 6 TDD",
+      "red": "BUILD FAILED：实现缺失，引用无法解析",
+      "missing": [
+        "di",
+        "module",
+        "koinApplication"
+      ],
+      "green": "BUILD SUCCESSFUL"
+    },
+    {
+      "command": "./gradlew :data:testDebugUnitTest :core-rules:test",
+      "result": "BUILD SUCCESSFUL；data 基线 NO-SOURCE，core-rules 通过"
+    },
+    {
+      "command": "./gradlew :data:testDebugUnitTest",
+      "result": "BUILD SUCCESSFUL；46/46，失败 0，跳过 0"
+    },
+    {
+      "command": "./gradlew test",
+      "result": "BUILD SUCCESSFUL；81/81，失败 0，跳过 0；尚无有效测试源码的模块为 NO-SOURCE"
+    },
+    {
+      "command": "bash scripts/check-merge.sh data",
+      "result": "== 1. 冻结项（g2-frozen 之后 data/core-rules/版本目录/模块列表不得改动）\n  ✓ 本模块就是冻结前的工作对象，跳过\n== 2. 依赖方向（data 只能依赖：core-rules）\n  ✓ 依赖合法\n== 3. 纯 Kotlin 约束（core-rules 与 guard.policy 不得引用 android.*）\n  ✓ 本模块无此约束\n== 4. 契约常量（引擎不得写奖励窗口/信号的字面量）\n  ✓ 本模块无此约束\n== 5. 模块入口登记（ModuleEntry，见 docs/CONTRACTS.md C5）\n  ✓ 已登记 DataEntry\n== 6. 测试\n  ✓ :data:testDebugUnitTest 通过\n\ncheck-merge: data 全部通过"
+    },
+    {
+      "phase": "配置变化时间边界",
+      "red": "expected 0 but was 60000，配置变化未在下一定时 tick 前重算",
+      "green": "全部 data 测试通过",
+      "fix": "0f78dbb"
+    }
+  ],
+  "tests": [
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ModuleTest",
+      "case": "MT_CR_01_parse_compile_match_end_to_end()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ModuleTest",
+      "case": "MT_CR_03_no_android_imports()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ModuleTest",
+      "case": "MT_CR_02_size_and_lookup_performance()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.catalog.CatalogTest",
+      "case": "UT_CR_3_01_sensitive_apps()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.catalog.CatalogTest",
+      "case": "UT_CR_3_03_landing_catalog()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.catalog.CatalogTest",
+      "case": "UT_CR_3_02_httpdns_cidrs()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.domain.DomainMatcherTest",
+      "case": "UT-CR-2-03 validation and memory mapped load()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.domain.DomainMatcherTest",
+      "case": "UT-CR-2-02 never block wins()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.domain.DomainMatcherTest",
+      "case": "UT-CR-2-01 most specific suffix()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.domain.DomainMatcherTest",
+      "case": "UT-CR-2-04 duplicate keeps standard()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.notify.NotifyMatcherTest",
+      "case": "UT_CR_6_04_other_app()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.notify.NotifyMatcherTest",
+      "case": "UT_CR_6_01_package_channel()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.notify.NotifyMatcherTest",
+      "case": "UT_CR_6_03_empty_rule_invalid()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.notify.NotifyMatcherTest",
+      "case": "UT_CR_6_02_keyword_in_body()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.AdGuardParserTest",
+      "case": "UT-CR-1-03 supported domain syntax only()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.GkdParserTest",
+      "case": "UT_CR_5_03_attribute_only_and_page_scope()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.GkdParserTest",
+      "case": "UT_CR_5_04_json5_lexical_conversion()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.HostsParserTest",
+      "case": "UT-CR-1-01 hosts comments and normalization()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.HostsParserTest",
+      "case": "UT-CR-1-04 reject IP wildcard and invalid domains()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.HostsParserTest",
+      "case": "UT-CR-1-02 plain domain()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.parse.JsonRuleParserTest",
+      "case": "UT_CR_5_05_all_rule_types_roundtrip()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ui.SelectorTest",
+      "case": "UT_CR_4_04_syntax_errors()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ui.SelectorTest",
+      "case": "UT_CR_4_03_class_short_name_and_snapshot()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ui.SelectorTest",
+      "case": "UT_CR_4_02_child_and_descendant()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ui.SelectorTest",
+      "case": "UT_CR_4_01_operators()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ui.UiRuleIndexTest",
+      "case": "UT_CR_5_01_lookup_order()",
+      "status": "通过"
+    },
+    {
+      "module": "core-rules",
+      "task": "test",
+      "class": "com.sentinel.rules.ui.UiRuleIndexTest",
+      "case": "UT_CR_5_02_invalid_count_and_builtins()",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-03 initial apps not observed and later sync preserves config",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-04 temp allow emits signal and expires",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-01 new bank immediately excluded",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-07 due observation requires unset level and positive deadline",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "configuration changes recompute current time before next periodic tick",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-02 ordinary app observed",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-05 uninstall cleans all specified tables and both jump ends",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.AppConfigRepositoryTest",
+      "case": "UT-DA-3-06 pause expires with sixty second recomputation",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DataModuleIntegrationTest",
+      "case": "MT-DA-03 partial subscription failure installs success and cache together",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DataModuleIntegrationTest",
+      "case": "MT-DA-02 app lifecycle sensitivity observation allow expiry uninstall",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DataModuleIntegrationTest",
+      "case": "MT-DA-01 fresh database seeds defaults and builds offline rules",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DataModuleTest",
+      "case": "UT-DA-6-01 Koin definitions verify and resolve",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DataModuleTest",
+      "case": "UT-DA-6-02 entry discovery main process and unique periodic work",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-05 default config",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-03 explicit level wins over sensitivity",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-01 global disabled and paused",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-06 observation awaits guard even after deadline",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-08 all enums stored by name",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-04 sensitive default",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-07 all entity round trips",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.DatabaseTest",
+      "case": "UT-DA-1-02 temporary allow",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-09 recent disabled only",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-08 user rules round trip",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-01 pause and atomic version",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-10 reward contract defaults",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-12 repeated reward replaces deadline",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-03 prune thirty days",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "signals validate package and effective level and tolerate write failure",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-02 local midnight count",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-06 unique recent rule hits",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-04 pinned rules cannot disable",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-05 disabled grouped by package",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-07 reward deadline",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RepositoriesTest",
+      "case": "UT-DA-2-11 every signal declares its emitter",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RuleStoreTest",
+      "case": "UT-DA-4-02 corrupt current falls back to previous",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RuleStoreTest",
+      "case": "UT-DA-4-04 missing and irrecoverable files use safe defaults",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RuleStoreTest",
+      "case": "UT-DA-4-03 validation failure keeps all old files and version",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RuleStoreTest",
+      "case": "UT-DA-4-05 install bumps version exactly once",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RuleStoreTest",
+      "case": "version write failure restores previous generation",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.RuleStoreTest",
+      "case": "UT-DA-4-01 installed matcher loaded",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.SubscriptionUpdaterTest",
+      "case": "UT-DA-5-04 ETag and 304 reuse cache",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.SubscriptionUpdaterTest",
+      "case": "UT-DA-5-02 stats count sources duplicates and skips",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.SubscriptionUpdaterTest",
+      "case": "worker succeeds offline and retries without replacing bad builds",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.SubscriptionUpdaterTest",
+      "case": "UT-DA-5-01 no subscriptions has standard domains and HttpDNS",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.SubscriptionUpdaterTest",
+      "case": "UT-DA-5-03 failed download keeps cache and records error",
+      "status": "通过"
+    },
+    {
+      "module": "data",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.data.SubscriptionUpdaterTest",
+      "case": "UT-DA-5-05 build exception cannot install or bump",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.SubscriptionHealthTest",
+      "case": "RR_04c_gkd_acceptance_report",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.SubscriptionHealthTest",
+      "case": "RR_04d_compiled_size_below_8_mb",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.SubscriptionHealthTest",
+      "case": "RR_04a_all_samples_parse",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.SubscriptionHealthTest",
+      "case": "RR_04b_adguard_skipped_below_20_percent",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.TopDomainsFalsePositiveTest",
+      "case": "RR_01a_standard_no_false_positives",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.TopDomainsFalsePositiveTest",
+      "case": "RR_01b_strong_report_only",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.UserRulesRegressionTest",
+      "case": "RR_05b_index_valid",
+      "status": "通过"
+    },
+    {
+      "module": "testing/rule-regression",
+      "task": "testDebugUnitTest",
+      "class": "com.sentinel.regression.UserRulesRegressionTest",
+      "case": "RR_05a_parse_and_compile_selectors",
+      "status": "通过"
+    }
+  ]
+}
