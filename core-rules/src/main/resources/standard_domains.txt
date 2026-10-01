@@ -1,0 +1,10 @@
+pangolin-sdk-toutiao.com	AD_SDK
+pangolin-sdk-toutiao-b.com	AD_SDK
+pglstatp-toutiao.com	AD_SDK
+gdt.qq.com	AD_SDK
+gdtimg.com	AD_SDK
+mobads.baidu.com	AD_SDK
+mobads-logs.baidu.com	AD_SDK
+ads.oppomobile.com	AD
+adukwai.com	AD_SDK
+sigmob.cn	AD_SDK
