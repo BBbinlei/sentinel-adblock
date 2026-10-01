@@ -95,4 +95,16 @@ class SubscriptionUpdaterTest {
         assertEquals(old, global.get().ruleVersion)
         assertNotNull(store.loadDomainMatcher()!!.lookup("gdt.qq.com"))
     }
+    @Test fun `worker succeeds offline and retries without replacing bad builds`() = runBlocking<Unit> {
+        val app = org.koin.core.context.startKoin { modules(org.koin.dsl.module { single { updater } }) }
+        try {
+            val worker = androidx.work.testing.TestListenableWorkerBuilder<RuleUpdateWorker>(RuntimeEnvironment.getApplication()).build()
+            assertEquals(androidx.work.ListenableWorker.Result.success(), worker.doWork())
+            val version = global.get().ruleVersion
+            db.userRuleDao().upsert(UserRuleEntity("broken", "broken", RuleOrigin.MANUAL, 0))
+            assertEquals(androidx.work.ListenableWorker.Result.retry(), worker.doWork())
+            assertEquals(version, global.get().ruleVersion)
+        } finally { org.koin.core.context.stopKoin() }
+    }
+
 }
