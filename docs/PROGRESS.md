@@ -45,35 +45,40 @@
 | Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
 | Task 7: 故障安全 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-vpn/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-vpn/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
-## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
+## [engine-system] 状态: 进行中 | 负责方: claude | 关卡: G5
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 配置档案 | 待办 | — |
-| Task 2: Shizuku 网关 | 待办 | — |
-| Task 3: 操作执行与撤销 | 待办 | — |
-| Task 4: 按 App 权限同步 | 待办 | — |
-| Task 5: 巡检与状态上报 | 待办 | — |
-| Task 6: 崩溃日志采集 | 待办 | — |
-| Task 7: 接线 | 待办 | — |
+| Task 1: 配置档案 | 完成 | 24fe2a1 |
+| Task 2: Shizuku 网关 | 完成 | 669bbb3 |
+| Task 3: 操作执行与撤销 | 完成 | 9d7ae3c |
+| Task 4: 按 App 权限同步 | 完成 | 077f268 |
+| Task 5: 巡检与状态上报 | 完成 | (见 git log) |
+| Task 6: 崩溃日志采集 | 完成 | (见 git log) |
+| Task 7: 接线 | 完成 | (见 git log) |
 
-- 下一步：从 Task 1 开始。
-- 已知问题：无
+- 下一步：等待实机核实报告以填写 verified=true 的档案并执行 DI-31/DI-32；测试模块需补 RR-06（testing/rule-regression ProfileHealthTest）。Task 1–7、UT-SY 25 项、MT-SY 3 项均已通过，G5 报告见 testing/reports/G5-2026-10-02.md；状态保持进行中，不改完成。接手说明：Codex 额度耗尽，Claude 接手本通道（负责方 claude）。
+- 已知问题：RR-06 的 ProfileHealthTest 在 testing/ 中不存在，本通道未自写；Task 7 用 CurrentProfile 持有者提供「当前档案 ColorOsProfile?」（Koin 不支持可空绑定），ROM 版本经反射读 ro.build.version.oplusrom，读不到则无档案（所有操作不执行）；UT-SY-6 两项通过，但 dropbox_sample.txt 为合成样本非实机采集，待实机核实后替换；DropboxCrashWorker 首次运行以当前时间为 lastChecked 基线（不回放历史崩溃）；UT-SY-5 四项通过（DriftInspector 另暴露 driftedCount 供上报，reapply 在非 READY 时返回空 map）；暂存 TestSupport 缺少 DriftInspector 的跨包 import，补足 import 以编译，断言不变；UT-SY-4 四项通过；恢复使用原 AppOps 模式，离线不发命令并保留待同步意图；backgroundPopupOp 为空时不推断 OEM 操作名；UT-SY-3 七项及 FakeDevice 自检通过；TestSupport 的混合 arrayOf 显式声明 <Any> 以消除 Kotlin 2.4 编译错误；新增本模块 AtomicFile 撤销定义持久化，data 保持只读；TestSupport 仅适配冻结 data 的四个仓库构造参数，未改断言；未来 appSync/inspector 辅助方法暂缓导入；测试增加版本目录已有 libs.room.runtime 引用；UT-SY-2 四项通过；AIDL 已启用；FakeShizukuApi 从暂存 TestSupport 原样提取以避免引用尚未实施的 Task 3–5 类型；Shizuku Provider/绑定依据官方 API 文档及已安装 13.1.5 签名；Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
 
-## [engine-notify] 状态: 待办 | 负责方: codex | 关卡: G6
+## [engine-notify] 状态: 已合并 | 负责方: claude | 关卡: G6
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 判定与内置规则 | 待办 | — |
-| Task 2: 划除学习 | 待办 | — |
-| Task 3: 编排器 NotifyEngine | 待办 | — |
-| Task 4: 服务接线 | 待办 | — |
+| Task 1: 判定与内置规则 | 完成 | 404115d |
+| Task 2: 划除学习 | 完成 | f5f8a4b |
+| Task 3: 编排器 NotifyEngine | 完成 | 25a23ca |
+| Task 4: 服务接线 | 完成 | b80bc69 |
 
-- 下一步：从 Task 1 开始。
-- 已知问题：无
+- 下一步：Task 1–4 已逐项迁入测试、确认缺少实现时失败、实现并通过；模块 14/14 测试、assembleDebug 已通过。claude 接手复核：14/14 测试重跑通过、./gradlew test 与 check-merge.sh engine-notify 全部通过，报告见 testing/reports/G6-2026-10-02.md；DI-07、DI-41 待真机。
+- 已知问题：
+  - 暂存测试仅修本模块副本的编译问题，未改断言内容或暂存源：NotifyFakes.kt 的 EffectiveConfig 导入从 policy 改为冻结实现所在的 db；NotifyEngineTest.kt 第 59 行为 listOf 补 Pair<Rule, RuleOrigin> 类型，解决 TYPE_INFERENCE_ONLY_INPUT_TYPES_ERROR；ListenerMappingTest.kt 用公开 StatusBarNotification 构造器补 score=0、去掉未公开构造器的 overrideGroupKey 参数，并把未公开 UserHandle.of(0) 换成 getUserHandleForUid(10_001)（仍为用户 0）。
+  - 共享测试辅助文件同时依赖 Task 2/3 接口，因此 Task 1 先声明 PLAN 指定的 LearnerStore / NotifyState，行为实现仍按 Task 顺序。Task 2 在本模块 build.gradle.kts 添加已有 libs.serialization.json 引用用于 JSON 持久化，未新增或升级版本。
+  - MT-NT-01 的事件写入、MT-NT-02 的接受/重建步骤由测试调用假邻居，未覆盖真实 listener/receiver 接线；按用户要求未另加用例，实际接线已实施，真实系统行为留给 DI-07、DI-41（等用户、待真机）。
+  - 实机核实报告尚不存在，保留 PLAN 六个内置包名，等用户真机核对。学习通知已声明 POST_NOTIFICATIONS；Android 13+ 运行时授权需由 app 引导完成并在真机核验。
+  - 用户给出的基线命令含另一项目的绝对路径及拼写错误，按目标执行 :engine-notify:assembleDebug。SDK 以 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，未写 local.properties 或修改冻结配置。
 
 ## [engine-a11y] 状态: 待办 | 负责方: codex | 关卡: G4
 
@@ -88,7 +93,7 @@
 | Task 7: 编排器 A11yBrain | 待办 | — |
 | Task 8: 服务接线、悬浮提示与通知动作 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-a11y/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-a11y/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
 ## [guard] 状态: 待办 | 负责方: codex | 关卡: G7
@@ -98,7 +103,7 @@
 | Task 1: 决策策略 | 待办 | — |
 | Task 2: 运行时执行、通知与观察期评估 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/guard/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `guard/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。跨模块契约测试 MT-CT-01～04 暂存在 `testing/unit/pending/contract/`，G7 时搬入 `testing/rule-regression/src/test/`。
 - 已知问题：无
 
 ## [app] 状态: 进行中 | 负责方: claude | 关卡: G3(Task 1–2) / G8

@@ -1,1 +1,17 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <application>
+        <service
+            android:name="com.sentinel.notify.service.SentinelNotificationListener"
+            android:label="哨兵通知过滤"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <receiver
+            android:name="com.sentinel.notify.service.NotifyLearnReceiver"
+            android:exported="false" />
+    </application>
+</manifest>

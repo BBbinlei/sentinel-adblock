@@ -1,0 +1,204 @@
+{
+  "romPrefix": "__unverified__",
+  "backgroundPopupOp": null,
+  "ops": [
+    {
+      "id": "pictorial-recommend",
+      "trick": 1,
+      "title": "关闭锁屏画报推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "pictorial-disable",
+      "trick": 1,
+      "title": "停用画报组件",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": true
+    },
+    {
+      "id": "assistant-cards",
+      "trick": 2,
+      "title": "关闭负一屏推荐卡片",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "search-hot",
+      "trick": 3,
+      "title": "关闭搜索热搜",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "commercial-service",
+      "trick": 4,
+      "title": "关闭商业化服务",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "opos-ads-uninstall",
+      "trick": 4,
+      "title": "移除广告组件",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": true
+    },
+    {
+      "id": "app-recommend-weather",
+      "trick": 5,
+      "title": "关闭天气推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "app-recommend-calendar",
+      "trick": 5,
+      "title": "关闭日历推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "app-recommend-browser",
+      "trick": 5,
+      "title": "关闭浏览器推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "app-recommend-video",
+      "trick": 5,
+      "title": "关闭视频推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "app-recommend-music",
+      "trick": 5,
+      "title": "关闭音乐推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "app-recommend-theme",
+      "trick": 5,
+      "title": "关闭主题推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "app-recommend-gamecenter",
+      "trick": 5,
+      "title": "关闭游戏中心推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "market-recommend",
+      "trick": 6,
+      "title": "关闭商店推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "safecenter-recommend",
+      "trick": 7,
+      "title": "关闭安全中心推荐",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "quickapp-disable",
+      "trick": 8,
+      "title": "停用快应用",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "limit-ad-tracking",
+      "trick": 10,
+      "title": "限制广告追踪",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    },
+    {
+      "id": "autostart-manage",
+      "trick": 21,
+      "title": "管理关联启动",
+      "kind": "WIZARD",
+      "verified": false,
+      "intent": {
+        "action": "android.settings.SETTINGS"
+      },
+      "optional": false
+    }
+  ]
+}
