@@ -1,6 +1,5 @@
 package com.sentinel.vpn.service
 
-import android.os.SystemClock
 import android.util.Log
 import com.sentinel.data.Clock
 import com.sentinel.data.db.*
@@ -36,27 +35,19 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     @Volatile private var configs = emptyMap<String, AppConfigEntity>()
     @Volatile private var globalState = GlobalStateEntity(enabled = false)
     @Volatile private var disabled = emptyMap<String, Set<String>>()
-    // 奖励窗口与重试风暴的计时用单调时钟（不受墙钟调整影响）：窗口到期时刻在读到时换算成单调时间。
-    private data class Window(val until: Long, val expiresAt: Long)
-    @Volatile private var windows = emptyMap<String, Window>()
+    @Volatile private var windows = emptyMap<String, Long>()
     private val watchers = mutableListOf<Job>()
     private var handle: TunHandle? = null
     private var loop: Job? = null
     private var spec: TunSpec? = null
     private val batcher = EventBatcher(events, scope = scope, clock = clock)
-    private val storms = RetryStormDetector(SystemClock::elapsedRealtime)
+    private val storms = RetryStormDetector(clock::now)
     private val decisions = decisionSourceDecorator(object : DecisionSource {
         override fun matcher() = rules
         override fun context(pkg: String?): DnsContext = DnsContext(
             EffectivePolicy.resolve(configs[pkg], pkg.orEmpty(), globalState, clock.now()),
-            disabled[pkg].orEmpty(), (windows[pkg]?.expiresAt ?: Long.MIN_VALUE) > SystemClock.elapsedRealtime())
+            disabled[pkg].orEmpty(), (windows[pkg] ?: 0) > clock.now())
     })
-    private fun applyWindows(open: Map<String, Long>) {
-        val now = clock.now(); val mono = SystemClock.elapsedRealtime(); val old = windows
-        windows = open.mapValues { (pkg, until) ->
-            old[pkg]?.takeIf { it.until == until } ?: Window(until, mono + (until - now))
-        }
-    }
     private suspend fun report(state: EngineState, message: String? = null) {
         try { status.report(EngineId.VPN, state, message) }
         catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "状态写入失败", e) }
@@ -103,7 +94,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         if (active) return@withLock
         globalState = global.get(); configs = apps.observeAll().first().associateBy { it.pkg }
         disabled = overrides.observeDisabled().first()
-        try { applyWindows(rewards.observeOpen().first()) } catch (e: Exception) {
+        try { windows = rewards.observeOpen().first() } catch (e: Exception) {
             currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "奖励窗口读取失败，按关闭处理", e); windows = emptyMap()
         }
         rules = loadRules()
@@ -128,13 +119,15 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         watchers += scope.launch {
             rewards.observeOpen().catch {
                 windows = emptyMap(); Log.w("SentinelVpn", "奖励窗口读取失败，按关闭处理", it)
-            }.collect { applyWindows(it) }
+            }.collect { windows = it }
         }
         watch(global.observe().map { it.ruleVersion }.distinctUntilChanged().drop(1)) {
             rules = loadRules()
             if (active) reportHealth()
         }
-        watch(apps.observeExcluded().debounce(2000)) {
+        // observeExcluded 内含每 60s 的 ticks（用于暂停/临时放行到期）；放在 Unconfined 上游，
+        // 让这个周期定时器走真实时间，不占用调用方调度器，下游防抖仍在 scope 上。
+        watch(apps.observeExcluded().flowOn(Dispatchers.Unconfined).debounce(2000)) {
             lifecycle.withLock {
                 if (active && !replace(it)) { Log.w("SentinelVpn", "TUN 重建未获授权") }
             }

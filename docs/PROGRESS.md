@@ -53,9 +53,9 @@
 - Task 5 构建补充：测试夹具直接使用 Room，按暂存 README 添加 testImplementation(libs.room.runtime)，版本目录未改。
 
 - Task 5 测试最小修正：EventBatcherTest 缺 ExperimentalCoroutinesApi import；VpnControllerTest 缺 runCurrent 扩展 import，分别补充，不改断言。EventBatcher 增加可选 scope/Clock 与 close，默认兼容既定构造，服务传入自身作用域和 Clock，避免定时任务泄漏。
-- Task 5 计时说明：暂存测试在 runTest 中等待真实 IO 时，data 的周期刷新流（AppConfigRepository 每 60s 的 ticks）会让虚拟时间自动前进，导致 UT-VP-5-04/5-07 若用仓库 Clock 计时必然失败。控制器因此用单调时钟 SystemClock.elapsedRealtime 做重试风暴窗口和奖励窗口到期判定（奖励窗口到期时刻在读到时由 until-Clock.now 换算为单调时间）；生产中两种时钟同速，行为等价，且不受墙钟调整影响。接手前的 Codex 版本这两个用例失败，已修。
+- 计时说明（Task 5/7，MT-VP-01）：data 的 AppConfigRepository.observeExcluded 内含每 60s 的 ticks；暂存测试在 runTest 里等待真实 IO 时，调度器会不断执行这些 ticks，使虚拟时间飞快前进，导致 UT-VP-5-04/5-07、MT-VP-01 失败（重试风暴窗口、奖励窗口、暂停到期均按虚拟 Clock 计算）。控制器对 observeExcluded 加 flowOn(Dispatchers.Unconfined)，让 ticks 定时器走真实时间、下游 2 秒防抖仍在注入的 scope 上；生产行为不变。data 未改。
 - 接手说明：由 Claude 接手（Codex 额度耗尽）；Task 5 的 Codex 未提交半成品已核对并完成，worktree 以 local.properties（gitignore）指向 SDK。
-- Task 7 测试最小修正：VpnFailSafeTest 缺 runCurrent 扩展 import，已补，不改断言。
+- Task 7 测试最小修正：VpnFailSafeTest、VpnModuleTest 缺 runCurrent 扩展 import，已补，不改断言。
 
 ## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
 
