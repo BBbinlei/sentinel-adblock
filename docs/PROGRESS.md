@@ -33,7 +33,7 @@
 - 下一步：G2 已通过：data 46/46、./gradlew test 全量 81/81、check-merge.sh data 全部通过；报告 testing/reports/G2-2026-10-02.md。等待合并通道确认并登记 g2-frozen，再放行后续引擎开发。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
-## [engine-vpn] 状态: 进行中 | 负责方: claude | 关卡: G3
+## [engine-vpn] 状态: 完成 | 负责方: claude | 关卡: G3
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -45,7 +45,7 @@
 | Task 6: 私人 DNS 检测与服务守护 | 完成（UT 3/3） | 本提交 |
 | Task 7: 故障安全 | 完成（UT 5/5） | 本提交 |
 
-- 下一步：G3 引擎部分：导入 VpnModuleTest（MT-VP-01/02），跑全量测试，写 G3 报告，check-merge。
+- 下一步：G3 引擎部分已通过：engine-vpn 48/48（46 UT + 2 MT）、./gradlew test 全量通过、check-merge.sh engine-vpn 全部通过；报告 testing/reports/G3-2026-10-02.md。待合并通道合并；DI-01～03、DI-11～14、DI-51 待真机（等用户）。
 - 已知问题：原启动命令含损坏的绝对路径，按目标模块执行 :engine-vpn:assembleDebug；worktree 无 SDK 配置，通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 运行。暂存 WireFixtures.kt 的 EffectiveConfig 导入包为 policy，冻结实现实际在 db，仅修正 import，未改断言。
 
 - Task 4 接线说明：暂存 TunFakes 同时使用 Task 5 的 TunFactory/TunHandle，因此提前落成这两个既定接口于 service/TunFactory.kt；未改测试。
