@@ -37,15 +37,15 @@
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 报文解析与构造 | 完成（UT 7/7） | 本提交 |
-| Task 2: DNS 报文与判定 | 待办 | — |
+| Task 1: 报文解析与构造 | 完成（UT 7/7） | d7f1be5 |
+| Task 2: DNS 报文与判定 | 完成（UT 12/12） | 本提交 |
 | Task 3: 上游解析与缓存 | 待办 | — |
 | Task 4: TUN 配置与报文循环 | 待办 | — |
 | Task 5: VpnController 与服务接线 | 待办 | — |
 | Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
 | Task 7: 故障安全 | 待办 | — |
 
-- 下一步：Task 2：导入 DNS 与判定测试，确认失败后实施。
+- 下一步：Task 3：导入上游与缓存测试，确认失败后实施。
 - 已知问题：原启动命令含损坏的绝对路径，按目标模块执行 :engine-vpn:assembleDebug；worktree 无 SDK 配置，通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 运行。暂存 WireFixtures.kt 的 EffectiveConfig 导入包为 policy，冻结实现实际在 db，仅修正 import，未改断言。
 
 ## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
