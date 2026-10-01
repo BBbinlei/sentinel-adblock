@@ -105,11 +105,11 @@
 - 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-a11y/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-a11y/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
-## [guard] 状态: 待办 | 负责方: codex | 关卡: G7
+## [guard] 状态: 进行中 | 负责方: claude | 关卡: G7
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 决策策略 | 待办 | — |
+| Task 1: 决策策略 | 完成（UT-GD-1-01～10 通过） | feat(guard): decision policy |
 | Task 2: 运行时执行、通知与观察期评估 | 待办 | — |
 
 - 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/guard/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `guard/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。跨模块契约测试 MT-CT-01～04 暂存在 `testing/unit/pending/contract/`，G7 时搬入 `testing/rule-regression/src/test/`。
