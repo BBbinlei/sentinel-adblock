@@ -36,4 +36,4 @@ mkdir -p "$ROOT/.supervisor/logs" "$HOME/Library/LaunchAgents"
 echo "$PLIST_BODY" > "$PLIST"
 launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true
 launchctl bootstrap "gui/$(id -u)" "$PLIST"
-echo "已安装：$PLIST（每 ${TICK}s 一次）。查看状态：python3 $HERE/supervisor.py status；日志：$ROOT/.supervisor/logs/"
+echo "已安装：${PLIST}（每 ${TICK}s 一次）。查看状态：python3 ${HERE}/supervisor.py status ；日志：${ROOT}/.supervisor/logs/"

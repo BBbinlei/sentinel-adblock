@@ -20,7 +20,7 @@
   "channels": [
     {"name": "core-rules", "module": "core-rules", "owner": "codex", "worktree": ".",
      "depends_on": [], "write_scope": "`core-rules/` 目录",
-     "instructions": "实施 `core-rules/PLAN.md` 的全部 Task，通过关卡 G1。直接在 main 上提交。"},
+     "instructions": "实施 `core-rules/PLAN.md` 的全部 Task，通过关卡 G1。G1 要求的 `UT-CR-*`、`MT-CR-*` 放在 core-rules 里；`RR-01`、`RR-04`、`RR-05` 放在 `testing/rule-regression`（先按 `testing/rule-regression/PLAN.md` Task 1 搭好子模块，快照录制工具留到 M4）。直接在 main 上提交。"},
     {"name": "data", "module": "data", "owner": "codex", "worktree": ".",
      "depends_on": ["core-rules"], "write_scope": "`data/` 目录",
      "instructions": "实施 `data/PLAN.md` 的全部 Task（含 `contract` 包与 `ModuleEntry`），通过关卡 G2。直接在 main 上提交。完成后监督脚本会打 `g2-frozen` 标签并冻结 data/core-rules。"},
