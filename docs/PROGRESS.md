@@ -80,7 +80,7 @@
 | Task | 状态 | 最后提交 |
 |---|---|---|
 | Task 1: 前台跟踪与启动识别 | 完成 | f9283a6 |
-| Task 2: 规则点击（开屏 / 弹窗 / 自动续费） | 待办 | — |
+| Task 2: 规则点击（开屏 / 弹窗 / 自动续费） | 完成 | ca57f7e |
 | Task 3: 学习模式候选规则 | 待办 | — |
 | Task 4: 误伤探测信号 | 待办 | — |
 | Task 5: 激励视频处理与音量保护 | 待办 | — |
@@ -88,7 +88,7 @@
 | Task 7: 编排器 A11yBrain | 待办 | — |
 | Task 8: 服务接线、悬浮提示与通知动作 | 待办 | — |
 
-- 下一步：Task 3 学习模式候选规则（Task 2 提交号见下一次提交的表格）。
+- 下一步：Task 3 提交后进入 Task 4。
 - 已知问题：
   - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
