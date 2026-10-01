@@ -1,0 +1,24 @@
+Drop box contents: 2 entries
+Max entries: 1000
+
+========================================
+2026-10-01 08:30:00 data_app_crash (text, 512 bytes)
+Process: com.example.reader
+PID: 1234
+Package: com.example.reader v1 (1)
+Build: synthetic/test/device:15/TEST/1:user/release-keys
+Flags: 0x0
+
+java.lang.IllegalStateException: synthetic crash for parser test
+    at com.example.reader.MainActivity.onCreate(MainActivity.kt:10)
+
+========================================
+2026-10-01 08:31:45 data_app_crash (text, 480 bytes)
+Process: com.example.player
+PID: 2345
+Package: com.example.player v2 (2)
+Build: synthetic/test/device:15/TEST/1:user/release-keys
+Flags: 0x0
+
+java.lang.RuntimeException: synthetic crash for parser test
+    at com.example.player.PlayerActivity.onStart(PlayerActivity.kt:20)
