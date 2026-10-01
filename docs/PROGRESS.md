@@ -16,8 +16,8 @@
 | Task 5: UI 规则解析、索引与内置规则 | 待办 | — |
 | Task 6: 通知匹配 | 待办 | — |
 
-- 下一步：在允许 Gradle 写入缓存和创建本地 socket 的执行环境中先运行 `./gradlew :core-rules:test`；然后从 Task 1 按 TDD 实施 Task 1～6，每 Task 一次提交；完成 MT-CR、RR-01/04/05，执行 G1、全量 test 与 check-merge。当前没有实现源码或测试，不得视为完成。
-- 已知问题：2026-10-02 当前沙箱禁止写入默认 Gradle 缓存锁；复制已有缓存到临时可写目录后，Gradle 仍因 `FileLockContentionHandler` 创建本地 socket 被拒绝（`java.net.SocketException: Operation not permitted`）而在构建启动前失败。模块基线、回归、全量 test 和 check-merge 的测试项均未执行成功，G1 未通过，详见 `testing/reports/G1-2026-10-02.md`。未更改依赖、未跳过失败测试、未执行真机步骤。
+- 下一步：在允许 Gradle 写入缓存和创建本地 socket 的执行环境中先运行 `./gradlew :core-rules:test`；然后从 Task 1 按 TDD 实施 Task 1～6，每 Task 一次提交；完成 MT-CR、RR-01/04/05，执行 G1、全量 test 与 check-merge。本会话未实施源码或测试；收尾发现外部新增提交 `70291f1`（Task 1）及未提交的 domain 测试文件，尚未验证，不得视为关卡完成。
+- 已知问题：2026-10-02 当前沙箱禁止写入默认 Gradle 缓存锁；复制已有缓存到临时可写目录后，Gradle 仍因 `FileLockContentionHandler` 创建本地 socket 被拒绝（`java.net.SocketException: Operation not permitted`）而在构建启动前失败。模块基线、回归、全量 test 和 check-merge 的测试项均未执行成功，G1 未通过，详见 `testing/reports/G1-2026-10-02.md`。本会话未更改依赖、未跳过失败测试、未执行真机步骤。存在另一执行者并发写入本通道的迹象，接手时先核实实际 HEAD 与测试结果，避免重复实施。
 
 ## [data] 状态: 待办 | 负责方: codex | 关卡: G2
 
