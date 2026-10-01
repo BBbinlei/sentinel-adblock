@@ -1,5 +1,6 @@
 package com.sentinel.data.repo
 
+import com.sentinel.data.contract.DataContract
 import com.sentinel.data.Clock
 import com.sentinel.data.db.*
 import kotlinx.coroutines.flow.*
@@ -19,12 +20,12 @@ class EventRepository(private val dao: EventDao, private val clock: Clock) {
             val zone = ZoneId.systemDefault()
             val day = Instant.ofEpochMilli(clock.now()).atZone(zone).toLocalDate()
             emit(day.atStartOfDay(zone).toInstant().toEpochMilli())
-            delay(60_000)
+            delay(DataContract.REFRESH_MS)
         }
     }.distinctUntilChanged().flatMapLatest { dao.observeCount(it) }
     fun observeCountByKind(since: Long): Flow<Map<EventKind, Int>> = dao.countByKind(since).map { rows -> rows.associate { it.kind to it.count } }
     fun observeCountByPkg(since: Long): Flow<Map<String, Int>> = dao.countByPkg(since).map { rows -> rows.associate { it.pkg to it.count } }
     fun observeRecent(kinds: Set<EventKind>, limit: Int): Flow<List<EventEntity>> { require(limit >= 0); return dao.recent(kinds, limit) }
     suspend fun rulesHitSince(pkg: String, since: Long): List<String> = dao.rulesHitSince(pkg, since)
-    suspend fun prune() = dao.prune(clock.now() - 30 * 86_400_000L)
+    suspend fun prune() = dao.prune(clock.now() - DataContract.EVENT_RETENTION_MS)
 }

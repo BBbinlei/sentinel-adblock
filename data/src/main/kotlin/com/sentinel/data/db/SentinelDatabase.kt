@@ -1,5 +1,6 @@
 package com.sentinel.data.db
 
+import com.sentinel.data.contract.DataContract
 import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -21,7 +22,7 @@ abstract class SentinelDatabase : RoomDatabase() {
 
     companion object {
         fun build(context: Context): SentinelDatabase = Room.databaseBuilder(
-            context.applicationContext, SentinelDatabase::class.java, "sentinel.db"
+            context.applicationContext, SentinelDatabase::class.java, DataContract.DATABASE_NAME
         ).enableMultiInstanceInvalidation().addCallback(object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 db.execSQL("INSERT INTO global_state (id, enabled, pausedUntil, ruleVersion) VALUES (0, 1, NULL, 0)")

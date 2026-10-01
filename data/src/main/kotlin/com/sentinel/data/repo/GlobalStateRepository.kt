@@ -1,5 +1,6 @@
 package com.sentinel.data.repo
 
+import com.sentinel.data.contract.DataContract
 import com.sentinel.data.Clock
 import com.sentinel.data.db.*
 import kotlinx.coroutines.flow.*
@@ -10,7 +11,7 @@ class GlobalStateRepository(private val db: SentinelDatabase, private val clock:
     fun observe(): Flow<GlobalStateEntity> = dao.observe().map { it ?: GlobalStateEntity() }
     suspend fun get(): GlobalStateEntity { dao.ensure(); return requireNotNull(dao.get()) }
     suspend fun setEnabled(on: Boolean) { dao.ensure(); dao.setEnabled(on) }
-    suspend fun pauseFor(ms: Long = 300_000) { require(ms >= 0); dao.ensure(); dao.setPausedUntil(Math.addExact(clock.now(), ms)) }
+    suspend fun pauseFor(ms: Long = DataContract.PAUSE_MS) { require(ms >= 0); dao.ensure(); dao.setPausedUntil(Math.addExact(clock.now(), ms)) }
     suspend fun resume() { dao.ensure(); dao.setPausedUntil(null) }
     suspend fun bumpRuleVersion(): Long = db.withTransaction { dao.ensure(); dao.bumpVersion(); requireNotNull(dao.get()).ruleVersion }
 }
