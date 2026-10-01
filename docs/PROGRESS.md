@@ -112,8 +112,8 @@
 | Task 1: 决策策略 | 完成（UT-GD-1-01～10 通过） | feat(guard): decision policy |
 | Task 2: 运行时执行、通知与观察期评估 | 完成（UT-GD-2-01～06、MT-GD-01～02 通过） | feat(guard): runtime runner, notifications and observation check |
 
-- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/guard/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `guard/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。跨模块契约测试 MT-CT-01～04 暂存在 `testing/unit/pending/contract/`，G7 时搬入 `testing/rule-regression/src/test/`。
-- 已知问题：无
+- 下一步：Task 1–2 与 UT-GD-*、MT-GD-* 已通过，`check-merge.sh guard` 与 `./gradlew test` 通过，G7 报告见 `testing/reports/G7-2026-10-02.md`。仅剩 MT-CT-01～04：等 engine-a11y 合并到 main 后，在本 worktree 合并 main，把 `testing/unit/pending/contract/src/test` 搬入 `testing/rule-regression/src/`（该模块 build.gradle.kts 需补 testImplementation：room.runtime、koin.android、koin.test、work.testing，写入边界需用户或合并通道许可，见暂存 README），运行 `./gradlew :testing:rule-regression:testDebugUnitTest --tests 'com.sentinel.regression.contract.*'`；全部通过后更新 G7 报告并把状态改为 `完成`（在此之前不得改为完成）。
+- 已知问题：(1) RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；(2) 通知依赖 app 申请 POST_NOTIFICATIONS，无权限时只记日志；(3) 暂存测试未改，仅在 guard/build.gradle.kts 增加 testImplementation(libs.room.runtime)；(4) MT-CT-* 的接线假设（CT-A1～A8）待 engine-a11y 合并后验证。
 
 ## [app] 状态: 待办 | 负责方: claude | 关卡: G3(Task 1–2) / G8
 
