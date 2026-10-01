@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 }
 
 @Dao interface GlobalStateDao {
+    @Query("INSERT OR IGNORE INTO global_state (id, enabled, pausedUntil, ruleVersion) VALUES (0, 1, NULL, 0)") suspend fun ensure()
+
     @Upsert suspend fun upsert(entity: GlobalStateEntity)
     @Query("SELECT * FROM global_state") suspend fun all(): List<GlobalStateEntity>
     @Query("SELECT * FROM global_state") fun observeAll(): Flow<List<GlobalStateEntity>>
@@ -36,7 +38,16 @@ import kotlinx.coroutines.flow.Flow
     @Query("DELETE FROM user_rules WHERE id = :id") suspend fun delete(id: String)
 }
 
+data class KindCount(val kind: com.sentinel.rules.model.EventKind, val count: Int)
+data class PkgCount(val pkg: String, val count: Int)
+
 @Dao interface EventDao {
+    @Query("SELECT COUNT(*) FROM events WHERE ts >= :since") fun observeCount(since: Long): Flow<Int>
+    @Query("SELECT kind, COUNT(*) AS count FROM events WHERE ts >= :since GROUP BY kind") fun countByKind(since: Long): Flow<List<KindCount>>
+    @Query("SELECT pkg, COUNT(*) AS count FROM events WHERE ts >= :since AND pkg IS NOT NULL GROUP BY pkg") fun countByPkg(since: Long): Flow<List<PkgCount>>
+    @Query("SELECT * FROM events WHERE kind IN (:kinds) ORDER BY ts DESC, id DESC LIMIT :limit") fun recent(kinds: Set<com.sentinel.rules.model.EventKind>, limit: Int): Flow<List<EventEntity>>
+    @Query("SELECT DISTINCT ruleId FROM events WHERE pkg = :pkg AND ts >= :since AND ruleId IS NOT NULL") suspend fun rulesHitSince(pkg: String, since: Long): List<String>
+
     @Insert suspend fun insert(entity: EventEntity): Long
     @Query("SELECT * FROM events") suspend fun all(): List<EventEntity>
     @Query("SELECT * FROM events") fun observeAll(): Flow<List<EventEntity>>
@@ -44,6 +55,9 @@ import kotlinx.coroutines.flow.Flow
 }
 
 @Dao interface SignalDao {
+    @Query("SELECT COUNT(*) FROM signals WHERE pkg = :pkg AND kind IN (:kinds) AND ts >= :since") suspend fun countSince(pkg: String, kinds: Set<SignalKind>, since: Long): Int
+    @Query("SELECT * FROM signals WHERE handled = 0 ORDER BY ts, id") fun unhandled(): Flow<List<SignalEntity>>
+
     @Insert suspend fun insert(entity: SignalEntity): Long
     @Query("SELECT * FROM signals") suspend fun all(): List<SignalEntity>
     @Query("SELECT * FROM signals") fun observeAll(): Flow<List<SignalEntity>>
