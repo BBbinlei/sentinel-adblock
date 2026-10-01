@@ -45,7 +45,7 @@
 | Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
 | Task 7: 故障安全 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-vpn/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-vpn/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
 ## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
@@ -60,7 +60,7 @@
 | Task 6: 崩溃日志采集 | 待办 | — |
 | Task 7: 接线 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-system/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-system/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
 ## [engine-notify] 状态: 待办 | 负责方: codex | 关卡: G6
@@ -72,7 +72,7 @@
 | Task 3: 编排器 NotifyEngine | 待办 | — |
 | Task 4: 服务接线 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-notify/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-notify/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
 ## [engine-a11y] 状态: 待办 | 负责方: codex | 关卡: G4
@@ -88,7 +88,7 @@
 | Task 7: 编排器 A11yBrain | 待办 | — |
 | Task 8: 服务接线、悬浮提示与通知动作 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-a11y/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-a11y/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
 ## [guard] 状态: 待办 | 负责方: codex | 关卡: G7
@@ -98,7 +98,7 @@
 | Task 1: 决策策略 | 待办 | — |
 | Task 2: 运行时执行、通知与观察期评估 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
+- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/guard/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `guard/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。跨模块契约测试 MT-CT-01～04 暂存在 `testing/unit/pending/contract/`，G7 时搬入 `testing/rule-regression/src/test/`。
 - 已知问题：无
 
 ## [app] 状态: 待办 | 负责方: claude | 关卡: G3(Task 1–2) / G8
@@ -113,7 +113,7 @@
 | Task 6: 规则页 | 待办 | — |
 | Task 7: 快捷开关 | 待办 | — |
 
-- 下一步：Task 1–2（M3）；Task 5、6、7 只依赖 data，可提前做；Task 3 等 engine-system 合并，Task 4 等 guard 合并（此时把状态改为 `等待`）。
+- 下一步：Task 1–2（M3）；Task 5、6、7 只依赖 data，可提前做；Task 3 等 engine-system 合并，Task 4 等 guard 合并（此时把状态改为 `等待`）。测试已预先写好，暂存在 `testing/unit/pending/app/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `app/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
 ## [merge] 状态: 待办 | 负责方: claude | 关卡: —
