@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.androidx.core)
     implementation(libs.coroutines.android)
+    implementation(libs.serialization.json)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
     testImplementation(libs.robolectric)
