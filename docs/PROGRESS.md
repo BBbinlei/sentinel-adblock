@@ -30,7 +30,7 @@
 | Task 5: 规则构建与订阅更新 | 待办 | — |
 | Task 6: Koin 模块与模块接线入口 | 待办 | — |
 
-- 下一步：执行 ./gradlew --no-daemon test，汇总 G1 报告并标记完成；:core-rules:test（27 项）与 :testing:rule-regression:testDebugUnitTest（8 项）已通过，RR-05 的 10 条学习风格 + 10 条手写规则均可解析，invalidCount=0。
+- 下一步：从 Task 1 开始。
 - 已知问题：无
 
 ## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3
