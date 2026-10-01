@@ -52,16 +52,16 @@
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 配置档案 | 完成 | 本提交 |
-| Task 2: Shizuku 网关 | 待办 | — |
+| Task 1: 配置档案 | 完成 | 24fe2a1 |
+| Task 2: Shizuku 网关 | 完成 | 本提交 |
 | Task 3: 操作执行与撤销 | 待办 | — |
 | Task 4: 按 App 权限同步 | 待办 | — |
 | Task 5: 巡检与状态上报 | 待办 | — |
 | Task 6: 崩溃日志采集 | 待办 | — |
 | Task 7: 接线 | 待办 | — |
 
-- 下一步：Task 2 导入 UT-SY-2，确认红灯后实现 Shizuku 网关。
-- 已知问题：Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
+- 下一步：Task 3 导入 UT-SY-3，确认红灯后实现执行和持久化撤销。
+- 已知问题：UT-SY-2 四项通过；AIDL 已启用；FakeShizukuApi 从暂存 TestSupport 原样提取以避免引用尚未实施的 Task 3–5 类型；Shizuku Provider/绑定依据官方 API 文档及已安装 13.1.5 签名；Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
 
 ## [engine-notify] 状态: 待办 | 负责方: codex | 关卡: G6
 
