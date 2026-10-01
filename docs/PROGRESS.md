@@ -33,20 +33,29 @@
 - 下一步：G2 已通过：data 46/46、./gradlew test 全量 81/81、check-merge.sh data 全部通过；报告 testing/reports/G2-2026-10-02.md。等待合并通道确认并登记 g2-frozen，再放行后续引擎开发。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
-## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3
+## [engine-vpn] 状态: 已合并 | 负责方: claude | 关卡: G3
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 报文解析与构造 | 待办 | — |
-| Task 2: DNS 报文与判定 | 待办 | — |
-| Task 3: 上游解析与缓存 | 待办 | — |
-| Task 4: TUN 配置与报文循环 | 待办 | — |
-| Task 5: VpnController 与服务接线 | 待办 | — |
-| Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
-| Task 7: 故障安全 | 待办 | — |
+| Task 1: 报文解析与构造 | 完成（UT 7/7） | d7f1be5 |
+| Task 2: DNS 报文与判定 | 完成（UT 12/12） | e939b70 |
+| Task 3: 上游解析与缓存 | 完成（UT 5/5） | b31d7cd |
+| Task 4: TUN 配置与报文循环 | 完成（UT 7/7） | 本提交 |
+| Task 5: VpnController 与服务接线 | 完成（UT 7/7） | 本提交 |
+| Task 6: 私人 DNS 检测与服务守护 | 完成（UT 3/3） | 本提交 |
+| Task 7: 故障安全 | 完成（UT 5/5） | 本提交 |
 
-- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-vpn/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-vpn/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
-- 已知问题：无
+- 下一步：G3 引擎部分已通过：engine-vpn 48/48（46 UT + 2 MT）、./gradlew test 全量通过、check-merge.sh engine-vpn 全部通过；报告 testing/reports/G3-2026-10-02.md。待合并通道合并；DI-01～03、DI-11～14、DI-51 待真机（等用户）。
+- 已知问题：原启动命令含损坏的绝对路径，按目标模块执行 :engine-vpn:assembleDebug；worktree 无 SDK 配置，通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 运行。暂存 WireFixtures.kt 的 EffectiveConfig 导入包为 policy，冻结实现实际在 db，仅修正 import，未改断言。
+
+- Task 4 接线说明：暂存 TunFakes 同时使用 Task 5 的 TunFactory/TunHandle，因此提前落成这两个既定接口于 service/TunFactory.kt；未改测试。
+
+- Task 5 构建补充：测试夹具直接使用 Room，按暂存 README 添加 testImplementation(libs.room.runtime)，版本目录未改。
+
+- Task 5 测试最小修正：EventBatcherTest 缺 ExperimentalCoroutinesApi import；VpnControllerTest 缺 runCurrent 扩展 import，分别补充，不改断言。EventBatcher 增加可选 scope/Clock 与 close，默认兼容既定构造，服务传入自身作用域和 Clock，避免定时任务泄漏。
+- 计时说明（Task 5/7，MT-VP-01）：data 的 AppConfigRepository.observeExcluded 内含每 60s 的 ticks；暂存测试在 runTest 里等待真实 IO 时，调度器会不断执行这些 ticks，使虚拟时间飞快前进，导致 UT-VP-5-04/5-07、MT-VP-01 失败（重试风暴窗口、奖励窗口、暂停到期均按虚拟 Clock 计算）。控制器对 observeExcluded 加 flowOn(Dispatchers.Unconfined)，让 ticks 定时器走真实时间、下游 2 秒防抖仍在注入的 scope 上；生产行为不变。data 未改。
+- 接手说明：由 Claude 接手（Codex 额度耗尽）；Task 5 的 Codex 未提交半成品已核对并完成，worktree 以 local.properties（gitignore）指向 SDK。
+- Task 7 测试最小修正：VpnFailSafeTest、VpnModuleTest 缺 runCurrent 扩展 import，已补，不改断言。
 
 ## [engine-system] 状态: 进行中 | 负责方: claude | 关卡: G5
 
@@ -96,15 +105,15 @@
 - 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-a11y/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-a11y/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
-## [guard] 状态: 待办 | 负责方: codex | 关卡: G7
+## [guard] 状态: 进行中 | 负责方: claude | 关卡: G7
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 决策策略 | 待办 | — |
-| Task 2: 运行时执行、通知与观察期评估 | 待办 | — |
+| Task 1: 决策策略 | 完成（UT-GD-1-01～10 通过） | feat(guard): decision policy |
+| Task 2: 运行时执行、通知与观察期评估 | 完成（UT-GD-2-01～06、MT-GD-01～02 通过） | feat(guard): runtime runner, notifications and observation check |
 
-- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/guard/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `guard/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。跨模块契约测试 MT-CT-01～04 暂存在 `testing/unit/pending/contract/`，G7 时搬入 `testing/rule-regression/src/test/`。
-- 已知问题：无
+- 下一步：Task 1–2 与 UT-GD-*、MT-GD-* 已通过，`check-merge.sh guard` 与 `./gradlew test` 通过，G7 报告见 `testing/reports/G7-2026-10-02.md`。仅剩 MT-CT-01～04：等 engine-a11y 合并到 main 后，在本 worktree 合并 main，把 `testing/unit/pending/contract/src/test` 搬入 `testing/rule-regression/src/`（该模块 build.gradle.kts 需补 testImplementation：room.runtime、koin.android、koin.test、work.testing，写入边界需用户或合并通道许可，见暂存 README），运行 `./gradlew :testing:rule-regression:testDebugUnitTest --tests 'com.sentinel.regression.contract.*'`；全部通过后更新 G7 报告并把状态改为 `完成`（在此之前不得改为完成）。
+- 已知问题：(1) RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；(2) 通知依赖 app 申请 POST_NOTIFICATIONS，无权限时只记日志；(3) 暂存测试未改，仅在 guard/build.gradle.kts 增加 testImplementation(libs.room.runtime)；(4) MT-CT-* 的接线假设（CT-A1～A8）待 engine-a11y 合并后验证。
 
 ## [app] 状态: 进行中 | 负责方: claude | 关卡: G3(Task 1–2) / G8
 

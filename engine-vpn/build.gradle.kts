@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.okhttp)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
+    testImplementation(libs.room.runtime)
     testImplementation(libs.robolectric)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.turbine)
