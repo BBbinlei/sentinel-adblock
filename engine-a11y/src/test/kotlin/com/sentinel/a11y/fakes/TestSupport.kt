@@ -61,3 +61,15 @@ fun snapshot(name: String): SnapshotNode {
     return read(document.documentElement)
 }
 
+class FakeVolume(var value: Int = 7) : VolumePort {
+    val writes = mutableListOf<Int>()
+    override fun get() = value
+    override fun set(v: Int) { value = v; writes += v }
+}
+
+class MemoryStore : KeyValueStore {
+    val values = mutableMapOf<String, Int>()
+    override fun getInt(k: String) = values[k]
+    override fun putInt(k: String, v: Int) { values[k] = v }
+    override fun remove(k: String) { values.remove(k) }
+}
