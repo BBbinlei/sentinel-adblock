@@ -73,3 +73,17 @@ class MemoryStore : KeyValueStore {
     override fun putInt(k: String, v: Int) { values[k] = v }
     override fun remove(k: String) { values.remove(k) }
 }
+
+class FakeA11yState(var rules: UiRuleIndex = UiRuleIndex.build(BuiltInUiRules.all)) : A11yState {
+    val configs = mutableMapOf<String, EffectiveConfig>()
+    val disabledRules = mutableMapOf<String, Set<String>>()
+    val exceptions = mutableSetOf<Pair<String, String>>()
+    var cfgFailure: RuntimeException? = null
+    override fun cfg(pkg: String): EffectiveConfig {
+        cfgFailure?.let { throw it }
+        return configs[pkg] ?: config(pkg)
+    }
+    override fun disabled(pkg: String) = disabledRules[pkg].orEmpty()
+    override fun excepted(src: String, tgt: String) = (src to tgt) in exceptions
+    override fun index() = rules
+}
