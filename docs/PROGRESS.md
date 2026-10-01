@@ -63,17 +63,22 @@
 - 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-system/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-system/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
-## [engine-notify] 状态: 待办 | 负责方: codex | 关卡: G6
+## [engine-notify] 状态: 完成 | 负责方: claude | 关卡: G6
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 判定与内置规则 | 待办 | — |
-| Task 2: 划除学习 | 待办 | — |
-| Task 3: 编排器 NotifyEngine | 待办 | — |
-| Task 4: 服务接线 | 待办 | — |
+| Task 1: 判定与内置规则 | 完成 | 404115d |
+| Task 2: 划除学习 | 完成 | f5f8a4b |
+| Task 3: 编排器 NotifyEngine | 完成 | 25a23ca |
+| Task 4: 服务接线 | 完成 | b80bc69 |
 
-- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-notify/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-notify/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
-- 已知问题：无
+- 下一步：Task 1–4 已逐项迁入测试、确认缺少实现时失败、实现并通过；模块 14/14 测试、assembleDebug 已通过。claude 接手复核：14/14 测试重跑通过、./gradlew test 与 check-merge.sh engine-notify 全部通过，报告见 testing/reports/G6-2026-10-02.md；DI-07、DI-41 待真机。
+- 已知问题：
+  - 暂存测试仅修本模块副本的编译问题，未改断言内容或暂存源：NotifyFakes.kt 的 EffectiveConfig 导入从 policy 改为冻结实现所在的 db；NotifyEngineTest.kt 第 59 行为 listOf 补 Pair<Rule, RuleOrigin> 类型，解决 TYPE_INFERENCE_ONLY_INPUT_TYPES_ERROR；ListenerMappingTest.kt 用公开 StatusBarNotification 构造器补 score=0、去掉未公开构造器的 overrideGroupKey 参数，并把未公开 UserHandle.of(0) 换成 getUserHandleForUid(10_001)（仍为用户 0）。
+  - 共享测试辅助文件同时依赖 Task 2/3 接口，因此 Task 1 先声明 PLAN 指定的 LearnerStore / NotifyState，行为实现仍按 Task 顺序。Task 2 在本模块 build.gradle.kts 添加已有 libs.serialization.json 引用用于 JSON 持久化，未新增或升级版本。
+  - MT-NT-01 的事件写入、MT-NT-02 的接受/重建步骤由测试调用假邻居，未覆盖真实 listener/receiver 接线；按用户要求未另加用例，实际接线已实施，真实系统行为留给 DI-07、DI-41（等用户、待真机）。
+  - 实机核实报告尚不存在，保留 PLAN 六个内置包名，等用户真机核对。学习通知已声明 POST_NOTIFICATIONS；Android 13+ 运行时授权需由 app 引导完成并在真机核验。
+  - 用户给出的基线命令含另一项目的绝对路径及拼写错误，按目标执行 :engine-notify:assembleDebug。SDK 以 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，未写 local.properties 或修改冻结配置。
 
 ## [engine-a11y] 状态: 待办 | 负责方: codex | 关卡: G4
 
