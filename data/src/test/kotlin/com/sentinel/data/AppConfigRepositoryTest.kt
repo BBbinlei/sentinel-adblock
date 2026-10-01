@@ -90,4 +90,20 @@ class AppConfigRepositoryTest {
         repo.endObservation("com.x.ended")
         assertEquals(listOf("com.x.due"), repo.observationDue().map { it.pkg })
     }
+    @Test fun `configuration changes recompute current time before next periodic tick`() = runTest {
+        db.close()
+        db = Room.inMemoryDatabaseBuilder(RuntimeEnvironment.getApplication(), SentinelDatabase::class.java)
+            .setQueryCoroutineContext(StandardTestDispatcher(testScheduler)).allowMainThreadQueries().build()
+        registry.syncInstalled(listOf(InstalledApp("com.x.normal", "Normal")), true)
+        global.pauseFor(30_000)
+        repo.observeExcluded().test {
+            assertEquals(setOf("com.x.normal"), awaitItem())
+            now += 31_000
+            repo.setLevel("com.x.normal", ProtectLevel.STRONG)
+            assertTrue(awaitItem().isEmpty())
+            assertEquals(0L, testScheduler.currentTime, "配置变化必须在下一次 60 秒 tick 之前重算")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
 }

@@ -14,11 +14,12 @@ class AppConfigRepository(private val db: SentinelDatabase, private val clock: C
     fun observeAll(): Flow<List<AppConfigEntity>> = dao.observeAll()
     fun observe(pkg: String): Flow<AppConfigEntity?> = dao.observe(pkg)
     suspend fun effective(pkg: String): EffectiveConfig = EffectivePolicy.resolve(dao.get(pkg), pkg, global.get(), clock.now())
-    private fun ticks(): Flow<Long> = flow { while (true) { emit(clock.now()); delay(DataContract.REFRESH_MS) } }
-    fun observeEffective(pkg: String): Flow<EffectiveConfig> = combine(dao.observe(pkg), global.observe(), ticks()) { cfg, state, now ->
-        EffectivePolicy.resolve(cfg, pkg, state, now)
+    private fun ticks(): Flow<Unit> = flow { while (true) { emit(Unit); delay(DataContract.REFRESH_MS) } }
+    fun observeEffective(pkg: String): Flow<EffectiveConfig> = combine(dao.observe(pkg), global.observe(), ticks()) { cfg, state, _ ->
+        EffectivePolicy.resolve(cfg, pkg, state, clock.now())
     }.distinctUntilChanged()
-    fun observeExcluded(): Flow<Set<String>> = combine(dao.observeAll(), global.observe(), ticks()) { apps, state, now ->
+    fun observeExcluded(): Flow<Set<String>> = combine(dao.observeAll(), global.observe(), ticks()) { apps, state, _ ->
+        val now = clock.now()
         apps.filter { EffectivePolicy.resolve(it, it.pkg, state, now).level == ProtectLevel.OFF }.map { it.pkg }.toSet()
     }.distinctUntilChanged()
     suspend fun setLevel(pkg: String, level: ProtectLevel?) = setToggles(pkg) { it.copy(level = level) }

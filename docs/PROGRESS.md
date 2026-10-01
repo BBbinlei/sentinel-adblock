@@ -28,9 +28,9 @@
 | Task 3: App 配置仓库与 App 登记 | 完成 | 1c6f438 |
 | Task 4: 规则存储 | 完成 | e4ab2ad |
 | Task 5: 规则构建与订阅更新 | 完成 | 6314051 |
-| Task 6: Koin 模块与模块接线入口 | 完成 | 本提交（Task 6） |
+| Task 6: Koin 模块与模块接线入口 | 完成 | 2c1b83e |
 
-- 下一步：执行 MT-DA-01～03、G2 全部用例与 ./gradlew test；写报告并运行 check-merge.sh data，全部通过后标记完成。
+- 下一步：G2 data 全部 46 项测试已通过（含 MT-DA-01～03 与 4 项补充检查）；配置变化时读取当前时间的边界问题已修复。执行 ./gradlew test、check-merge.sh data，再写报告并标记完成。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
 ## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3
