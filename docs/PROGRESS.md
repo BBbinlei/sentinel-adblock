@@ -39,14 +39,16 @@
 |---|---|---|
 | Task 1: 报文解析与构造 | 完成（UT 7/7） | d7f1be5 |
 | Task 2: DNS 报文与判定 | 完成（UT 12/12） | e939b70 |
-| Task 3: 上游解析与缓存 | 完成（UT 5/5） | 本提交 |
-| Task 4: TUN 配置与报文循环 | 待办 | — |
+| Task 3: 上游解析与缓存 | 完成（UT 5/5） | b31d7cd |
+| Task 4: TUN 配置与报文循环 | 完成（UT 7/7） | 本提交 |
 | Task 5: VpnController 与服务接线 | 待办 | — |
 | Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
 | Task 7: 故障安全 | 待办 | — |
 
-- 下一步：Task 4：导入 TUN 与报文循环测试，确认失败后实施。
+- 下一步：Task 5：导入控制器与事件测试，确认失败后实施服务接线。
 - 已知问题：原启动命令含损坏的绝对路径，按目标模块执行 :engine-vpn:assembleDebug；worktree 无 SDK 配置，通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 运行。暂存 WireFixtures.kt 的 EffectiveConfig 导入包为 policy，冻结实现实际在 db，仅修正 import，未改断言。
+
+- Task 4 接线说明：暂存 TunFakes 同时使用 Task 5 的 TunFactory/TunHandle，因此提前落成这两个既定接口于 service/TunFactory.kt；未改测试。
 
 ## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
 
