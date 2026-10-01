@@ -1,0 +1,18 @@
+{
+  "romPrefix": "V15.0",
+  "backgroundPopupOp": "BACKGROUND_POPUP_TEST",
+  "ops": [
+    {
+      "id": "pictorial-recommend", "trick": 1, "title": "关闭画报推荐",
+      "kind": "SETTING", "verified": true,
+      "apply": "settings put secure test_recommend 0",
+      "revert": "settings put secure test_recommend {before}",
+      "probe": "settings get secure test_recommend", "appliedRegex": "^0$"
+    },
+    {
+      "id": "assistant-cards", "trick": 2, "title": "关闭负一屏卡片",
+      "kind": "WIZARD", "verified": false, "optional": true,
+      "intent": {"action": "android.settings.SETTINGS", "pkg": "com.android.settings", "cls": "com.android.settings.Settings"}
+    }
+  ]
+}

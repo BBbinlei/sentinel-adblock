@@ -15,6 +15,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    buildFeatures { aidl = true }
     testOptions { unitTests.isIncludeAndroidResources = true }
 }
 
@@ -23,6 +24,7 @@ kotlin { jvmToolchain(17) }
 dependencies {
     implementation(project(":data"))
     implementation(project(":core-rules"))
+    implementation(libs.serialization.json)
     implementation(libs.koin.android)
     implementation(libs.androidx.core)
     implementation(libs.coroutines.android)
@@ -37,4 +39,5 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.koin.test)
     testImplementation(libs.work.testing)
+    testImplementation(libs.room.runtime)
 }
