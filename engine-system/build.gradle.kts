@@ -39,4 +39,5 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.koin.test)
     testImplementation(libs.work.testing)
+    testImplementation(libs.room.runtime)
 }
