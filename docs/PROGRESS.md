@@ -48,11 +48,11 @@
 - 下一步：从 Task 1 开始。
 - 已知问题：无
 
-## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
+## [engine-system] 状态: 进行中 | 负责方: codex | 关卡: G5
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 配置档案 | 待办 | — |
+| Task 1: 配置档案 | 完成 | 本提交 |
 | Task 2: Shizuku 网关 | 待办 | — |
 | Task 3: 操作执行与撤销 | 待办 | — |
 | Task 4: 按 App 权限同步 | 待办 | — |
@@ -60,8 +60,8 @@
 | Task 6: 崩溃日志采集 | 待办 | — |
 | Task 7: 接线 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
-- 已知问题：无
+- 下一步：Task 2 导入 UT-SY-2，确认红灯后实现 Shizuku 网关。
+- 已知问题：Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
 
 ## [engine-notify] 状态: 待办 | 负责方: codex | 关卡: G6
 

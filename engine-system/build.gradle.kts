@@ -23,6 +23,7 @@ kotlin { jvmToolchain(17) }
 dependencies {
     implementation(project(":data"))
     implementation(project(":core-rules"))
+    implementation(libs.serialization.json)
     implementation(libs.koin.android)
     implementation(libs.androidx.core)
     implementation(libs.coroutines.android)
