@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.sentinel.guard"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = libs.versions.build.tools.get()
     defaultConfig {
         minSdk = 30
@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core-rules"))
     implementation(libs.koin.android)
+    implementation(libs.androidx.core)
     implementation(libs.coroutines.android)
     implementation(libs.work.runtime)
     testImplementation(libs.kotlin.test.junit)
@@ -32,4 +33,5 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.koin.test)
+    testImplementation(libs.work.testing)
 }

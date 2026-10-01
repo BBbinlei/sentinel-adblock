@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.sentinel.vpn"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = libs.versions.build.tools.get()
     defaultConfig {
         minSdk = 30
@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core-rules"))
     implementation(libs.koin.android)
+    implementation(libs.androidx.core)
     implementation(libs.coroutines.android)
     implementation(libs.okhttp)
     testImplementation(libs.kotlin.test.junit)

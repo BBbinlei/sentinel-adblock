@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.sentinel.system"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = libs.versions.build.tools.get()
     defaultConfig {
         minSdk = 30
@@ -24,8 +24,9 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core-rules"))
     implementation(libs.koin.android)
+    implementation(libs.androidx.core)
     implementation(libs.coroutines.android)
-    implementation(libs.serialization.json)
+    implementation(libs.work.runtime)
     implementation(libs.shizuku.api)
     implementation(libs.shizuku.provider)
     testImplementation(libs.kotlin.test.junit)
@@ -35,4 +36,5 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.koin.test)
+    testImplementation(libs.work.testing)
 }

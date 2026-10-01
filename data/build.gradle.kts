@@ -1,11 +1,13 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
     namespace = "com.sentinel.data"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = libs.versions.build.tools.get()
     defaultConfig {
         minSdk = 30
@@ -20,14 +22,17 @@ android {
 
 kotlin { jvmToolchain(17) }
 
+room { schemaDirectory("$projectDir/schemas") }
+
 dependencies {
-    implementation(project(":core-rules"))
+    api(project(":core-rules"))          // 实体与仓库的公开签名使用 core-rules 类型
     implementation(libs.koin.android)
     implementation(libs.coroutines.android)
     implementation(libs.serialization.json)
     implementation(libs.work.runtime)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
     implementation(libs.okhttp)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
@@ -36,4 +41,6 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.koin.test)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.work.testing)
 }

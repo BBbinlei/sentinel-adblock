@@ -4,11 +4,10 @@ plugins {
 
 android {
     namespace = "com.sentinel.di"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = libs.versions.build.tools.get()
     targetProjectPath = ":app"
     defaultConfig {
-        applicationId = "com.sentinel.di"
         minSdk = 30
         targetSdk = 36
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

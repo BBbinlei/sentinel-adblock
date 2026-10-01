@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.sentinel.app"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = libs.versions.build.tools.get()
     defaultConfig {
         applicationId = "com.sentinel.adblock"
@@ -38,6 +38,13 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.androidx.core)
+    implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.work.runtime)
     implementation(libs.coroutines.android)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
@@ -46,4 +53,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.koin.test)
+    testImplementation(platform(libs.compose.bom))
+    testImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
 }
