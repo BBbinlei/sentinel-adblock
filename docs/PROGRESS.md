@@ -33,7 +33,7 @@
 - 下一步：G2 已通过：data 46/46、./gradlew test 全量 81/81、check-merge.sh data 全部通过；报告 testing/reports/G2-2026-10-02.md。等待合并通道确认并登记 g2-frozen，再放行后续引擎开发。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
-## [engine-vpn] 状态: 进行中 | 负责方: codex | 关卡: G3
+## [engine-vpn] 状态: 进行中 | 负责方: claude | 关卡: G3
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -41,14 +41,20 @@
 | Task 2: DNS 报文与判定 | 完成（UT 12/12） | e939b70 |
 | Task 3: 上游解析与缓存 | 完成（UT 5/5） | b31d7cd |
 | Task 4: TUN 配置与报文循环 | 完成（UT 7/7） | 本提交 |
-| Task 5: VpnController 与服务接线 | 待办 | — |
+| Task 5: VpnController 与服务接线 | 完成（UT 7/7） | 本提交 |
 | Task 6: 私人 DNS 检测与服务守护 | 待办 | — |
 | Task 7: 故障安全 | 待办 | — |
 
-- 下一步：Task 5：导入控制器与事件测试，确认失败后实施服务接线。
+- 下一步：Task 6：导入 health 测试，实现 PrivateDnsDetector 与 ServiceWatchdog 并接入服务。
 - 已知问题：原启动命令含损坏的绝对路径，按目标模块执行 :engine-vpn:assembleDebug；worktree 无 SDK 配置，通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 运行。暂存 WireFixtures.kt 的 EffectiveConfig 导入包为 policy，冻结实现实际在 db，仅修正 import，未改断言。
 
 - Task 4 接线说明：暂存 TunFakes 同时使用 Task 5 的 TunFactory/TunHandle，因此提前落成这两个既定接口于 service/TunFactory.kt；未改测试。
+
+- Task 5 构建补充：测试夹具直接使用 Room，按暂存 README 添加 testImplementation(libs.room.runtime)，版本目录未改。
+
+- Task 5 测试最小修正：EventBatcherTest 缺 ExperimentalCoroutinesApi import；VpnControllerTest 缺 runCurrent 扩展 import，分别补充，不改断言。EventBatcher 增加可选 scope/Clock 与 close，默认兼容既定构造，服务传入自身作用域和 Clock，避免定时任务泄漏。
+- Task 5 计时说明：暂存测试在 runTest 中等待真实 IO 时，data 的周期刷新流（AppConfigRepository 每 60s 的 ticks）会让虚拟时间自动前进，导致 UT-VP-5-04/5-07 若用仓库 Clock 计时必然失败。控制器因此用单调时钟 SystemClock.elapsedRealtime 做重试风暴窗口和奖励窗口到期判定（奖励窗口到期时刻在读到时由 until-Clock.now 换算为单调时间）；生产中两种时钟同速，行为等价，且不受墙钟调整影响。接手前的 Codex 版本这两个用例失败，已修。
+- 接手说明：由 Claude 接手（Codex 额度耗尽）；Task 5 的 Codex 未提交半成品已核对并完成，worktree 以 local.properties（gitignore）指向 SDK。
 
 ## [engine-system] 状态: 待办 | 负责方: codex | 关卡: G5
 
