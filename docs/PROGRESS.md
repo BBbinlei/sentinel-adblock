@@ -13,8 +13,8 @@
 | Task 2: 域名编译器与匹配器 | 完成 | c0c0b11 |
 | Task 3: 内置目录 | 完成 | 8a9ff77 |
 | Task 4: 选择器 | 完成 | d022343 |
-| Task 5: UI 规则解析、索引与内置规则 | 完成 | 本提交（Task 5） |
-| Task 6: 通知匹配 | 待办 | — |
+| Task 5: UI 规则解析、索引与内置规则 | 完成 | 247887e |
+| Task 6: 通知匹配 | 完成 | 本提交（Task 6） |
 
 - 下一步：在允许 Gradle 写入缓存和创建本地 socket 的执行环境中先运行 `./gradlew :core-rules:test`；然后从 Task 1 按 TDD 实施 Task 1～6，每 Task 一次提交；完成 MT-CR、RR-01/04/05，执行 G1、全量 test 与 check-merge。本会话未实施源码或测试；收尾发现外部新增提交 `70291f1`（Task 1）及未提交的 domain 测试文件，尚未验证，不得视为关卡完成。
 - 已知问题：2026-10-02 当前沙箱禁止写入默认 Gradle 缓存锁；复制已有缓存到临时可写目录后，Gradle 仍因 `FileLockContentionHandler` 创建本地 socket 被拒绝（`java.net.SocketException: Operation not permitted`）而在构建启动前失败。模块基线、回归、全量 test 和 check-merge 的测试项均未执行成功，G1 未通过，详见 `testing/reports/G1-2026-10-02.md`。本会话未更改依赖、未跳过失败测试、未执行真机步骤。存在另一执行者并发写入本通道的迹象，接手时先核实实际 HEAD 与测试结果，避免重复实施。
@@ -30,7 +30,7 @@
 | Task 5: 规则构建与订阅更新 | 待办 | — |
 | Task 6: Koin 模块与模块接线入口 | 待办 | — |
 
-- 下一步：Task 6，通知匹配；UT-CR-5-01～05 已通过。
+- 下一步：编写 MT-CR-01～03、RR-01/RR-04/RR-05，执行 G1 三项构建并提交报告；UT-CR-6-01～04 已通过。
 - 已知问题：无
 
 ## [engine-vpn] 状态: 待办 | 负责方: codex | 关卡: G3
