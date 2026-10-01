@@ -15,3 +15,7 @@ captures/
 .DS_Store
 # Kotlin
 .kotlin/
+
+# Supervisor runtime state
+.supervisor/
+docs/device-survey/out/

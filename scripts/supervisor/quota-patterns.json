@@ -1,0 +1,28 @@
+{
+  "_comment": "额度耗尽的识别规则。首次真实耗尽后，请把 .supervisor/logs 里的报错原文对照这里调整正则。",
+  "strong_regexes": [
+    "usage limit reached",
+    "you've hit your (usage )?limit",
+    "you have hit your (usage )?limit",
+    "hit your usage limit",
+    "claude ai usage limit",
+    "insufficient_quota",
+    "exceeded your (current )?quota"
+  ],
+  "weak_regexes": [
+    "usage limit",
+    "rate.?limit",
+    "quota",
+    "limit reached",
+    "too many requests",
+    "\\b429\\b",
+    "try again (later|in|at|after)",
+    "resets? (at|in)"
+  ],
+  "strong_max_runtime_sec": 120,
+  "strong_max_log_bytes": 6000,
+  "tail_bytes": 6000,
+  "backoff_sec": [1800, 3600, 7200, 10800],
+  "max_reset_horizon_sec": 691200,
+  "reset_slack_sec": 90
+}

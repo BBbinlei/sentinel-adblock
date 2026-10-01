@@ -1,0 +1,58 @@
+{
+  "_comment": "通道清单。列表顺序即启动优先级。worktree 为 \".\" 表示直接在仓库根目录（main）上做。",
+  "caps": {"codex": 3, "claude": 1},
+  "max_runtime_sec": 14400,
+  "max_consecutive_failures": 3,
+  "tick_interval_sec": 600,
+  "agents": {
+    "codex": {
+      "cmd": ["codex", "exec", "--cd", "{workdir}", "-s", "workspace-write", "-m", "gpt-6.1-sol",
+              "-c", "sandbox_workspace_write.network_access=true", "{prompt}"],
+      "probe": ["codex", "exec", "-s", "read-only", "Reply with the single word ok"]
+    },
+    "claude": {
+      "cmd": ["claude", "-p", "{prompt}", "--permission-mode", "acceptEdits",
+              "--allowedTools", "Bash(git *) Bash(./gradlew *) Bash(bash scripts/*) Bash(python3 *) Bash(grep *) Bash(ls *) Bash(cat *) Bash(mkdir *) Bash(mv *) Bash(cp *) Bash(find *)",
+              "--output-format", "json"],
+      "probe": ["claude", "-p", "Reply with the single word ok"]
+    }
+  },
+  "channels": [
+    {"name": "core-rules", "module": "core-rules", "owner": "codex", "worktree": ".",
+     "depends_on": [], "write_scope": "`core-rules/` 目录",
+     "instructions": "实施 `core-rules/PLAN.md` 的全部 Task，通过关卡 G1。直接在 main 上提交。"},
+    {"name": "data", "module": "data", "owner": "codex", "worktree": ".",
+     "depends_on": ["core-rules"], "write_scope": "`data/` 目录",
+     "instructions": "实施 `data/PLAN.md` 的全部 Task（含 `contract` 包与 `ModuleEntry`），通过关卡 G2。直接在 main 上提交。完成后监督脚本会打 `g2-frozen` 标签并冻结 data/core-rules。"},
+
+    {"name": "engine-vpn", "module": "engine-vpn", "owner": "codex", "worktree": "../wt-engine-vpn", "base_ref": "g2-frozen",
+     "depends_on": ["data"], "write_scope": "`engine-vpn/` 目录",
+     "instructions": "实施 `engine-vpn/PLAN.md` 的全部 Task，通过关卡 G3 中属于引擎的部分（`UT-VP-*`、`MT-VP-*`；`DI-*` 需真机，留给用户）。"},
+    {"name": "engine-system", "module": "engine-system", "owner": "codex", "worktree": "../wt-engine-system", "base_ref": "g2-frozen",
+     "depends_on": ["data"], "write_scope": "`engine-system/` 目录",
+     "instructions": "实施 `engine-system/PLAN.md`。若 `docs/device-survey/find-x7-ultra-survey.md` 尚不存在，只做 Task 2、3（Shizuku 网关与执行器），Task 1 的档案内容留待报告出现后再补，并把状态保持为 `进行中`。"},
+    {"name": "engine-notify", "module": "engine-notify", "owner": "codex", "worktree": "../wt-engine-notify", "base_ref": "g2-frozen",
+     "depends_on": ["data"], "write_scope": "`engine-notify/` 目录",
+     "instructions": "实施 `engine-notify/PLAN.md` 的全部 Task，通过关卡 G6 中非真机部分。"},
+    {"name": "engine-a11y", "module": "engine-a11y", "owner": "codex", "worktree": "../wt-engine-a11y", "base_ref": "g2-frozen",
+     "depends_on": ["data"], "write_scope": "`engine-a11y/` 目录",
+     "instructions": "实施 `engine-a11y/PLAN.md` 的全部 Task，通过关卡 G4 中非真机部分。"},
+
+    {"name": "guard", "module": "guard", "owner": "codex", "worktree": "../wt-guard", "base_ref": "main",
+     "depends_on": ["engine-vpn", "engine-system", "engine-notify", "engine-a11y"], "depends_merged": true,
+     "write_scope": "`guard/` 目录",
+     "instructions": "实施 `guard/PLAN.md` 的全部 Task，通过关卡 G7（含 `MT-CT-01`～`MT-CT-04`，测试放在 `testing/rule-regression`，这部分对 `testing/rule-regression/src/test/.../contract/` 有写权限）。"},
+
+    {"name": "app", "module": "app", "owner": "claude", "worktree": "../wt-app", "base_ref": "g2-frozen",
+     "depends_on": ["data"], "wait_for": ["engine-system", "guard"],
+     "write_scope": "`app/` 目录",
+     "instructions": "实施 `app/PLAN.md`。顺序：Task 1、2 → Task 5、6、7（只依赖 data）→ Task 3（需 `engine-system` 已并入 main）→ Task 4（需 `guard` 已并入 main）。做到 Task 3/4 而依赖尚未合并时，把状态改为 `等待` 并结束本次运行。关卡：G3 的 app 部分、G8。"},
+
+    {"name": "merge", "module": "(合并)", "owner": "claude", "worktree": ".", "kind": "merge",
+     "depends_on": [], "write_scope": "仓库根目录（仅限合并操作与 `docs/PROGRESS.md`）",
+     "instructions": "找出 `docs/PROGRESS.md` 里状态为 `完成` 的通道（读它们各自 worktree 里的 PROGRESS）。按 notify → system → a11y → vpn → guard → app 的顺序逐个处理：在该通道 worktree 里运行 `bash scripts/check-merge.sh <模块>`，通过后把分支 `chan/<通道>` 合并进 main（不 push），在 main 上跑 `./gradlew assembleDebug test`，再把 main 的 PROGRESS 里该通道状态改为 `已合并` 并提交。check-merge 或测试失败：不要合并，把原因写进该通道的「已知问题」并退回（状态改回 `进行中`），然后处理下一个。"},
+
+    {"name": "survey", "module": "(实机核实)", "owner": "用户", "worktree": ".", "kind": "user",
+     "depends_on": [], "write_scope": "-", "instructions": "用户运行 `docs/device-survey/scripts/survey.sh`。"}
+  ]
+}
