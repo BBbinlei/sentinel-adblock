@@ -5,19 +5,19 @@
 
 （`core-rules`、`data` 直接在 `main` 上做，状态到 `完成` 即视为已合并；其余通道在各自 worktree 分支上做，由合并通道并入 `main` 后标 `已合并`。）
 
-## [core-rules] 状态: 待办 | 负责方: codex | 关卡: G1
+## [core-rules] 状态: 进行中 | 负责方: codex | 关卡: G1
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 规则模型与域名解析器 | 待办 | — |
+| Task 1: 规则模型与域名解析器 | 阻塞：基线测试无法启动 | 见本次 wip 提交 |
 | Task 2: 域名编译器与匹配器 | 待办 | — |
 | Task 3: 内置目录 | 待办 | — |
 | Task 4: 选择器 | 待办 | — |
 | Task 5: UI 规则解析、索引与内置规则 | 待办 | — |
 | Task 6: 通知匹配 | 待办 | — |
 
-- 下一步：从 Task 1 开始。
-- 已知问题：无
+- 下一步：在允许 Gradle 写入缓存和创建本地 socket 的执行环境中先运行 `./gradlew :core-rules:test`；然后从 Task 1 按 TDD 实施 Task 1～6，每 Task 一次提交；完成 MT-CR、RR-01/04/05，执行 G1、全量 test 与 check-merge。当前没有实现源码或测试，不得视为完成。
+- 已知问题：2026-10-02 当前沙箱禁止写入默认 Gradle 缓存锁；复制已有缓存到临时可写目录后，Gradle 仍因 `FileLockContentionHandler` 创建本地 socket 被拒绝（`java.net.SocketException: Operation not permitted`）而在构建启动前失败。模块基线、回归、全量 test 和 check-merge 的测试项均未执行成功，G1 未通过，详见 `testing/reports/G1-2026-10-02.md`。未更改依赖、未跳过失败测试、未执行真机步骤。
 
 ## [data] 状态: 待办 | 负责方: codex | 关卡: G2
 
