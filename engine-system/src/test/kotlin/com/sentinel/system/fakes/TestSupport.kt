@@ -5,6 +5,7 @@ import com.sentinel.data.Clock
 import com.sentinel.data.db.*
 import com.sentinel.data.repo.*
 import com.sentinel.system.ops.*
+import com.sentinel.system.drift.DriftInspector
 import com.sentinel.system.profile.*
 import com.sentinel.system.shell.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,6 +84,9 @@ abstract class MemoryDataTest {
 
     protected fun appSync(shell: Shell, executor: OpExecutor, profile: ColorOsProfile?, state: MutableStateFlow<ShizukuState>) =
         AppOpsSync(shell, executor, profile, configs, logs, state)
+
+    protected fun inspector(executor: OpExecutor, profile: ColorOsProfile, state: MutableStateFlow<ShizukuState>) =
+        DriftInspector(executor, profile, logs, state)
 
     @After fun closeMemoryData() {
         try { if (::db.isInitialized) db.close() } finally { Dispatchers.resetMain() }
