@@ -63,7 +63,7 @@
 - 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-system/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-system/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
 - 已知问题：无
 
-## [engine-notify] 状态: 完成 | 负责方: claude | 关卡: G6
+## [engine-notify] 状态: 已合并 | 负责方: claude | 关卡: G6
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
