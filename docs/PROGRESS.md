@@ -68,12 +68,12 @@
 | Task | 状态 | 最后提交 |
 |---|---|---|
 | Task 1: 判定与内置规则 | 完成 | 404115d |
-| Task 2: 划除学习 | 完成 | 本次提交 |
-| Task 3: 编排器 NotifyEngine | 进行中 | — |
-| Task 4: 服务接线 | 待办 | — |
+| Task 2: 划除学习 | 完成 | f5f8a4b |
+| Task 3: 编排器 NotifyEngine | 完成 | 本次提交 |
+| Task 4: 服务接线 | 进行中 | — |
 
-- 下一步：Task 2 的 UT-NT-2-01～05 已红绿验证通过；继续 Task 3，迁入 MT-NT-01～02。
-- 已知问题：Task 2 为纯 Kotlin JSON 持久化在本模块 build.gradle.kts 新增 implementation(libs.serialization.json)，库及版本已在冻结版本目录存在，未新增或升级版本。暂存共享辅助文件 NotifyFakes.kt 的 EffectiveConfig 导入为 com.sentinel.data.policy.EffectiveConfig，但冻结实现位于 com.sentinel.data.db；仅将本模块副本导入修正为 db，未改断言或暂存源。共享辅助文件同时引用 Task 2/3 接口，Task 1 先声明 PLAN 已规定的 LearnerStore / NotifyState，使辅助文件编译，行为实现仍按 Task 顺序。用户给出的基线 Gradle task 含另一项目的绝对路径及拼写错误，按目标使用 :engine-notify:assembleDebug；SDK 通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，不写 local.properties。实机核实报告尚不存在，保留 PLAN 六个包名，等用户真机核对。
+- 下一步：Task 3 的 MT-NT-01～02 已红绿验证通过；继续 Task 4，迁入映射测试并接线监听服务与入口。
+- 已知问题：Task 3 暂存 NotifyEngineTest.kt 第 59 行期望 List<Pair<NotifyRule, RuleOrigin>> 与实际 List<Pair<Rule, RuleOrigin>> 在现有 Kotlin 上导致 TYPE_INFERENCE_ONLY_INPUT_TYPES_ERROR；仅补 listOf<Pair<com.sentinel.rules.model.Rule, RuleOrigin>> 显式类型，不改比较内容。MT 的日志与接受步骤由假邻居驱动，未覆盖真实服务/receiver，遵守不另写测试要求，将在 G6 报告保留此边界。Task 2 为纯 Kotlin JSON 持久化在本模块 build.gradle.kts 新增 implementation(libs.serialization.json)，库及版本已在冻结版本目录存在，未新增或升级版本。暂存共享辅助文件 NotifyFakes.kt 的 EffectiveConfig 导入为 com.sentinel.data.policy.EffectiveConfig，但冻结实现位于 com.sentinel.data.db；仅将本模块副本导入修正为 db，未改断言或暂存源。共享辅助文件同时引用 Task 2/3 接口，Task 1 先声明 PLAN 已规定的 LearnerStore / NotifyState，使辅助文件编译，行为实现仍按 Task 顺序。用户给出的基线 Gradle task 含另一项目的绝对路径及拼写错误，按目标使用 :engine-notify:assembleDebug；SDK 通过 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，不写 local.properties。实机核实报告尚不存在，保留 PLAN 六个包名，等用户真机核对。
 
 ## [engine-a11y] 状态: 待办 | 负责方: codex | 关卡: G4
 
