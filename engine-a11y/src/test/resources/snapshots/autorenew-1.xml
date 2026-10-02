@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node class="android.widget.FrameLayout">
+  <node class="android.widget.TextView" text="开通连续包月，自动续费" checked="true" clickable="true"/>
+</node>

@@ -89,21 +89,25 @@
   - 实机核实报告尚不存在，保留 PLAN 六个内置包名，等用户真机核对。学习通知已声明 POST_NOTIFICATIONS；Android 13+ 运行时授权需由 app 引导完成并在真机核验。
   - 用户给出的基线命令含另一项目的绝对路径及拼写错误，按目标执行 :engine-notify:assembleDebug。SDK 以 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，未写 local.properties 或修改冻结配置。
 
-## [engine-a11y] 状态: 待办 | 负责方: codex | 关卡: G4
+## [engine-a11y] 状态: 已合并 | 负责方: claude | 关卡: G4
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 前台跟踪与启动识别 | 待办 | — |
-| Task 2: 规则点击（开屏 / 弹窗 / 自动续费） | 待办 | — |
-| Task 3: 学习模式候选规则 | 待办 | — |
-| Task 4: 误伤探测信号 | 待办 | — |
-| Task 5: 激励视频处理与音量保护 | 待办 | — |
-| Task 6: 跳转回退 | 待办 | — |
-| Task 7: 编排器 A11yBrain | 待办 | — |
-| Task 8: 服务接线、悬浮提示与通知动作 | 待办 | — |
+| Task 1: 前台跟踪与启动识别 | 完成 | f9283a6 |
+| Task 2: 规则点击（开屏 / 弹窗 / 自动续费） | 完成 | ca57f7e |
+| Task 3: 学习模式候选规则 | 完成 | a2aeef8 |
+| Task 4: 误伤探测信号 | 完成 | 65ebc76 |
+| Task 5: 激励视频处理与音量保护 | 完成 | 15aa811 |
+| Task 6: 跳转回退 | 完成 | 1948c8a |
+| Task 7: 编排器 A11yBrain | 完成 | 09ab19b |
+| Task 8: 服务接线、悬浮提示与通知动作 | 完成 | 0857679, 0b6093e |
 
-- 下一步：从 Task 1 开始。测试已预先写好，暂存在 `testing/unit/pending/engine-a11y/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `engine-a11y/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
-- 已知问题：无
+- 下一步：等用户真机：DI-05、DI-21～25，用 SnapshotDumper 录制快照后补 RR-02/RR-03；G4 非真机部分已通过，见 testing/reports/G4-*.md。
+- 已知问题：
+  - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
+  - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
+  - 设计取舍：激励关闭点击后保持静音至离开 App 或 3 秒收尾 tick；自动续费提醒每包 10 分钟去重；学习模式「窗口出现时间」按 Activity 变化/弹窗窗口记，内容变化不刷新。
+  - MT-AY-03 暂存测试未覆盖执行器写例外/USER_UNDO（见暂存 README 待确认 5）。
 
 ## [guard] 状态: 进行中 | 负责方: claude | 关卡: G7
 

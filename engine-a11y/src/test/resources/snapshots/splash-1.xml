@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node class="android.widget.FrameLayout">
+  <node class="android.widget.TextView" text="跳过 3s" id="com.example.reader:id/skip" clickable="true"/>
+</node>
