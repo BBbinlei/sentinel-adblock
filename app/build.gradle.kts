@@ -23,8 +23,6 @@ android {
     buildFeatures { compose = true }
     testOptions {
         unitTests.isIncludeAndroidResources = true
-        // UT-AP-1-04 只在 G8（全部模块入口到齐后）执行；M8 结束时删掉这条排除
-        unitTests.all { it.useJUnit { excludeCategories("com.sentinel.app.di.G8Only") } }
     }
 }
 
