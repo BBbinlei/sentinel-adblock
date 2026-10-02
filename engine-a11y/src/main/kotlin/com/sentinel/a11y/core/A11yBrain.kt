@@ -108,7 +108,9 @@ class A11yBrain(
         if (transition != null) {
             guard.onTransition(transition, before, state::cfg, state::disabled, state::excepted)
                 ?.let { out += A11yAction.Revert(it) }
-            health.onLaunch(transition.to, tracker.launchesWithin(transition.to, LOOP_WINDOW_MS, w.ts))
+        }
+        if (tracker.launch != before.launch) {
+            health.onLaunch(w.pkg, tracker.launchesWithin(w.pkg, LOOP_WINDOW_MS, w.ts))
                 ?.let { out += A11yAction.Signal(it) }
         }
         if (!isIgnored || w.pkg in launchers()) {
