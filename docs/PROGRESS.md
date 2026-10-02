@@ -86,7 +86,7 @@
 | Task 6: 崩溃日志采集 | 完成 | (见 git log) |
 | Task 7: 接线 | 完成 | (见 git log) |
 | R03: AppOps 档案验证 | 未修（现有断言冲突） | 7b5920d |
-| R04: 复核失败后的恢复 | 已修（现有测试 28/28） | 7e86218 |
+| R04: 复核失败后的恢复 | 已补测试（6/6） | 本提交 |
 | R17: 动态 AppOps 漂移恢复 | 未修（R03 验证门控阻塞） | 本提交 |
 
 - 下一步：Codex 修复复核完成，R04 已修；R03 等测试模块协调既有断言冲突后实施严格验证，再按该约束修复 R17。实机核实报告、DI-31/DI-32、RR-06 仍待补，不改 verified 标记，G5 保持进行中。历史 G5 报告见 testing/reports/G5-2026-10-02.md。
@@ -99,6 +99,9 @@
 - 修复复核 R17（2026-10-02）：报告属实；AppOpsSync 仅按 success 日志及相同命令去重，DriftInspector 只遍历 profile.ops。未修改实现：用户要求本项必须处于 R03 的验证约束下；R03 被 UT-SY-4-01～04、MT-SY-01/03 的无验证声明执行断言阻塞。在门控未落地时直接增加漂移重执行会扩大未核实 AppOps 的执行；增加默认空验证集合并对现有同步严格门控又会违反这些断言，故保守保留原行为，不能宣称动态 AppOps 已恢复巡检。R04 修复不等于 R17 修复。
 - 已知问题（R17，待补测试）：先协调 R03 断言，再覆盖明确验证的动态 AppOps：状态正常只 probe 不重执行；确认漂移才重执行；probe UNKNOWN/失败、profile=null、未验证操作不重执行；多次漂移后关闭开关/undoAll 恢复首次修改前模式；未知/离线仍保留 pending 意图。待真机：系统恢复 AppOps 后再次同步及原模式恢复；当前没有任何已核实 AppOps，应保持不执行的目标尚受 R03 冲突阻塞。
 - 本轮最终验证（2026-10-02）：使用 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools，依次运行 `./gradlew :engine-system:testDebugUnitTest`、`bash scripts/check-merge.sh engine-system`、`./gradlew test`，全部成功。模块 28 项，失败/跳过均为 0；git diff --check 通过；对比修复前提交，测试（含 testing 暂存测试）、冻结目录和其他模块均无改动，PROGRESS 仅 engine-system 节变化。R03/R17 未修原因、R04 待补测试和待真机均已登记；本轮不等于 G5 真机关卡完成。
+
+- 测试补全 R04（2026-10-02）：新增 OpExecutorRecoveryTest，复用 FakeDevice/MemoryDataTest，不改现有测试及生产代码。6/6 通过：复核失败和异常后的实际回滚；失败回滚重建执行器后 undo/undoAll 重试；待恢复项拒绝 apply 且不执行命令；取消发生在修改后、日志前，以及日志 insert 失败时，恢复文件保留原值并在重建后恢复。取消用 CompletableDeferred，时间用现有 Clock，恢复文件由 TemporaryFolder 清理。基线 28/28 通过。下一步：最终模块/合并检查及全量测试。
+- 已知问题（R04 测试边界）：本轮新增 6 项未暴露生产缺陷；中断用协程取消并令收尾回滚失败模拟，验证的是落库前已持久化及新执行器读取恢复文件，不是真机进程强杀。Shizuku/设备断电仍待真机。
 
 ## [engine-notify] 状态: 已合并 | 负责方: claude | 关卡: G6
 
