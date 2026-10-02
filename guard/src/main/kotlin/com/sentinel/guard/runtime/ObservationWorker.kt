@@ -21,7 +21,8 @@ class ObservationWorker(context: Context, params: WorkerParameters) : CoroutineW
         val notifier = koin.get<GuardNotifier>()
         for (cfg in apps.observationDue()) {
             try {
-                val count = signals.countSince(cfg.pkg, COUNTED, cfg.firstSeenAt)
+                val observationStartedAt = cfg.observationEndsAt - EXTEND_MS
+                val count = signals.countSince(cfg.pkg, COUNTED, observationStartedAt)
                 when (GuardPolicy.evaluateObservation(cfg, count)) {
                     is Decision.ExtendObservation -> {
                         apps.extendObservation(cfg.pkg, EXTEND_MS)

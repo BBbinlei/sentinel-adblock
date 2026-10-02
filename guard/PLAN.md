@@ -100,7 +100,7 @@
 - `GuardRunner` 对每条未处理信号：计算 `recentHits = rulesHitSince(pkg, ts - hitWindowMs)` 与 `sameKindCount24h`，执行决定，发通知，`markHandled`。
 - `DisableRules` 对每个 ruleId 调 `OverrideRepository.disable`；如果全部返回 false（都被钉住），按 `NoRuleFound` 处理。
 - 单条信号处理异常只记录日志、标记已处理，不能让收集协程退出。
-- `ObservationWorker` 对 `observationDue()` 返回的每个 App，统计 `[firstSeenAt, now]` 内 USER_UNDO + TEMP_ALLOW 的次数，按 `evaluateObservation` 的结果执行 `extendObservation(pkg, 259_200_000)` 或 `endObservation(pkg)`。
+- `ObservationWorker` 对 `observationDue()` 返回的每个 App，统计 `[observationEndsAt - 259_200_000, now]` 内 USER_UNDO + TEMP_ALLOW 的次数，按 `evaluateObservation` 的结果执行 `extendObservation(pkg, 259_200_000)` 或 `endObservation(pkg)`。统计起点为本轮观察期起点（第一轮等于 firstSeenAt，延期后等于上次延期时刻），只用本轮新增信号，避免旧信号反复延长；不新增持久状态。
 
 - [ ] **Step 1:** 编写 UT-GD-2-01～06。
 - [ ] **Step 2:** 运行，期望 FAIL。
