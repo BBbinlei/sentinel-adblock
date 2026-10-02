@@ -57,7 +57,7 @@
 - 接手说明：由 Claude 接手（Codex 额度耗尽）；Task 5 的 Codex 未提交半成品已核对并完成，worktree 以 local.properties（gitignore）指向 SDK。
 - Task 7 测试最小修正：VpnFailSafeTest、VpnModuleTest 缺 runCurrent 扩展 import，已补，不改断言。
 
-## [engine-system] 状态: 进行中 | 负责方: claude | 关卡: G5
+## [engine-system] 状态: 进行中 | 负责方: codex | 关卡: G5
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -68,9 +68,13 @@
 | Task 5: 巡检与状态上报 | 完成 | (见 git log) |
 | Task 6: 崩溃日志采集 | 完成 | (见 git log) |
 | Task 7: 接线 | 完成 | (见 git log) |
+| R03: AppOps 档案验证 | 未修（现有断言冲突） | 本提交 |
 
 - 下一步：等待实机核实报告以填写 verified=true 的档案并执行 DI-31/DI-32；测试模块需补 RR-06（testing/rule-regression ProfileHealthTest）。Task 1–7、UT-SY 25 项、MT-SY 3 项均已通过，G5 报告见 testing/reports/G5-2026-10-02.md；状态保持进行中，不改完成。接手说明：Codex 额度耗尽，Claude 接手本通道（负责方 claude）。
 - 已知问题：RR-06 的 ProfileHealthTest 在 testing/ 中不存在，本通道未自写；Task 7 用 CurrentProfile 持有者提供「当前档案 ColorOsProfile?」（Koin 不支持可空绑定），ROM 版本经反射读 ro.build.version.oplusrom，读不到则无档案（所有操作不执行）；UT-SY-6 两项通过，但 dropbox_sample.txt 为合成样本非实机采集，待实机核实后替换；DropboxCrashWorker 首次运行以当前时间为 lastChecked 基线（不回放历史崩溃）；UT-SY-5 四项通过（DriftInspector 另暴露 driftedCount 供上报，reapply 在非 READY 时返回空 map）；暂存 TestSupport 缺少 DriftInspector 的跨包 import，补足 import 以编译，断言不变；UT-SY-4 四项通过；恢复使用原 AppOps 模式，离线不发命令并保留待同步意图；backgroundPopupOp 为空时不推断 OEM 操作名；UT-SY-3 七项及 FakeDevice 自检通过；TestSupport 的混合 arrayOf 显式声明 <Any> 以消除 Kotlin 2.4 编译错误；新增本模块 AtomicFile 撤销定义持久化，data 保持只读；TestSupport 仅适配冻结 data 的四个仓库构造参数，未改断言；未来 appSync/inspector 辅助方法暂缓导入；测试增加版本目录已有 libs.room.runtime 引用；UT-SY-2 四项通过；AIDL 已启用；FakeShizukuApi 从暂存 TestSupport 原样提取以避免引用尚未实施的 Task 3–5 类型；Shizuku Provider/绑定依据官方 API 文档及已安装 13.1.5 签名；Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
+
+- 修复复核 R03（2026-10-02）：报告属实，当前 AppOpsSync 在无匹配档案时仍生成 verified=true 的操作。未修改实现：用户要求“修法必然让现有测试失败时保留原行为”。`AppOpsSyncTest.UT_SY_4_01` 在无验证声明的 `ColorOsProfile("TEST", backgroundOp, emptyList())` 上断言 syncOnce()>0、deny/ignore 和 3 条成功日志；UT_SY_4_02 断言这三项的恢复命令；UT_SY_4_03 断言 READY 后 syncOnce()>0、pending=0 和 deny；UT_SY_4_04 断言无验证声明时发出 SYSTEM_ALERT_WINDOW deny。`SystemModuleTest.MT_SY_01/03` 同样断言无 AppOps 验证声明时执行并生成 6/3 条成功日志。默认空 verifiedAppOps 并严格门控必然违反这些断言，不能用 TEST ROM 特判或默认授权绕过。基线 :engine-system:testDebugUnitTest 28/28 通过，测试文件未改。
+- 已知问题（R03，待补测试）：测试模块需协调上述冲突，并覆盖旧 JSON 缺字段默认为空、profile=null/空验证集合不发任何命令、仅执行明确验证的 AppOps、未验证开关意图保留及 pending 数量。实机核实报告不存在，全部档案 verified=false；修复落地后的预期是真机 AppOpsSync 不执行任何操作，但当前因断言冲突尚未达到该行为。待真机：DI-31/DI-32 和未验证意图上报。
 
 ## [engine-notify] 状态: 已合并 | 负责方: claude | 关卡: G6
 
