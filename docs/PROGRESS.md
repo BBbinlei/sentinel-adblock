@@ -220,3 +220,17 @@
 - 职责：M0 Task 1 实机核实。用户连接手机后运行 `docs/device-survey/scripts/survey.sh`；报告写入 `docs/device-survey/find-x7-ultra-survey.md`。
 - 下一步：等用户。
 - 已知问题：无
+
+## [apk-ad-scan] 状态: 进行中 | 负责方: Codex | 关卡: 自测待执行
+
+| Task | 状态 | 最后提交 |
+|---|---|---|
+| Task 1: 标准库 APK/strings 扫描工具 | 完成 | 本提交 |
+| Task 2: 百度网盘域名包及人工清单对照 | 待办 | — |
+| Task 3: 合成样本自测 | 待办 | — |
+
+- 基线：chan/apk-ad-scan 工作区干净；scripts/apk-ad-scan 不存在，无已有模块测试可跑；没有运行或改动 Gradle 模块。
+- Task 1：scan.py 解析所有根目录 classes*.dex 的 string_ids，支持 strings 文本、三类 TAB 清单和 --format domains；内置 12 家 SDK 数据表和离线 TLD 快照。已有种子/人工确认之外的新增特征用本机 dexdump 核对了 Vlion、Octopus、美数的引用类；未核实的 Mintegral/倍孜/趣盟只列疑似，不猜测专用域。
+- 验证：Python 3.9.6；Task 1 临时 smoke assertions 通过（URL/裸域名、大小写、标识符过滤、百度主域保护、后缀伪装）；真实 APK 的标准 DEX 读取成功，确认 28 个域名。scan.py --help、git diff --check 通过；正式自测在 Task 3 落地。
+- 下一步：Task 2 对指定 base.apk 生成域名包，核对人工确认列表，再执行 Task 3；不 push。
+- 已知问题：静态字符串不证明实时请求或拦截效果；不扫描资源/native/动态拼接/split APK，不处理 HTTPDNS 或 pan.baidu.com 自营广告。公共 TLD 语法仍可能接受同形代码标识符（不会因此进入确认清单）；离线材料不足的三家 SDK 没有已核实专用域名。报告按本任务写入范围保存到 docs/device-survey/ad-domain-packs，不写 testing/reports。
