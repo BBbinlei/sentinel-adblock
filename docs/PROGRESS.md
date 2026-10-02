@@ -116,8 +116,8 @@
 | Task 1: 决策策略 | 完成（UT-GD-1-01～10 通过） | feat(guard): decision policy |
 | Task 2: 运行时执行、通知与观察期评估 | 完成（UT-GD-2-01～06、MT-GD-01～02 通过） | feat(guard): runtime runner, notifications and observation check |
 
-- 下一步：Task 1–2 与 UT-GD-*、MT-GD-* 已通过，`check-merge.sh guard` 与 `./gradlew test` 通过，G7 报告见 `testing/reports/G7-2026-10-02.md`。仅剩 MT-CT-01～04：等 engine-a11y 合并到 main 后，在本 worktree 合并 main，把 `testing/unit/pending/contract/src/test` 搬入 `testing/rule-regression/src/`（该模块 build.gradle.kts 需补 testImplementation：room.runtime、koin.android、koin.test、work.testing，写入边界需用户或合并通道许可，见暂存 README），运行 `./gradlew :testing:rule-regression:testDebugUnitTest --tests 'com.sentinel.regression.contract.*'`；全部通过后更新 G7 报告并把状态改为 `完成`（在此之前不得改为完成）。
-- 已知问题：(1) RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；(2) 通知依赖 app 申请 POST_NOTIFICATIONS，无权限时只记日志；(3) 暂存测试未改，仅在 guard/build.gradle.kts 增加 testImplementation(libs.room.runtime)；(4) MT-CT-* 的接线假设（CT-A1～A8）待 engine-a11y 合并后验证。
+- 下一步：guard 自身（Task 1–2、UT/MT-GD）已通过；G7 仍 `进行中`，因 MT-CT-01～04 实跑 4/4 未通过——生产代码未按 CT-A2 暴露快照（详见 `testing/reports/G7-2026-10-02.md` 第 3 节与适配补丁 `testing/reports/G7-contract-wiring-attempt.diff`）。需要用户/协调者裁定：(a) 授权在 engine-vpn/engine-notify/engine-a11y 暴露只读访问器（DecisionSource、NotifyState、EnabledServicesChecker 生产实现、快照预取），或 (b) 由测试模块负责人重写 `testing/unit/pending/contract` 夹具的快照获取方式；并裁定 CT-A7（OFF 过滤在 Brain 还是 SignalRepository）。裁定后按补丁搬入 `testing/rule-regression/src/test` 重跑 `./gradlew :testing:rule-regression:testDebugUnitTest --tests 'com.sentinel.regression.contract.*'`，全部通过再改 `完成`。
+- 已知问题：(1) RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；(2) 通知依赖 app 申请 POST_NOTIFICATIONS；(3) guard 暂存测试未改，仅增加 testImplementation(libs.room.runtime)；(4) testing/rule-regression/build.gradle.kts 已按协调者授权增加 room.runtime、koin.android、koin.test、work.testing 的 testImplementation（无版本改动）；(5) MT-CT 适配（编译性）：TunFactory/TunHandle 导入、buildBroadcastReceiver 替换、手工构造 VpnController、A11yState/DecisionSource 绑定，仅在补丁中，未提交；(6) MT-CT 剩余阻塞见 G7 报告第 3 节（快照预取、NotifyState、EnabledServicesChecker 不可获取；CT-A7 歧义）。
 
 ## [app] 状态: 待办 | 负责方: claude | 关卡: G3(Task 1–2) / G8
 

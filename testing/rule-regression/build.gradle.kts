@@ -35,4 +35,8 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.serialization.json)
+    testImplementation(libs.room.runtime)
+    testImplementation(libs.koin.android)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.work.testing)
 }
