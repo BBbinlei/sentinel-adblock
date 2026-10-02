@@ -75,7 +75,7 @@
 - 下一步：从 Task 1 开始。
 - 已知问题：无
 
-## [engine-a11y] 状态: 进行中 | 负责方: claude | 关卡: G4
+## [engine-a11y] 状态: 完成 | 负责方: claude | 关卡: G4
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -86,12 +86,14 @@
 | Task 5: 激励视频处理与音量保护 | 完成 | 15aa811 |
 | Task 6: 跳转回退 | 完成 | 1948c8a |
 | Task 7: 编排器 A11yBrain | 完成 | 09ab19b |
-| Task 8: 服务接线、悬浮提示与通知动作 | 待办 | — |
+| Task 8: 服务接线、悬浮提示与通知动作 | 完成 | 0857679, 0b6093e |
 
-- 下一步：G4 非真机部分：快照录制工具（若 PLAN 要求）、报告、check-merge。
+- 下一步：等用户真机：DI-05、DI-21～25，用 SnapshotDumper 录制快照后补 RR-02/RR-03；G4 非真机部分已通过，见 testing/reports/G4-*.md。
 - 已知问题：
   - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
+  - 设计取舍：激励关闭点击后保持静音至离开 App 或 3 秒收尾 tick；自动续费提醒每包 10 分钟去重；学习模式「窗口出现时间」按 Activity 变化/弹窗窗口记，内容变化不刷新。
+  - MT-AY-03 暂存测试未覆盖执行器写例外/USER_UNDO（见暂存 README 待确认 5）。
 
 ## [guard] 状态: 待办 | 负责方: codex | 关卡: G7
 
