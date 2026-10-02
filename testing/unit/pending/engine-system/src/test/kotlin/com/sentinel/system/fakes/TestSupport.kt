@@ -5,6 +5,7 @@ import com.sentinel.data.Clock
 import com.sentinel.data.db.*
 import com.sentinel.data.repo.*
 import com.sentinel.system.ops.*
+import com.sentinel.system.drift.DriftInspector
 import com.sentinel.system.profile.*
 import com.sentinel.system.shell.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -74,10 +75,10 @@ abstract class MemoryDataTest {
             .build()
         // 不假设 data 未定义的 DAO 名称；用 Room 标准 API 填入计划给定的表。
         db.openHelper.writableDatabase.execSQL("INSERT OR REPLACE INTO global_state (id, enabled, pausedUntil, ruleVersion) VALUES (0, 1, NULL, 0)")
-        logs = OpLogRepository(db, clock)
-        events = EventRepository(db, clock)
-        configs = AppConfigRepository(db, clock)
-        statuses = EngineStatusRepository(db, clock)
+        logs = OpLogRepository(db.opLogDao(), clock)
+        events = EventRepository(db.eventDao(), clock)
+        configs = AppConfigRepository(db, clock, GlobalStateRepository(db, clock), SignalRepository(db, clock))
+        statuses = EngineStatusRepository(db.engineStatusDao(), clock)
     }
 
     protected fun seedApp(pkg: String, overlay: Boolean = false, clipboard: Boolean = false) {
@@ -86,7 +87,7 @@ abstract class MemoryDataTest {
                 (pkg, label, level, splash, rewarded, shake, jumpBack, notify, limitOverlay,
                  denyClipboard, sensitive, tempAllowUntil, firstSeenAt, observationEndsAt)
                 VALUES (?, ?, 'STANDARD', 1, 'SILENT', 1, 1, 1, ?, ?, 0, NULL, ?, 0)""",
-            arrayOf(pkg, pkg, if (overlay) 1 else 0, if (clipboard) 1 else 0, clock.now()),
+            arrayOf<Any>(pkg, pkg, if (overlay) 1 else 0, if (clipboard) 1 else 0, clock.now()),
         )
     }
 

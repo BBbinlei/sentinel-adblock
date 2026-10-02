@@ -44,4 +44,8 @@ class ProfileLoaderTest {
         assertEquals("settings put secure test_recommend {before}", op.apply)
         assertEquals("settings put secure test_recommend {before}", op.revert)
     }
+
+    @Test fun UT_SY_1_05_legacy_profile_has_no_verified_appops() {
+        assertEquals(emptySet(), ProfileLoader.parse(sample()).verifiedAppOps)
+    }
 }

@@ -2,6 +2,8 @@
 
 本目录未加入 Gradle 源集。已编写 Task SY 的 **28/28** 个编号（UT 25、MT 3），另有 1 个 FakeDevice 工具自检。没有产品类替身、跳过或空断言；尚未运行 Gradle或编译这些测试，不能视为 G5 通过。
 
+2026-10-02 更新（覆盖下文历史验证说明）：D/R03 的 6 项夹具已声明合成档案 verifiedAppOps，原有断言不变；新增 UT-SY-1-05（旧 JSON 默认空集合）、UT-SY-4-05～08（null/空集合、部分授权及历史日志不绕过授权）。对应运行源集 engine-system/src/test 已实跑 **34/34 通过，失败/跳过 0**。TestSupport 已适配冻结 data 的仓库构造参数、DriftInspector 导入与 arrayOf<Any>。本目录仍不单独参与 Gradle；合成验证声明仅用于测试，未改产品档案。
+
 ## 文件与编号对照
 
 下表文件均相对 `src/test/kotlin/com/sentinel/system/`；测试函数前另有原始编号注释。

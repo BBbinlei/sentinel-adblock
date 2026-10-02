@@ -81,11 +81,14 @@
 | Task 5: 巡检与状态上报 | 完成 | (见 git log) |
 | Task 6: 崩溃日志采集 | 完成 | (见 git log) |
 | Task 7: 接线 | 完成 | (见 git log) |
-| R03: AppOps 档案验证 | 已修（6 项预期测试冲突） | a6d68af |
+| R03: AppOps 档案验证 | 已修（6 项夹具冲突已由 D 修复） | a6d68af |
 | R04: 复核失败后的恢复 | 已修（现有测试 28/28） | 7e86218 |
-| R17: 动态 AppOps 漂移恢复 | 已修（新增路径待测试模块覆盖） | 本提交 |
+| R17: 动态 AppOps 漂移恢复 | 已修（新增路径待本轮覆盖） | 5fc59da |
+| 测试 Task D: 验证声明夹具与边界 | 完成（模块 34/34） | 本提交 |
 
-- 下一步：R03/R17 已修；测试模块需更新下列 6 项无验证声明的旧断言并补新增路径，更新后重新验证再由用户决定合并。实机核实报告、DI-31/DI-32、RR-06 仍待补；所有档案保持 verified=false，G5 保持进行中。本分支不合并 main、不 push。
+- 下一步：测试 Task D 完成；继续补 R17 动态漂移行为和 C/RR-06 档案体检，再运行模块测试、check-merge 与全量 test。实机核实、DI-31/DI-32 仍等用户，G5 保持进行中；不合并、不 push。
+- 测试补全 Task D（2026-10-02）：修改前实跑 29 项，23 通过、6 失败，恰为用户列出的夹具冲突；已只给 UT-SY-4-01～04、MT-SY-01/03 的合成档案声明所需 verifiedAppOps，保留全部原断言。新增 UT-SY-4-05/06：null/空集合在 READY、离线、再次 READY 时无命令、状态/配置不变、pending 保留；UT-SY-4-07：仅声明 READ_CLIPBOARD 时只探测/执行该项、其余两项保持 pending；UT-SY-4-08：历史成功日志也不能绕过 null/空集合，开启及关闭开关均不探测或恢复；UT-SY-1-05：旧 JSON 默认空集合。测试与共享构造适配同步回 pending/engine-system。运行 ./gradlew :engine-system:testDebugUnitTest -q：34 通过、0 失败、0 错误、0 跳过。
+- 已知问题（本轮 Task D）：未暴露新的生产缺陷；下文 R03 的 6 项失败表为历史记录，本轮已消除。docs/TEST_MODULE_REQUESTS.md 当前没有 D 节，按本次用户明确列出的 D 范围执行；生产代码和档案只读。
 - 已知问题：RR-06 的 ProfileHealthTest 在 testing/ 中不存在，本通道未自写；Task 7 用 CurrentProfile 持有者提供「当前档案 ColorOsProfile?」（Koin 不支持可空绑定），ROM 版本经反射读 ro.build.version.oplusrom，读不到则无档案（所有操作不执行）；UT-SY-6 两项通过，但 dropbox_sample.txt 为合成样本非实机采集，待实机核实后替换；DropboxCrashWorker 首次运行以当前时间为 lastChecked 基线（不回放历史崩溃）；UT-SY-5 四项通过（DriftInspector 另暴露 driftedCount 供上报，reapply 在非 READY 时返回空 map）；暂存 TestSupport 缺少 DriftInspector 的跨包 import，补足 import 以编译，断言不变；UT-SY-4 四项通过；恢复使用原 AppOps 模式，离线不发命令并保留待同步意图；backgroundPopupOp 为空时不推断 OEM 操作名；UT-SY-3 七项及 FakeDevice 自检通过；TestSupport 的混合 arrayOf 显式声明 <Any> 以消除 Kotlin 2.4 编译错误；新增本模块 AtomicFile 撤销定义持久化，data 保持只读；TestSupport 仅适配冻结 data 的四个仓库构造参数，未改断言；未来 appSync/inspector 辅助方法暂缓导入；测试增加版本目录已有 libs.room.runtime 引用；UT-SY-2 四项通过；AIDL 已启用；FakeShizukuApi 从暂存 TestSupport 原样提取以避免引用尚未实施的 Task 3–5 类型；Shizuku Provider/绑定依据官方 API 文档及已安装 13.1.5 签名；Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
 
 - 修复复核 R03（2026-10-02，本轮特殊裁定）：报告属实，已增加 ColorOsProfile.verifiedAppOps（默认空集合，旧 JSON 兼容）；仅从当前档案明确声明的已核实名称生成 ProfileOp，verified 来自该集合。SYSTEM_ALERT_WINDOW、READ_CLIPBOARD、backgroundPopupOp 均受门控，档案 null/集合为空时不发任何 AppOps 命令（含日志恢复）；用户配置不变，未核实意图仍计入 pending，已有成功日志也不能消除未核实 pending。关闭开关后的未核实历史恢复保留为 pending。未修改任何档案验证标记、测试或暂存测试。修改前模块基线成功；修改后 XML 实计 29 项：23 通过、6 预期失败、0 跳过，其他测试没有失败。
