@@ -27,7 +27,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         const val REVOKED = "VPN 授权被撤销或被其他 VPN 取代"
         const val RULES_UNAVAILABLE = "规则不可用，暂停网络拦截"
         const val UPSTREAM_UNAVAILABLE = "DNS 上游连续不可用，网络拦截已停止，网络已恢复直连"
-        // 连续三次 DoH 与 UDP 都失败才停止，容忍单次网络切换；有效应答重置计数。
+        // 仅在已验证的底层网络可用时累计传输失败；有效应答或网络恢复重置计数。
         const val UPSTREAM_FAILURE_LIMIT = 3
     }
     private val mutableState = MutableStateFlow(EngineState.NOT_SETUP)
@@ -39,6 +39,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     @Volatile private var stopReason: String? = null
     @Volatile private var active = false
     private var upstreamFailures = 0
+    private var underlyingNetworkAvailable = false
     @Volatile private var rules: DomainMatcher? = null
     @Volatile private var configs = emptyMap<String, AppConfigEntity>()
     @Volatile private var globalState = GlobalStateEntity(enabled = false)
@@ -71,8 +72,14 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         privateDnsWarning = warning
         if (active) reportHealth()
     }
+    /** 服务注入非 VPN、具备 INTERNET 且 VALIDATED 的底层网络状态；未知视为不可用。 */
+    @Synchronized fun onUnderlyingNetwork(available: Boolean) {
+        if (available && !underlyingNetworkAvailable) upstreamFailures = 0
+        underlyingNetworkAvailable = available
+    }
     @Synchronized fun onUpstreamTransport(success: Boolean) {
         if (!active) return
+        if (!success && !underlyingNetworkAvailable) return
         upstreamFailures = if (success) 0 else upstreamFailures + 1
         if (upstreamFailures == UPSTREAM_FAILURE_LIMIT) {
             closeTun(UPSTREAM_UNAVAILABLE)
