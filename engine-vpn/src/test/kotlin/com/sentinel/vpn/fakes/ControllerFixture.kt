@@ -2,6 +2,7 @@ package com.sentinel.vpn.fakes
 
 import com.sentinel.data.Clock
 import com.sentinel.data.db.*
+import com.sentinel.data.repo.EngineStatusRepository
 import com.sentinel.vpn.decide.*
 import com.sentinel.vpn.service.VpnController
 import com.sentinel.vpn.tun.*
@@ -18,7 +19,8 @@ import kotlin.test.*
 
 /** 所有未定的 controller 构造参数集中在此处，完整假设见 README A4。 */
 @OptIn(ExperimentalCoroutinesApi::class)
-class ControllerFixture(val test: TestScope) : Closeable {
+class ControllerFixture(val test: TestScope,
+    statusFactory: (MemoryData) -> EngineStatusRepository = { it.status }) : Closeable {
     private val dispatcher = StandardTestDispatcher(test.testScheduler)
     private val job = SupervisorJob(test.backgroundScope.coroutineContext[Job])
     val scope = CoroutineScope(test.backgroundScope.coroutineContext + job + dispatcher)
@@ -32,19 +34,23 @@ class ControllerFixture(val test: TestScope) : Closeable {
     val decisionFaults = AtomicInteger()
     val decisionFailures = Channel<Unit>(Channel.UNLIMITED)
     val contexts: MutableList<DnsContext> = Collections.synchronizedList(mutableListOf())
+    lateinit var decisionSource: DecisionSource; private set
     val controller = VpnController(
         scope = scope, tunFactory = factory, selfPkg = "com.sentinel.adblock",
         apps = data.apps, global = data.global, overrides = data.overrides, rewards = data.rewards,
-        ruleStore = data.rules, events = data.events, signals = data.signals, status = data.status,
+        ruleStore = data.rules, events = data.events, signals = data.signals, status = statusFactory(data),
         resolver = upstream, pkgs = PackageResolver { pkg }, clock = clock,
         stopService = { factory.operations.add("stopService"); stops.incrementAndGet() },
-        decisionSourceDecorator = { delegate -> object : DecisionSource {
-            override fun matcher() = delegate.matcher()
-            override fun context(pkg: String?): DnsContext {
-                if (failDecisions) { decisionFaults.incrementAndGet(); decisionFailures.trySend(Unit); throw IOException("injected decision-source failure") }
-                return delegate.context(pkg).also { contexts.add(it) }
+        decisionSourceDecorator = { delegate ->
+            decisionSource = delegate
+            object : DecisionSource {
+                override fun matcher() = delegate.matcher()
+                override fun context(pkg: String?): DnsContext {
+                    if (failDecisions) { decisionFaults.incrementAndGet(); decisionFailures.trySend(Unit); throw IOException("injected decision-source failure") }
+                    return delegate.context(pkg).also { contexts.add(it) }
+                }
             }
-        } }
+        }
     )
     suspend fun start(installRules: Boolean = true) {
         if (installRules) data.initialize(rule(), rule("sdk.example.test", com.sentinel.rules.model.DomainTag.AD_SDK))
@@ -63,8 +69,10 @@ class ControllerFixture(val test: TestScope) : Closeable {
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-suspend fun TestScope.withController(block: suspend ControllerFixture.() -> Unit) {
+suspend fun TestScope.withController(
+    statusFactory: (MemoryData) -> EngineStatusRepository = { it.status },
+    block: suspend ControllerFixture.() -> Unit) {
     Dispatchers.setMain(StandardTestDispatcher(testScheduler))
-    try { ControllerFixture(this).use { fixture -> try { fixture.block() } finally { fixture.stop() } } }
+    try { ControllerFixture(this, statusFactory).use { fixture -> try { fixture.block() } finally { fixture.stop() } } }
     finally { Dispatchers.resetMain() }
 }
