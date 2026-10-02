@@ -205,7 +205,7 @@ class SentinelAccessibilityService : AccessibilityService() {
         stopped = true
         if (current === this) current = null
         try { keeper?.restore() } catch (e: Exception) { warn("恢复音量失败", e) }
-        overlay?.dismiss()
+        overlay?.close()
         contentJob?.cancel(); tickJob?.cancel(); labelJob?.cancel()
         val rt = try { runtime } catch (_: Exception) { null }
         // 状态上报在独立协程里完成，不随服务作用域取消。

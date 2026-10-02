@@ -101,9 +101,10 @@
 | Task 6: 跳转回退 | 完成 | 1948c8a |
 | Task 7: 编排器 A11yBrain | 完成 | 09ab19b |
 | Task 8: 服务接线、悬浮提示与通知动作 | 完成 | 0857679, 0b6093e |
-| R08: 回调内提取事件数据 | 已修 | 本提交 |
+| R08: 回调内提取事件数据 | 已修 | 37b3cd5 |
+| R09: 悬浮窗异常与退出保护 | 已修 | 本提交 |
 
-- 下一步：继续 R09～R12 修复；基线 :engine-a11y:testDebugUnitTest、:guard:testDebugUnitTest 均通过。原接力事项：等用户真机：DI-05、DI-21～25，用 SnapshotDumper 录制快照后补 RR-02/RR-03；G4 非真机部分已通过，见 testing/reports/G4-*.md。
+- 下一步：继续 R10～R12 修复；基线 :engine-a11y:testDebugUnitTest、:guard:testDebugUnitTest 均通过。原接力事项：等用户真机：DI-05、DI-21～25，用 SnapshotDumper 录制快照后补 RR-02/RR-03；G4 非真机部分已通过，见 testing/reports/G4-*.md。
 - 已知问题：
   - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
@@ -111,6 +112,7 @@
   - MT-AY-03 暂存测试未覆盖执行器写例外/USER_UNDO（见暂存 README 待确认 5）。
 
   - R08 待补测试：由测试模块覆盖回调返回后事件回收/复用、IO 排队时仍使用原包名、Activity 和 source 节点；本次仅把 source 读取移到回调内，不保留 AccessibilityEvent。Android 11/12 事件生命周期待真机。
+  - R09 待补测试：由测试模块覆盖 showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException、部分添加失败后的移除与 current 清理、close 前后排队/新展示不执行、重复退出和展示失败后重试；本次异常保护位于 Runnable 内，shutdown 永久关闭 OverlayToast。窗口 token 撤销及 ColorOS 服务断开待真机。
 
 ## [guard] 状态: 进行中 | 负责方: claude | 关卡: G7
 

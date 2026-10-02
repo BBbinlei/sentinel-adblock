@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService
 import android.graphics.PixelFormat
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -11,12 +12,14 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.sentinel.a11y.di.A11yRuntime
 
 /** 撤销提示与激励询问小窗，使用 TYPE_ACCESSIBILITY_OVERLAY（无需悬浮窗权限）。主线程使用。 */
 class OverlayToast(private val service: AccessibilityService) {
     private val handler = Handler(Looper.getMainLooper())
     private val wm get() = service.getSystemService(WindowManager::class.java)
     private var current: View? = null
+    @Volatile private var closed = false
 
     private fun params(touchable: Boolean) = WindowManager.LayoutParams(
         WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
@@ -34,10 +37,28 @@ class OverlayToast(private val service: AccessibilityService) {
         current = null
     }
 
+    /** 服务退出时永久关闭，排队和后续展示均失效。 */
+    fun close() {
+        closed = true
+        dismiss()
+    }
+
+    private fun postShow(block: () -> Unit) {
+        if (closed) return
+        handler.post {
+            if (closed) return@post
+            try { block() }
+            catch (e: Exception) {
+                dismiss()
+                Log.w(A11yRuntime.TAG, "悬浮提示展示失败", e)
+            }
+        }
+    }
+
     private fun show(view: View, autoDismissMs: Long?) {
         dismiss()
-        wm.addView(view, params(true))
         current = view
+        wm.addView(view, params(true))
         if (autoDismissMs != null) handler.postDelayed({ dismiss() }, autoDismissMs)
     }
 
@@ -50,7 +71,7 @@ class OverlayToast(private val service: AccessibilityService) {
 
     /** 「已拦截 A → B 的跳转 [撤销]」，显示 [durationMs] 毫秒。 */
     fun showUndo(text: String, durationMs: Long, onUndo: () -> Unit) {
-        handler.post {
+        postShow {
             val layout = row()
             layout.addView(TextView(service).apply { this.text = text; setTextColor(0xFFFFFFFF.toInt()) },
                 LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
@@ -64,7 +85,7 @@ class OverlayToast(private val service: AccessibilityService) {
 
     /** 激励视频询问：静默播完 / 正常观看 / 记住。 */
     fun showRewardedAsk(onChoice: (silent: Boolean, remember: Boolean) -> Unit) {
-        handler.post {
+        postShow {
             val layout = LinearLayout(service).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(32, 24, 32, 24)
