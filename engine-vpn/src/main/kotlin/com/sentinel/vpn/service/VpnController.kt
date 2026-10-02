@@ -26,11 +26,15 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         const val UNEXPECTED_STOP = "网络拦截意外停止，网络已恢复直连"
         const val REVOKED = "VPN 授权被撤销或被其他 VPN 取代"
         const val RULES_UNAVAILABLE = "规则不可用，暂停网络拦截"
+        const val UPSTREAM_UNAVAILABLE = "DNS 上游连续不可用，网络拦截已停止，网络已恢复直连"
+        // 连续三次 DoH 与 UDP 都失败才停止，容忍单次网络切换；有效应答重置计数。
+        const val UPSTREAM_FAILURE_LIMIT = 3
     }
     private val mutableState = MutableStateFlow(EngineState.NOT_SETUP)
     val state: StateFlow<EngineState> = mutableState.asStateFlow()
     private val lifecycle = Mutex()
     @Volatile private var active = false
+    private var upstreamFailures = 0
     @Volatile private var rules: DomainMatcher? = null
     @Volatile private var configs = emptyMap<String, AppConfigEntity>()
     @Volatile private var globalState = GlobalStateEntity(enabled = false)
@@ -62,6 +66,11 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     suspend fun onPrivateDns(warning: String?) = lifecycle.withLock {
         privateDnsWarning = warning
         if (active) reportHealth()
+    }
+    @Synchronized fun onUpstreamTransport(success: Boolean) {
+        if (!active) return
+        upstreamFailures = if (success) 0 else upstreamFailures + 1
+        if (upstreamFailures == UPSTREAM_FAILURE_LIMIT) scope.launch { stop(UPSTREAM_UNAVAILABLE) }
     }
     private fun onEvent(e: LoopEvent) {
         batcher.offer(e)

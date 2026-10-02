@@ -117,7 +117,8 @@ class SentinelVpnService : VpnService() {
     private fun begin(koin: Koin) {
         val clock = koin.get<Clock>()
         val resolver = DohUdpResolver("https://223.5.5.5/dns-query", InetSocketAddress("223.5.5.5", 53),
-            { protect(it) }, { protect(it) }, koin.get<DnsCache>())
+            { protect(it) }, { protect(it) }, koin.get<DnsCache>(),
+            { success -> controller?.onUpstreamTransport(success) })
         val c = VpnController(scope, ServiceTunFactory(), packageName, koin.get(), koin.get(), koin.get(), koin.get(),
             koin.get<RuleStore>(), koin.get(), koin.get(), koin.get(), resolver, ConnectionPackageResolver(this), clock,
             { scope.launch { stopSelf() } })

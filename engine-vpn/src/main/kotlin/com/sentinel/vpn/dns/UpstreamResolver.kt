@@ -14,7 +14,7 @@ fun interface SocketProtector { fun protect(socket: Socket): Boolean }
 interface UpstreamResolver { suspend fun resolve(query: ByteArray): ByteArray }
 class DohUdpResolver(private val dohUrl: String, private val udpServer: InetSocketAddress,
     protector: SocketProtector, private val datagramProtector: (DatagramSocket) -> Boolean,
-    private val cache: DnsCache) : UpstreamResolver {
+    private val cache: DnsCache, private val onTransportResult: (Boolean) -> Unit = {}) : UpstreamResolver {
     private val client = OkHttpClient.Builder().socketFactory(object : SocketFactory() {
         override fun createSocket(): Socket = Socket().also {
             if (!protector.protect(it)) { it.close(); throw IOException("Socket protection failed") }
@@ -59,9 +59,12 @@ class DohUdpResolver(private val dohUrl: String, private val udpServer: InetSock
                 }
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
-                DnsMessage.servFail(query)
+                onTransportResult(false)
+                return@withContext DnsMessage.servFail(query)
             }
         }
+        // 有效 DNS 错误应答（包括 SERVFAIL/NXDOMAIN）仍表示上游传输成功。
+        onTransportResult(true)
         cache.put(question.name, question.qtype, response)
         response
     }
