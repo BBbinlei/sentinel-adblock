@@ -1,0 +1,32 @@
+https://C2.GDT.QQ.COM:443/path?next=ads.hidden.example.net
+MI.GDT.QQ.COM.
+https:\/\/c2.gdt.qq.com\/duplicate
+(https://mobads.baidu.com)
+mobads-logs.baidu.com
+pgdt.ugdtimg.com adsmind.ugdtimg.com
+https://api-access.pangolin-sdk-toutiao.com/settings
+cdn.pglstatp-toutiao.com
+adx-cfg-u1.ubixioe.com
+bid-adx2.vlion.cn
+https://api-v3.mentamob.com/api/v2/config
+sdk.zhangyuyidong.cn
+sdk.1rtb.net
+api.adukwai.com api.sigmob.cn
+https://pan.baidu.com/splash/ad
+baidu.com www.baidu.com httpsdns.baidu.com
+mobads-pre-config.cdn.bcebos.com miniapp-ad.cdn.bcebos.com
+download.baidupcs.com cdn.bdstatic.com
+https://c2.gdt.qq.com.evil.net
+https://mobads.baidu.com.evil.net
+https://notgdt.qq.com
+https://sdk.zhangyuyidong.cn.evil.net
+https://child.sdk.zhangyuyidong.cn
+ads.new-vendor.net bid.new-vendor.net splash.new-vendor.net union.new-vendor.net
+sdk.mintegral.example.net sdk.beizi.example.net sdk.qumeng.example.net
+https://c2.gdt.qq.com@safe.example.net/resource
+https://safe.example.net/adsmind.ugdtimg.com?next=ads.hidden.example.net
+normal.example.zip normal.example.so
+https://例子.测试/path
+com.baidu.netdisk android.intent.action window.mobadssdkbridge.play image.png config.json
+192.168.1.1 https://127.0.0.1 https://[::1]
+-bad.gdt.qq.com bad_.gdt.qq.com c2.gdt.qq.com_bad
