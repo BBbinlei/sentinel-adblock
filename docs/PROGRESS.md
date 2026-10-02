@@ -81,11 +81,11 @@
 | Task 5: 巡检与状态上报 | 完成 | (见 git log) |
 | Task 6: 崩溃日志采集 | 完成 | (见 git log) |
 | Task 7: 接线 | 完成 | (见 git log) |
-| R03: AppOps 档案验证 | 已修（6 项预期测试冲突） | 本提交 |
+| R03: AppOps 档案验证 | 已修（6 项预期测试冲突） | a6d68af |
 | R04: 复核失败后的恢复 | 已修（现有测试 28/28） | 7e86218 |
-| R17: 动态 AppOps 漂移恢复 | 未修（R03 验证门控阻塞） | 本提交 |
+| R17: 动态 AppOps 漂移恢复 | 已修（新增路径待测试模块覆盖） | 本提交 |
 
-- 下一步：R03 已按用户特殊裁定落地，不绕过验证来满足旧断言；继续修复 R17。测试模块需更新无 AppOps 验证声明的旧断言并补新增路径；实机核实报告、DI-31/DI-32、RR-06 仍待补，所有档案保持 verified=false，G5 保持进行中。本分支不合并 main、不 push。
+- 下一步：R03/R17 已修；测试模块需更新下列 6 项无验证声明的旧断言并补新增路径，更新后重新验证再由用户决定合并。实机核实报告、DI-31/DI-32、RR-06 仍待补；所有档案保持 verified=false，G5 保持进行中。本分支不合并 main、不 push。
 - 已知问题：RR-06 的 ProfileHealthTest 在 testing/ 中不存在，本通道未自写；Task 7 用 CurrentProfile 持有者提供「当前档案 ColorOsProfile?」（Koin 不支持可空绑定），ROM 版本经反射读 ro.build.version.oplusrom，读不到则无档案（所有操作不执行）；UT-SY-6 两项通过，但 dropbox_sample.txt 为合成样本非实机采集，待实机核实后替换；DropboxCrashWorker 首次运行以当前时间为 lastChecked 基线（不回放历史崩溃）；UT-SY-5 四项通过（DriftInspector 另暴露 driftedCount 供上报，reapply 在非 READY 时返回空 map）；暂存 TestSupport 缺少 DriftInspector 的跨包 import，补足 import 以编译，断言不变；UT-SY-4 四项通过；恢复使用原 AppOps 模式，离线不发命令并保留待同步意图；backgroundPopupOp 为空时不推断 OEM 操作名；UT-SY-3 七项及 FakeDevice 自检通过；TestSupport 的混合 arrayOf 显式声明 <Any> 以消除 Kotlin 2.4 编译错误；新增本模块 AtomicFile 撤销定义持久化，data 保持只读；TestSupport 仅适配冻结 data 的四个仓库构造参数，未改断言；未来 appSync/inspector 辅助方法暂缓导入；测试增加版本目录已有 libs.room.runtime 引用；UT-SY-2 四项通过；AIDL 已启用；FakeShizukuApi 从暂存 TestSupport 原样提取以避免引用尚未实施的 Task 3–5 类型；Shizuku Provider/绑定依据官方 API 文档及已安装 13.1.5 签名；Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
 
 - 修复复核 R03（2026-10-02，本轮特殊裁定）：报告属实，已增加 ColorOsProfile.verifiedAppOps（默认空集合，旧 JSON 兼容）；仅从当前档案明确声明的已核实名称生成 ProfileOp，verified 来自该集合。SYSTEM_ALERT_WINDOW、READ_CLIPBOARD、backgroundPopupOp 均受门控，档案 null/集合为空时不发任何 AppOps 命令（含日志恢复）；用户配置不变，未核实意图仍计入 pending，已有成功日志也不能消除未核实 pending。关闭开关后的未核实历史恢复保留为 pending。未修改任何档案验证标记、测试或暂存测试。修改前模块基线成功；修改后 XML 实计 29 项：23 通过、6 预期失败、0 跳过，其他测试没有失败。
@@ -102,9 +102,10 @@
 | SystemModuleTest.MT_SY_03_disconnect_preserves_applied_and_reconnect_runs_pending | SystemModuleTest.kt:116，assertTrue(sync.syncOnce() > 0) | 重连不授权未核实 AppOps，实际仍为 0 |
 - 修复复核 R04（2026-10-02）：报告属实，已仅修改 OpExecutor。沿用 AtomicFile，在修改前保存操作定义、before 和时间到 system-undo.json.recovery；区分未改变、可能已改变、已确认改变。复核失败时，只有成功 probe 与 before 完全一致才认定未改变；否则尽力回滚。回滚成功标 undone；失败保留恢复记录，undo/undoAll 不以 success 决定恢复资格；未完成恢复时禁止覆盖同项 before。命令/复核异常、取消、日志保存失败也尝试恢复；日志尚未落库的记录由 undoAll 恢复。保持原失败日志 success=false 和 Failed 结果。验证：现有 engine-system 全部 28/28、OpExecutorTest 7/7 通过，check-merge.sh engine-system 全部通过；没有新增/修改/删除测试文件，data 保持只读。
 - 已知问题（R04，待补测试）：现有断言只验证兼容性，没有覆盖新增恢复路径。测试模块需补修改成功后 probe 失败/异常且回滚成功、回滚失败后 undo/undoAll 重试（包括重建执行器读取恢复文件）、非零命令返回但实际已改变、命令取消、日志落库前中断/写入失败、旧撤销文件兼容、已 undone 的恢复记录不重复执行、同项多次修改保持撤销顺序。历史 success=false 且无恢复记录的日志无法判断是否曾修改，保守维持不可恢复，不自动臆测迁移。待真机：Shizuku 修改后断开、重新激活后恢复及重启恢复；本次未执行设备操作。
-- 修复复核 R17（2026-10-02）：报告属实；AppOpsSync 仅按 success 日志及相同命令去重，DriftInspector 只遍历 profile.ops。未修改实现：用户要求本项必须处于 R03 的验证约束下；R03 被 UT-SY-4-01～04、MT-SY-01/03 的无验证声明执行断言阻塞。在门控未落地时直接增加漂移重执行会扩大未核实 AppOps 的执行；增加默认空验证集合并对现有同步严格门控又会违反这些断言，故保守保留原行为，不能宣称动态 AppOps 已恢复巡检。R04 修复不等于 R17 修复。
-- 已知问题（R17，待补测试）：先协调 R03 断言，再覆盖明确验证的动态 AppOps：状态正常只 probe 不重执行；确认漂移才重执行；probe UNKNOWN/失败、profile=null、未验证操作不重执行；多次漂移后关闭开关/undoAll 恢复首次修改前模式；未知/离线仍保留 pending 意图。待真机：系统恢复 AppOps 后再次同步及原模式恢复；当前没有任何已核实 AppOps，应保持不执行的目标尚受 R03 冲突阻塞。
+- 修复复核 R17（2026-10-02）：报告属实，已选择同步时 probe 复核方案。AppOpsSync 不再用成功日志及相同命令跳过已执行项；只遍历 R03 允许生成的已核实操作，有历史成功记录时经 OpExecutor.status：APPLIED 只 probe；NOT_APPLIED 才交由 apply 再探测后执行；UNKNOWN 不执行、保留 pending。Shizuku 离线不探测，所有待复核意图暂计 pending。OpExecutor 在同项动态 appop:* 重执行时，从最早尚未撤销的成功日志取得首次恢复基线，用于新日志、持久恢复记录及失败回滚，防止漂移值覆盖首次模式；关闭开关和 undoAll 仍恢复首次模式，已撤销的历史轮次不参与新基线。沿用 R04 待恢复记录阻止覆盖规则，不改 DriftInspector 的档案巡检路径。修改后模块测试 29 项：23 通过、6 项与 R03 同名同断言的预期失败、0 跳过，没有新增失败；OpExecutorTest 7/7 通过。
+- 已知问题（R17，待补测试）：测试模块需补明确验证的动态 AppOps：成功日志存在但实际状态正常时只 probe、不重执行；漂移时只在确认后重执行；probe UNKNOWN/失败、profile=null/空集合/未核实/离线不重执行且 pending 保留；首次 foreground/allow 后漂移为不同模式，经多次重执行、关闭开关、单项撤销或 undoAll 均还原首次模式；执行器重建后基线保留；已全部撤销后再开启以新现场值建立基线；漂移重执行复核失败沿用首次恢复记录，不破坏 R04 恢复资格。当前实现只在既有同步触发时复核动态项，未增加每日动态巡检（采用用户允许的同步复核方案）。待真机：系统恢复 AppOps 后再次同步、Shizuku 断开/重连及首次模式恢复。本轮未执行设备操作；当前生产档案没有任何已核实 AppOps，因此同步不执行。
 - 前轮最终验证（2026-10-02，历史，早于本轮 R03/R17 修复）：使用 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools，依次运行 `./gradlew :engine-system:testDebugUnitTest`、`bash scripts/check-merge.sh engine-system`、`./gradlew test`，全部成功。模块 28 项，失败/跳过均为 0；git diff --check 通过；对比修复前提交，测试（含 testing 暂存测试）、冻结目录和其他模块均无改动，PROGRESS 仅 engine-system 节变化。R03/R17 未修原因、R04 待补测试和待真机均已登记；本轮不等于 G5 真机关卡完成。
+- 本轮最终验证（2026-10-02，R03/R17 修复后）：已运行 `./gradlew :engine-system:testDebugUnitTest`（29 项，23 通过、上表 6 项预期失败、0 跳过）、`bash scripts/check-merge.sh engine-system`（第 1～5 项静态检查通过，仅测试项因同样 6 项失败返回 1）、`./gradlew test`（因同样 6 项失败返回 1）。为完成其他模块检查，另运行 `./gradlew test --continue`，所有测试 XML 合计 249 项：243 通过、仅上述 6 项失败、0 跳过；core-rules 27、data 46、engine-a11y 59、engine-notify 14、engine-vpn 48、guard 18、rule-regression 8 全通过，app 没有已落地单元测试（NO-SOURCE，不算测试通过）。精确比对失败名称和断言位置，没有预期之外的失败。git diff --check 通过；相对修复前 da82eb2 仅 3 个 engine-system 生产文件及本节变化，测试/暂存测试、档案、冻结目录和其他模块均未修改。R03/R17 新路径没有新增测试覆盖，待测试模块补测；待真机，不能据此宣称 G5 完成。
 
 ## [engine-notify] 状态: 已合并 | 负责方: claude | 关卡: G6
 

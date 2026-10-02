@@ -63,10 +63,9 @@ class AppOpsSync(
         }
         val active = log.observeAll().first().filter { it.success && !it.undone && it.opId.startsWith("appop:") }
         val restore = active.filter { it.opId !in requested }
-        val apply = desired.filter { (id, op) -> active.none { it.opId == id && it.command == op.apply } }
         val unverified = requested.count { it !in desired }
         if (shizukuState.value != ShizukuState.READY) {
-            pending.value = unverified + apply.size + restore.map { it.opId }.distinct().size
+            pending.value = requested.size + restore.map { it.opId }.distinct().size
             return@withLock 0
         }
         var changed = 0
@@ -75,8 +74,15 @@ class AppOpsSync(
             if (entry.opId.split(':').getOrNull(1) !in verified ||
                 shizukuState.value != ShizukuState.READY || !executor.undo(entry.id)) remaining++ else changed++
         }
-        for ((_, op) in apply) {
+        for ((id, op) in desired) {
             if (shizukuState.value != ShizukuState.READY) { remaining++; continue }
+            if (active.any { it.opId == id }) {
+                when (executor.status(op)) {
+                    OpStatus.APPLIED -> continue
+                    OpStatus.UNKNOWN -> { remaining++; continue }
+                    OpStatus.NOT_APPLIED -> Unit
+                }
+            }
             when (executor.apply(op)) {
                 OpOutcome.Applied -> changed++
                 OpOutcome.AlreadyApplied -> Unit
