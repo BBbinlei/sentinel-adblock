@@ -1,5 +1,8 @@
 package com.sentinel.app.onboarding
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +35,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.sentinel.app.R
+import com.sentinel.app.VpnStarter
+import com.sentinel.data.repo.GlobalStateRepository
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 
 @Composable
@@ -45,6 +53,23 @@ fun OnboardingScreen(
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val vm by rememberUpdatedState(viewModel)
+    // VPN 授权弹窗必须用带结果的方式启动，否则系统弹窗拿不到调用方会直接关闭。
+    // 授权通过就顺手把网络拦截开起来，和首页开关一致；否则向导走完 VPN 仍是关的。
+    val koin = getKoin()
+    val scope = rememberCoroutineScope()
+    val vpnLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            scope.launch {
+                runCatching {
+                    val global = koin.get<GlobalStateRepository>()
+                    global.setEnabled(true)
+                    global.resume()
+                }
+            }
+            VpnStarter.start(context)
+        }
+        vm.onResume()
+    }
 
     // 从系统设置页回来时重新判定每一步
     LaunchedEffect(lifecycle) { lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) { vm.onResume() } }
@@ -76,7 +101,12 @@ fun OnboardingScreen(
                     Text(stringResource(R.string.onboarding_skip))
                 }
                 Button(
-                    onClick = { runCatching { context.startActivity(checker.settingsIntent(step)) } },
+                    onClick = {
+                        val intent = checker.settingsIntent(step)
+                        runCatching {
+                            if (step == SetupStep.VPN) vpnLauncher.launch(intent) else context.startActivity(intent)
+                        }
+                    },
                     modifier = Modifier.weight(1f).height(48.dp).testTag("onboarding:go"),
                 ) { Text(stringResource(R.string.onboarding_go)) }
             }

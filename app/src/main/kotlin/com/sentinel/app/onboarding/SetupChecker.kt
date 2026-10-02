@@ -44,7 +44,9 @@ class AndroidSetupChecker(
             context.packageManager.getLaunchIntentForPackage(SHIZUKU_PACKAGE)
                 ?: Intent(Intent.ACTION_VIEW, Uri.parse("https://shizuku.rikka.app/"))
         }
-        SetupStep.VPN -> VpnService.prepare(context) ?: Intent(Settings.ACTION_VPN_SETTINGS)
+        // 系统 VPN 授权弹窗要靠调用方 Activity 才能打开，带 NEW_TASK 会让它一创建就自己关闭。
+        SetupStep.VPN -> return VpnService.prepare(context)
+            ?: Intent(Settings.ACTION_VPN_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         SetupStep.ACCESSIBILITY -> Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         SetupStep.NOTIFICATION -> Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
         SetupStep.BATTERY -> Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
