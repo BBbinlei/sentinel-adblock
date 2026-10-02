@@ -21,6 +21,23 @@ class CatalogTest {
         assertFalse(Cidr.parse("203.107.1.0/24").contains(ByteArray(16)))
         assertFailsWith<IllegalArgumentException> { Cidr.parse("203.107.1.0/33") }
     }
+    @Test fun baidu_httpdns_service_ips_are_exact_hosts() {
+        assertTrue(HttpDnsCatalog.cidrs.any { it.contains(InetAddress.getByName("180.76.76.76").address) })
+        assertTrue(HttpDnsCatalog.cidrs.any { it.contains(InetAddress.getByName("180.76.76.112").address) })
+        assertFalse(HttpDnsCatalog.cidrs.any { it.contains(InetAddress.getByName("180.76.76.77").address) })
+        assertFalse(HttpDnsCatalog.cidrs.any { it.contains(InetAddress.getByName("180.76.76.113").address) })
+        assertFalse(HttpDnsCatalog.cidrs.any { it.contains(InetAddress.getByName("180.76.76.200").address) })
+    }
+    @Test fun httpdns_cidrs_are_unique_network_boundaries() {
+        val networks = HttpDnsCatalog.cidrs.map { it.address.toList() to it.prefix }
+        assertEquals(networks.size, networks.toSet().size)
+        for (cidr in HttpDnsCatalog.cidrs) {
+            for (bit in cidr.prefix until cidr.address.size * 8) {
+                assertEquals(0, cidr.address[bit / 8].toInt() and (1 shl (7 - bit % 8)),
+                    "Host bit $bit must be zero for ${InetAddress.getByAddress(cidr.address).hostAddress}/${cidr.prefix}")
+            }
+        }
+    }
     @Test fun UT_CR_3_03_landing_catalog() {
         assertTrue(JumpTargetCatalog.isAdLanding("com.xunmeng.pinduoduo"))
         assertFalse(JumpTargetCatalog.isAdLanding("com.android.settings"))
