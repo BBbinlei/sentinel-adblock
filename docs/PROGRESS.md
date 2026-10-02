@@ -172,13 +172,13 @@
 | Task 6: 规则页 | 代码完成（测试被夹具问题阻塞） | — |
 | Task 7: 快捷开关 | 代码完成（测试被夹具问题阻塞） | — |
 
-- 下一步：执行授权 A1～A5 测试适配及全部暂存测试同步；保持 UT-AP-1-04 的 G8 Category 排除，验证 app、全仓测试与 assembleDebug。
+- 下一步：app Debug 自动测试已全绿；继续 `./gradlew test`、`./gradlew :app:assembleDebug` 与 `bash scripts/check-merge.sh app`，之后更新 Task 表。UT-AP-1-04 按授权保持 Category 排除。
 - 测试补全 A1～A5：已修复并同步全部 18 个暂存 Kotlin 文件。FakeData 使用真实内存 Room、真实仓库与可控 Clock，Rows 属性直接读写数据库；调用记录只代理到真实 DAO。Koin verify 加入 File，并逐类声明生产模块 lambda 直接提供的参数（未豁免仓库类型）。磁贴停止监听后继续写库、推进虚拟时间，验证状态/副标题不再更新；不调用有 shadow 缺陷的 onDestroy。启动导航用真实 MainActivity，补齐日志/guard 测试接线；UI 用 native graphics 测量中文字。
-- 本轮结果：原有全量 33 项已运行，30 通过/3 失败（MT-AP-02 两项、MT-AP-05）；新增 MT-AP-03 返回导航回归待跑。UT-AP-1-04 按授权继续排除。
+- 本轮结果：`:app:testDebugUnitTest` 36 项全部通过、0 失败（原 33 项 + 返回导航 1 项 + 检测器负例 2 项）。UT-AP-1-04 按授权继续排除。
 - 已知问题：
   1. **MT-AP-02 测量接口误报，已修复**：native graphics 的 `已关闭` 文本实际宽 48、段落重建宽 103，未超高/行数；本机 Compose 1.12.1 `ParagraphLayoutCache.slowCreateTextLayoutResultOrNull` 字节码确认，它按 prevConstraints 重建 MultiParagraph 却保留原 layoutSize，导致 hasVisualOverflow 比较不同宽度。撤回未生效的 HomeScreen 改动；按同一输入/字体/密度在实际文本框内重新测量，保留 hasVisualOverflow/ellipsis 断言，并添加省略/截断的负例校验。4 项 MT-AP-02（明/暗布局与省略/截断负例）全部通过，未发现生产布局截断。
-  2. **app 日志页缺少界内返回入口，待修复**：MT_AP_05 在 `engine_log/VPN must contain actual clickable controls` 失败。日志页隐藏底部导航、没有可见返回控件；新增 MT_AP_03_log_pages_offer_a_back_action 验证引擎日志/撤销记录返回首页，待按导航可用性修复。
-  3. 原 A1～A5 阻塞已解决；首次真正执行的业务测试（Task 2～7）通过，布局修复与最终全仓/构建验证尚未完成，不能据此标 G8 完成。
+  2. **app 日志页缺少界内返回入口，已修复**：MT_AP_05 在 `engine_log/VPN must contain actual clickable controls` 失败。日志页隐藏底部导航、没有可见返回控件；新增 MT_AP_03_log_pages_offer_a_back_action 也在缺少 nav:back 时失败。SentinelNavHost 为隐藏底部导航的详情/净化/日志/撤销记录页统一提供 ≥48dp 的「返回」按钮，popBackStack 返回原页面；MT-AP-03/05 及全量 36 项通过。
+  3. 原 A1～A5 阻塞已解决；首次真正执行的业务测试（Task 2～7）通过，导航修复完成，最终全仓/构建验证尚未完成，不能据此标 G8 完成。
   4. 系统净化页无匹配档案时显示「暂无可用方案」；真实档案 verified=false，仍待实机核实。本轮仅用测试档案验证，不触碰设备。
   5. 向导图示是通用矢量图，未按 DI-21 的真实 ColorOS 路径绘制，待真机核实后替换。DI-52/DI-61 等设备关卡不在本次无人值守授权范围。
 

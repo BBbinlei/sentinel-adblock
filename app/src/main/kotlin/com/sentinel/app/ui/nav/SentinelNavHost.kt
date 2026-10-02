@@ -1,6 +1,8 @@
 package com.sentinel.app.ui.nav
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -10,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -65,6 +68,16 @@ fun SentinelNavHost(navController: NavHostController, startDestination: String =
     val showBar = current == null || tabs.any { it.route == current }
 
     Scaffold(
+        topBar = {
+            if (current in setOf(Routes.APP_DETAIL, Routes.SYSTEM_CLEANUP, Routes.ENGINE_LOG, Routes.OP_LOG)) {
+                Box(Modifier.fillMaxWidth()) {
+                    TextButton(
+                        onClick = { navController.popBackStack() },
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("nav:back"),
+                    ) { Text(stringResource(R.string.nav_back)) }
+                }
+            }
+        },
         bottomBar = {
             if (showBar) {
                 NavigationBar {
