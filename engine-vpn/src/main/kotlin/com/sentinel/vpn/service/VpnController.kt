@@ -33,6 +33,10 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     private val mutableState = MutableStateFlow(EngineState.NOT_SETUP)
     val state: StateFlow<EngineState> = mutableState.asStateFlow()
     private val lifecycle = Mutex()
+    // 只保护同步资源操作；这里绝不等待 Room 或其他挂起操作。
+    private val tunLock = Any()
+    @Volatile private var closed = false
+    @Volatile private var stopReason: String? = null
     @Volatile private var active = false
     private var upstreamFailures = 0
     @Volatile private var rules: DomainMatcher? = null
@@ -41,7 +45,7 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     @Volatile private var disabled = emptyMap<String, Set<String>>()
     @Volatile private var windows = emptyMap<String, Long>()
     private val watchers = mutableListOf<Job>()
-    private var handle: TunHandle? = null
+    @Volatile private var handle: TunHandle? = null
     private var loop: Job? = null
     private var spec: TunSpec? = null
     private val batcher = EventBatcher(events, scope = scope, clock = clock)
@@ -70,7 +74,10 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     @Synchronized fun onUpstreamTransport(success: Boolean) {
         if (!active) return
         upstreamFailures = if (success) 0 else upstreamFailures + 1
-        if (upstreamFailures == UPSTREAM_FAILURE_LIMIT) scope.launch { stop(UPSTREAM_UNAVAILABLE) }
+        if (upstreamFailures == UPSTREAM_FAILURE_LIMIT) {
+            closeTun(UPSTREAM_UNAVAILABLE)
+            scope.launch { stop(UPSTREAM_UNAVAILABLE) }
+        }
     }
     private fun onEvent(e: LoopEvent) {
         batcher.offer(e)
@@ -82,7 +89,8 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
             }
         }
     }
-    private suspend fun replace(excluded: Set<String>): Boolean {
+    private fun replace(excluded: Set<String>): Boolean = synchronized(tunLock) {
+        if (closed) return false
         val next = TunSpec.build(selfPkg, excluded)
         if (spec == next) return true
         val new = tunFactory.establish(next) ?: return false
@@ -100,15 +108,19 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
         return true
     }
     suspend fun start() = lifecycle.withLock {
-        if (active) return@withLock
+        if (active || closed) return@withLock
         globalState = global.get(); configs = apps.observeAll().first().associateBy { it.pkg }
         disabled = overrides.observeDisabled().first()
         try { windows = rewards.observeOpen().first() } catch (e: Exception) {
             currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "奖励窗口读取失败，按关闭处理", e); windows = emptyMap()
         }
         rules = loadRules()
-        active = true
+        synchronized(tunLock) {
+            if (closed) return@withLock
+            active = true
+        }
         if (!replace(apps.observeExcluded().first())) {
+            if (closed) return@withLock
             active = false; report(EngineState.NOT_SETUP); stopService(); return@withLock
         }
         reportHealth()
@@ -145,16 +157,27 @@ class VpnController(private val scope: CoroutineScope, private val tunFactory: T
     private suspend fun loadRules(): DomainMatcher? = try { withContext(Dispatchers.IO) { ruleStore.loadDomainMatcher() } }
     catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "规则加载失败", e); null }
     /** 系统撤销 VPN 授权（VpnService.onRevoke）；关闭 TUN 并上报原因。 */
-    fun onRevoked() { scope.launch { stop(REVOKED) } }
-    suspend fun stop(reason: String) = withContext(NonCancellable) {
-        lifecycle.withLock {
-            active = false
-            handle?.close(); handle = null; spec = null
-            loop?.cancel(); loop = null
+    fun onRevoked() { closeTun(REVOKED); scope.launch { stop(REVOKED) } }
+    /** 不等待 lifecycle；销毁时先恢复网络，再异步写库。返回关闭前是否仍在运行。 */
+    fun closeTun(reason: String): Boolean = synchronized(tunLock) {
+        val wasActive = active
+        if (stopReason == null) stopReason = reason
+        closed = true
+        active = false
+        val old = handle
+        handle = null; spec = null
+        try { old?.close() }
+        catch (e: Exception) { Log.w("SentinelVpn", "TUN 关闭失败", e) }
+        finally { loop?.cancel(); loop = null }
+        wasActive
+    }
+    suspend fun stop(reason: String) {
+        closeTun(reason)
+        withContext(NonCancellable) { lifecycle.withLock {
             watchers.forEach { it.cancel() }; watchers.clear()
             batcher.close()
-            report(EngineState.STOPPED, reason)
+            report(EngineState.STOPPED, stopReason)
             stopService()
-        }
+        } }
     }
 }
