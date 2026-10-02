@@ -32,6 +32,46 @@
 | MT-AY-03 | 暂存测试只验证到「外部撤销之后例外生效」 | `UndoJump` 写跳转例外 + 发 `USER_UNDO` 信号这一半只有代码，没有测试验证 |
 | 无 | `AndroidGuardNotifier`、`GuardActionReceiver` 没有任何暂存测试 | 通知与撤销按钮的入口目前未被自动化覆盖 |
 
+## D. AppOps 总约束修复要求改的测试（分支 `chan/fix-appops`，尚未合并）
+
+独立复核指出 `AppOpsSync` 现场构造 `verified=true` 绕过了「只执行档案中 verified=true 的项」。已按总约束修复（提交 `a6d68af`、`5fc59da`）：只有档案的 `verifiedAppOps` 明确声明的 AppOps 才会执行，档案为 null 或集合为空时不执行，意图保留在 pending。目前档案没有任何已核实项，所以真机上 AppOpsSync 什么也不执行（预期行为）。
+
+修复后以下 6 个现有测试按预期失败，因为它们假设「没有已核实档案也会执行 AppOps」。**请改成：测试夹具里的档案声明 `verifiedAppOps`，再断言原有行为；并补一个「档案未核实/为 null → 不执行、pending 不丢」的用例。** 改好后合并 `chan/fix-appops`。
+
+| 测试 | 失败断言 |
+|---|---|
+| `AppOpsSyncTest.UT_SY_4_01` | 第 25 行 `syncOnce() > 0`，实际 0 |
+| `AppOpsSyncTest.UT_SY_4_02` | 第 54 行应有恢复 `SYSTEM_ALERT_WINDOW allow` 的命令，实际没有 |
+| `AppOpsSyncTest.UT_SY_4_03` | 第 73 行 READY 后 `syncOnce() > 0`，实际 0 |
+| `AppOpsSyncTest.UT_SY_4_04` | 第 84 行应有一个 overlay deny 命令，实际为空 |
+| `SystemModuleTest.MT_SY_01` | 第 56 行 `syncOnce() > 0`，实际 0 |
+| `SystemModuleTest.MT_SY_03` | 第 116 行重连后 `syncOnce() > 0`，实际 0 |
+
+## E. 独立复核后新增、没有任何测试覆盖的修复
+
+复核修复（Codex 实现）都没有新增测试，请补：
+
+| 项 | 需要的用例 |
+|---|---|
+| R01 / R01 离线修正 | 上游连续 3 次传输失败关 TUN 并上报带原因的 STOPPED；有效应答（含 SERVFAIL/NXDOMAIN）重置计数；底层网络不可用时失败不计数；网络恢复时清零 |
+| R02 | `onDestroy` 不阻塞主线程；`lifecycle` 锁被持有时销毁仍能先关 TUN |
+| R04 | 修改成功但复核失败 → 回滚；回滚失败后记录仍可 `undo`/`undoAll`；日志落库前中断的恢复信息不丢 |
+| R05 | Manifest 含 `SUPPORTS_ALWAYS_ON=false` |
+| R06 | 阻塞读下关闭描述符能让读退出（需真机） |
+| R08–R12 | 事件在回调返回前取出 source；悬浮窗异常被吞；经过桌面的独立启动不被当成跳转；失败后不再做坐标点击；撤销三步互不影响 |
+| R14 | 延长一次后同一条信号不再被计入；无新信号时观察期按时结束 |
+| R15 | 引擎正常 STOPPED 后守护仍视为「用户想要」 |
+| R17 | 动态 AppOps 漂移后被复核并重新执行 |
+
+## F. 已知不修的复核项
+
+| 项 | 原因 |
+|---|---|
+| R07 HttpDNS IP 拒绝不尊重观察期/规则停用 | 需要真正的转发路径或重建 TUN，是设计问题，待设计 |
+| R13 guard 撤销 remove+pin 非原子 | 修法（直接 pin）会让 `UT-AP-4-02` 的断言「先 remove 再 pin」失败；等测试模块确认该断言是否必须 |
+| R16 DropBox 崩溃时间被替换为采集时间 | `SignalRepository.emit` 不接受时间参数，需改已冻结的 data |
+| R01 之后的自动重启 | 现有停止流程会销毁服务并注销回调，自动重启风险较大；停止后需用户手动重新开启 |
+
 ## 修好之后
 
 1. 把修好的测试放回 `testing/unit/pending/<模块>/`。
