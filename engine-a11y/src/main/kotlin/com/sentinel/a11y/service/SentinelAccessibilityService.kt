@@ -62,6 +62,7 @@ class SentinelAccessibilityService : AccessibilityService() {
     override fun onServiceConnected() {
         try {
             super.onServiceConnected()
+            current = this
             val audio = getSystemService(AudioManager::class.java)
             val prefs = getSharedPreferences("sentinel-a11y", Context.MODE_PRIVATE)
             val volumeKeeper = VolumeKeeper(object : VolumePort {
@@ -202,6 +203,7 @@ class SentinelAccessibilityService : AccessibilityService() {
     private fun shutdown() {
         if (stopped) return
         stopped = true
+        if (current === this) current = null
         try { keeper?.restore() } catch (e: Exception) { warn("恢复音量失败", e) }
         overlay?.dismiss()
         contentJob?.cancel(); tickJob?.cancel(); labelJob?.cancel()
@@ -215,8 +217,11 @@ class SentinelAccessibilityService : AccessibilityService() {
 
     private fun warn(msg: String, e: Throwable) { Log.w(A11yRuntime.TAG, msg, e) }
 
-    private companion object {
-        const val DEBOUNCE_MS = 100L
-        const val SELF_CLICK_MS = 600L
+    companion object {
+        /** 当前已连接的服务实例（调试版快照录制使用）。 */
+        @Volatile var current: SentinelAccessibilityService? = null
+            private set
+        private const val DEBOUNCE_MS = 100L
+        private const val SELF_CLICK_MS = 600L
     }
 }
