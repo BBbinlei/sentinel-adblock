@@ -33,7 +33,7 @@
 - 下一步：G2 已通过：data 46/46、./gradlew test 全量 81/81、check-merge.sh data 全部通过；报告 testing/reports/G2-2026-10-02.md。等待合并通道确认并登记 g2-frozen，再放行后续引擎开发。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
-## [engine-vpn] 状态: 进行中 | 负责方: codex | 关卡: G3
+## [engine-vpn] 状态: 完成 | 负责方: codex | 关卡: G3
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -47,12 +47,15 @@
 | R01（Task 3/5）: DNS 上游连续传输失败退出 | 已修，48/48 通过 | 867bd0b |
 | R02（Task 5/7）: 销毁先同步关闭 TUN，异步写库 | 已修，48/48 通过 | c6dfbb4 |
 | R05（Task 5）: 禁用不兼容的 always-on | 已修，48/48 通过 | 215a842 |
-| R06（Task 4/5）: 阻塞 TUN 与描述符关闭 | 已修，48/48 通过；待真机 | 本提交 |
+| R06（Task 4/5）: 阻塞 TUN 与描述符关闭 | 已修，48/48 通过；待真机 | 9a21a00 |
+| R15（Task 6）: 持久保存曾经运行的守护意图 | 已修，48/48 通过 | 本提交 |
 
-- 下一步：按本次修复范围继续 R15；每项独立提交，不修改任何测试、不 push。完成后执行模块测试、check-merge.sh engine-vpn 与 ./gradlew test；设备验证待真机。
+- 下一步：本次 R01/R02/R05/R06/R15 五项修复完成，留在 chan/fix-vpn 等合并，不 push；测试模块补下列回归用例，DI-01～03、DI-11～14、DI-51 及本次设备事项待真机。最终 :engine-vpn:testDebugUnitTest 48/48（失败/错误/跳过 0）、bash scripts/check-merge.sh engine-vpn 全部通过、./gradlew test BUILD SUCCESSFUL（249 项，失败/错误/跳过均 0）；本次报告只写本节，未越界写 testing/reports。
 - 已知问题：
+  - R15 待补测试：测试模块补 RUNNING→STOPPED 后仍提醒、RUNNING→DEGRADED 后仍为 wanted、重启 :vpn 后从 SharedPreferences 恢复、已有 STOPPED/DEGRADED 行的首次迁移、空状态/NOT_SETUP 从未开启不提醒、状态行删除或 NOT_SETUP 不抹去已保存历史、两个引擎标记互不影响、短暂 RUNNING 的持续订阅捕获；EnabledServicesChecker 接口未改，现有 48/48 通过。历史由 :vpn 独占本地持久保存，跨进程输入仍仅 Room；按 C4 将既有 STOPPED/DEGRADED 作为运行历史证据（保守迁移），标记只增不删，不推断用户永久关闭意图。磁盘写入失败仅日志提醒，持久性/真实关闭后通知待真机。
+  - 范围确认：只改 engine-vpn 生产代码/PLAN 与本节；所有测试（含暂存）、data/core-rules/app/依赖版本/模块列表零改动。R07 按指令未修，需要真实转发路径，仍由用户另行处理。
   - R06 待补测试/待真机：测试模块补设备用例：空闲 TUN 无空转、空闲阻塞读时 stop/onRevoke/onDestroy/重建能解除读等待且循环结束，反复启停无线程/描述符残留；JVM 现有 UT-VP-4-07 与退出路径通过，只能验证假阻塞流，不能验证 Android TUN。Builder 已 setBlocking(true)，AutoCloseInputStream/AutoCloseOutputStream 共享同一个 PFD，close 幂等关闭 PFD 后关闭流；静态核对 Android AutoClose→ParcelFileDescriptor.close→IoUtils.close→IoBridge.closeAndSignalBlockedThreads 的唤醒路径（[AOSP PFD](https://android.googlesource.com/platform/frameworks/base/+/5301928/core/java/android/os/ParcelFileDescriptor.java)、[AOSP IoUtils](https://android.googlesource.com/platform/prebuilts/fullsdk/sources/+/refs/heads/androidx-constraintlayout-release/android-35/libcore/io/IoUtils.java)、[AOSP IoBridge](https://android.googlesource.com/platform/prebuilts/fullsdk/sources/+/refs/heads/androidx-media-release/android-34/libcore/io/IoBridge.java)）；未运行真机，不能宣称实际解除读等待已验证。
-  - R05 待补测试：测试模块补最终合并 Manifest 中 VpnService 的 SUPPORTS_ALWAYS_ON=false；已核对源 Manifest 和本模块 Gradle 合并产物均保留 false，48/48 通过。系统设置不再提供 always-on/锁定入口及排除应用保持直连待真机；本次只改 Manifest，不改向导。
+  - R05 待补测试：测试模块补最终合并 Manifest 中 VpnService 的 SUPPORTS_ALWAYS_ON=false；已核对源 Manifest、本模块与 app 的 Debug 合并产物均保留 false，48/48 通过。系统设置不再提供 always-on/锁定入口及排除应用保持直连待真机；本次只改 Manifest，不改向导。
   - R02 待补测试：测试模块补 Main 协程持有 lifecycle、Room 写入挂起时调用 onDestroy，断言主线程立即返回、TUN 已关且循环取消；重复销毁/撤销/stop 幂等，首次停止原因不被销毁覆盖，启动与重建挂起时销毁后不能建立新 TUN；异步状态写入失败不影响释放网络。现有 48/48 通过，未新增或修改测试；ANR 与真实服务销毁恢复网络待真机。
   - R01 待补测试：测试模块补连续 3 次 DoH/UDP 全失败触发 TUN 关闭、带原因 STOPPED、停止服务及关闭先于写库；单次失败不关闭、有效 SERVFAIL/NXDOMAIN 重置计数、缓存命中不掩盖传输失败、并发查询计数。真实网络恢复待真机。现有 UT-VP-3-03 单次失败 SERVFAIL 断言保留；解析器以独立传输结果回调通知控制器，未通过 RCODE 推断传输失败。
   - 基线首次 :engine-vpn:testDebugUnitTest 为 47/48：UT-VP-5-03 第 34 行应收到上游地址 1.2.3.4/TTL 120，却收到旧规则拦截地址 0.0.0.0/TTL 60；未改源码的 --rerun-tasks 重跑 48/48。loadRules 在真实 Dispatchers.IO 上运行，runCurrent 不等待真实 IO，存在既有调度竞争；本次不扩大范围修复，测试模块需补确定性热更新等待。R01 修改后 48/48，测试/断言未动。

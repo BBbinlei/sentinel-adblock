@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
@@ -18,6 +19,7 @@ import com.sentinel.data.repo.*
 import com.sentinel.data.rules.RuleStore
 import com.sentinel.data.db.EngineId
 import com.sentinel.data.db.EngineState
+import com.sentinel.data.db.EngineStatusEntity
 import com.sentinel.vpn.health.*
 import com.sentinel.vpn.dns.DohUdpResolver
 import com.sentinel.vpn.dns.DnsCache
@@ -61,13 +63,23 @@ class SentinelVpnService : VpnService() {
 
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
-    private class SettingsChecker(private val context: Context, private val wanted: Set<EngineId>) : EnabledServicesChecker {
+    private class SettingsChecker(private val context: Context, private val history: SharedPreferences) : EnabledServicesChecker {
+        fun remember(states: Map<EngineId, EngineStatusEntity>) {
+            // C4: STOPPED 表示曾经运行；兼容升级前已停止或已降级的引擎，标记只增不删。
+            val seen = states.filter { (id, status) ->
+                status.state != EngineState.NOT_SETUP && !history.getBoolean(id.name, false)
+            }.keys
+            if (seen.isEmpty()) return
+            val edit = history.edit()
+            seen.forEach { edit.putBoolean(it.name, true) }
+            if (!edit.commit()) Log.w("SentinelVpn", "服务运行历史保存失败")
+        }
         private fun listed(key: String) = Settings.Secure.getString(context.contentResolver, key)
             .orEmpty().split(':').any { it.startsWith(context.packageName + "/") }
         override fun accessibilityEnabled() = listed(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
         override fun notificationListenerEnabled() = listed("enabled_notification_listeners")
-        override fun userWantsA11y() = EngineId.A11Y in wanted
-        override fun userWantsNotify() = EngineId.NOTIFY in wanted
+        override fun userWantsA11y() = history.getBoolean(EngineId.A11Y.name, false)
+        override fun userWantsNotify() = history.getBoolean(EngineId.NOTIFY.name, false)
     }
 
     private fun startHealth(koin: Koin, c: VpnController) {
@@ -81,11 +93,17 @@ class SentinelVpnService : VpnService() {
         try { manager.registerDefaultNetworkCallback(callback); networkCallback = callback }
         catch (e: Exception) { Log.w("SentinelVpn", "网络回调登记失败", e) }
         val status = koin.get<EngineStatusRepository>()
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
+            // 仅由 :vpn 进程维护本地历史；跨进程状态仍从 Room 获取。
+            val checker = SettingsChecker(this@SentinelVpnService, getSharedPreferences("vpn_engine_history", MODE_PRIVATE))
+            launch {
+                try { status.observeAll().collect { checker.remember(it) } }
+                catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "服务运行历史订阅失败", e) }
+            }
             while (true) {
                 try {
-                    val wanted = status.observeAll().first().filterValues { it.state == EngineState.RUNNING }.keys
-                    ServiceWatchdog(SettingsChecker(this@SentinelVpnService, wanted), status, ::notifyLost).checkOnce()
+                    checker.remember(status.observeAll().first())
+                    ServiceWatchdog(checker, status, ::notifyLost).checkOnce()
                 } catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "守护检查失败", e) }
                 delay(5 * 60_000L)
             }
