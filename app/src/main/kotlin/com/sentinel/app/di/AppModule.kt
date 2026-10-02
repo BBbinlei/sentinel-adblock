@@ -6,6 +6,12 @@ import android.provider.Settings
 import com.sentinel.app.apps.AppDetailViewModel
 import com.sentinel.app.apps.AppsViewModel
 import com.sentinel.app.home.HomeViewModel
+import com.sentinel.app.log.EngineLogViewModel
+import com.sentinel.app.system.OpLogViewModel
+import com.sentinel.app.system.SystemCleanupViewModel
+import com.sentinel.data.db.EngineId
+import com.sentinel.system.di.CurrentProfile
+import com.sentinel.system.profile.ColorOsProfile
 import com.sentinel.app.rules.RulesViewModel
 import com.sentinel.data.db.SubscriptionDao
 import com.sentinel.data.rules.SubscriptionUpdater
@@ -59,5 +65,12 @@ val appModule = module {
             updateAll = { updater.updateAll() },
             rebuildFromCache = { updater.rebuildFromCache() },
         )
+    }
+    factory { (engine: EngineId) -> EngineLogViewModel(engine, get()) }
+    factory { OpLogViewModel(get(), get()) }
+    factory {
+        // 当前系统版本没有净化方案时给空方案，页面会显示「暂无可用方案」，不崩溃
+        val profile = getOrNull<CurrentProfile>()?.profile ?: ColorOsProfile(romPrefix = "", ops = emptyList())
+        SystemCleanupViewModel(profile, get())
     }
 }

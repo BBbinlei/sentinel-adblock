@@ -27,7 +27,11 @@ import com.sentinel.app.R
 import com.sentinel.app.apps.AppDetailScreen
 import com.sentinel.app.apps.AppsScreen
 import com.sentinel.app.home.HomeScreen
+import com.sentinel.app.log.EngineLogScreen
 import com.sentinel.app.rules.RulesScreen
+import com.sentinel.app.system.OpLogScreen
+import com.sentinel.app.system.SystemCleanupScreen
+import com.sentinel.data.db.EngineId
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.sentinel.app.onboarding.OnboardingScreen
@@ -91,7 +95,20 @@ fun SentinelNavHost(navController: NavHostController, startDestination: String =
                     navController.navigate(Routes.HOME) { popUpTo(Routes.ONBOARDING) { inclusive = true } }
                 })
             }
-            composable(Routes.HOME) { HomeScreen() }
+            composable(Routes.HOME) {
+                HomeScreen(
+                    onOpenSystem = { navController.navigate(Routes.SYSTEM_CLEANUP) },
+                    onOpenEngineLog = { navController.navigate(Routes.engineLog(it)) },
+                    onOpenOpLog = { navController.navigate(Routes.OP_LOG) },
+                    onOpenSetup = { navController.navigate(Routes.ONBOARDING) },
+                )
+            }
+            composable(Routes.SYSTEM_CLEANUP) { SystemCleanupScreen(onOpenOpLog = { navController.navigate(Routes.OP_LOG) }) }
+            composable(Routes.OP_LOG) { OpLogScreen() }
+            composable(Routes.ENGINE_LOG, arguments = listOf(navArgument("engine") { type = NavType.StringType })) { entry ->
+                val engine = EngineId.entries.firstOrNull { it.name == entry.arguments?.getString("engine") } ?: EngineId.VPN
+                EngineLogScreen(engine)
+            }
             composable(Routes.APPS) { AppsScreen(onOpen = { navController.navigate(Routes.appDetail(it)) }) }
             composable(Routes.APP_DETAIL, arguments = listOf(navArgument("pkg") { type = NavType.StringType })) { entry ->
                 AppDetailScreen(pkg = entry.arguments?.getString("pkg").orEmpty())

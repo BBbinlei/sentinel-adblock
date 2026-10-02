@@ -80,4 +80,37 @@
     <string name="rules_url">订阅地址（必须是 https）</string>
     <string name="rules_add_button">添加并更新</string>
     <string name="tile_label">暂停哨兵</string>
+
+    <string name="home_setup_todo">还有 %1$d 步设置没完成</string>
+    <string name="home_setup_go">去完成</string>
+    <string name="home_guard_alert">「%1$s」的 %2$d 条规则被自动停用</string>
+    <string name="home_guard_undo">撤销（恢复并保持启用）</string>
+    <string name="home_system_cleanup">系统净化</string>
+    <string name="home_op_log">撤销记录</string>
+
+    <string name="cleanup_title">系统净化</string>
+    <string name="cleanup_hint">只执行已在你的手机上核实过的操作，随时可以撤销。</string>
+    <string name="cleanup_apply_all">一键应用</string>
+    <string name="cleanup_undo_all">全部撤销</string>
+    <string name="cleanup_empty">当前系统版本还没有可用的净化方案</string>
+    <string name="cleanup_unverified">尚未在你的手机上核实，暂不执行</string>
+    <string name="cleanup_wizard">需要你在系统设置里手动操作，点这里前往</string>
+    <string name="cleanup_applied">已应用</string>
+    <string name="cleanup_tap_apply">未应用，点击应用</string>
+    <string name="cleanup_tap_uninstall">未卸载，点击卸载（需确认）</string>
+    <string name="cleanup_unknown">状态未知</string>
+    <string name="cleanup_confirm_title">确认卸载</string>
+    <string name="cleanup_confirm_body">将卸载「%1$s」。这会影响系统功能，且可能无法完全恢复。</string>
+    <string name="cleanup_confirm">确认卸载</string>
+    <string name="cleanup_cancel">取消</string>
+
+    <string name="oplog_title">撤销记录</string>
+    <string name="oplog_empty">还没有执行过系统操作</string>
+    <string name="oplog_applied">已应用</string>
+    <string name="oplog_undone">已撤销</string>
+    <string name="oplog_failed">执行失败</string>
+    <string name="oplog_undo">撤销</string>
+
+    <string name="log_title">%1$s 日志</string>
+    <string name="log_empty">还没有记录</string>
 </resources>

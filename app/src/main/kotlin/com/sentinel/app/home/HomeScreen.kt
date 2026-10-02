@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -26,6 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,17 +51,36 @@ import com.sentinel.app.R
 import com.sentinel.app.VpnStarter
 import com.sentinel.data.db.EngineId
 import com.sentinel.data.db.EngineState
+import com.sentinel.app.onboarding.SetupChecker
+import com.sentinel.app.onboarding.SetupStep
+import com.sentinel.guard.runtime.GuardRunner
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinViewModel()) {
+fun HomeScreen(
+    onOpenSystem: () -> Unit = {},
+    onOpenEngineLog: (String) -> Unit = {},
+    onOpenOpLog: () -> Unit = {},
+    onOpenSetup: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = koinViewModel(),
+    guard: GuardRunner = koinInject(),
+    setupChecker: SetupChecker = koinInject(),
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    var missingSetup by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val currentVm by rememberUpdatedState(viewModel)
 
     LaunchedEffect(lifecycle) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) { currentVm.refresh() }
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            currentVm.refresh()
+            missingSetup = SetupStep.entries.count { !setupChecker.isDone(it) }
+        }
     }
 
     val authorize = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -95,7 +119,32 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinVie
         if (state.warnings.isNotEmpty()) {
             items(state.warnings) { warning -> WarningCard(warning) }
         }
-        item { EnginesCard(state.engines) }
+        if (missingSetup > 0) {
+            item {
+                Card(Modifier.fillMaxWidth().clickable(onClick = onOpenSetup).testTag("home:setup-todo")) {
+                    Row(Modifier.heightIn(min = 48.dp).padding(16.dp), verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(stringResource(R.string.home_setup_todo, missingSetup), modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.home_setup_go), color = MaterialTheme.colorScheme.primary)
+                    }
+                }
+            }
+        }
+        items(state.guardAlerts, key = { it.pkg }) { alert ->
+            GuardAlertCard(alert, onUndo = { scope.launch { guard.undo(alert.pkg, alert.ruleIds) } })
+        }
+        item { EnginesCard(state.engines, onOpenEngineLog) }
+        item {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = onOpenSystem, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("home:system-cleanup")) {
+                    Text(stringResource(R.string.home_system_cleanup))
+                }
+                OutlinedButton(onClick = onOpenOpLog, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("home:op-log")) {
+                    Text(stringResource(R.string.home_op_log))
+                }
+            }
+        }
     }
 }
 
@@ -140,12 +189,31 @@ private fun WarningCard(text: String) {
 }
 
 @Composable
-private fun EnginesCard(engines: List<EngineRow>) {
+private fun GuardAlertCard(alert: GuardAlert, onUndo: () -> Unit) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+        modifier = Modifier.fillMaxWidth().testTag("home:guard-alert:${alert.pkg}"),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.home_guard_alert, alert.label, alert.ruleIds.size),
+                style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            Text(alert.reason, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            OutlinedButton(onClick = onUndo, modifier = Modifier.heightIn(min = 48.dp).testTag("home:guard-undo:${alert.pkg}")) {
+                Text(stringResource(R.string.home_guard_undo))
+            }
+        }
+    }
+}
+
+@Composable
+private fun EnginesCard(engines: List<EngineRow>, onOpenLog: (String) -> Unit) {
     Card(modifier = Modifier.fillMaxWidth().testTag("home:engines")) {
         Column(Modifier.padding(vertical = 8.dp)) {
             engines.forEach { row ->
                 Row(
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(horizontal = 16.dp),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                        .clickable { onOpenLog(row.engine.name) }.padding(horizontal = 16.dp)
+                        .testTag("home:engine:${row.engine.name}"),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
