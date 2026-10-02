@@ -1,10 +1,12 @@
 # engine-system 暂存测试
 
-本目录未加入 Gradle 源集。已编写 Task SY 的 **28/28** 个编号（UT 25、MT 3），另有 1 个 FakeDevice 工具自检。没有产品类替身、跳过或空断言；尚未运行 Gradle或编译这些测试，不能视为 G5 通过。
+本目录未加入 Gradle 源集。保留 Task SY 原始 **28/28** 个编号（UT 25、MT 3），另有 1 个 FakeDevice 工具自检；本轮新增 8 个编号。对应 engine-system/src/test 已实跑 **37/37 通过，失败/错误/跳过均 0**。没有产品类替身、跳过或空断言；DI-31/DI-32 尚未执行，不能视为完整 G5 通过。
 
 2026-10-02 更新（覆盖下文历史验证说明）：D/R03 的 6 项夹具已声明合成档案 verifiedAppOps，原有断言不变；新增 UT-SY-1-05（旧 JSON 默认空集合）、UT-SY-4-05～08（null/空集合、部分授权及历史日志不绕过授权）。对应运行源集 engine-system/src/test 已实跑 **34/34 通过，失败/跳过 0**。TestSupport 已适配冻结 data 的仓库构造参数、DriftInspector 导入与 arrayOf<Any>。本目录仍不单独参与 Gradle；合成验证声明仅用于测试，未改产品档案。
 
 R17 更新：AppOpsSyncTest 新增 R17_01～03，覆盖稳定状态只 probe、多次漂移后重执行、UNKNOWN/离线保留 pending、关闭开关及重建执行器后 undoAll 还原首次模式、全撤销后新一轮使用新基线。该类实跑 **11/11 通过，失败/跳过 0**，测试使用固定 Clock 与自动清理的 TemporaryFolder。
+
+最终验证：合并检查 engine-system 全部通过；全量 ./gradlew test **259/259 通过，失败/错误/跳过 0**；C/RR-06 的 2 项测试保存在 testing/rule-regression/src/test/kotlin/com/sentinel/regression/ProfileHealthTest.kt，直接读取生产档案。下文未运行/产品未实现的说明保留为初次暂存时的历史记录，以本段实跑结果为准。
 
 ## 文件与编号对照
 
