@@ -4,6 +4,8 @@
 
 2026-10-02 更新（覆盖下文历史验证说明）：D/R03 的 6 项夹具已声明合成档案 verifiedAppOps，原有断言不变；新增 UT-SY-1-05（旧 JSON 默认空集合）、UT-SY-4-05～08（null/空集合、部分授权及历史日志不绕过授权）。对应运行源集 engine-system/src/test 已实跑 **34/34 通过，失败/跳过 0**。TestSupport 已适配冻结 data 的仓库构造参数、DriftInspector 导入与 arrayOf<Any>。本目录仍不单独参与 Gradle；合成验证声明仅用于测试，未改产品档案。
 
+R17 更新：AppOpsSyncTest 新增 R17_01～03，覆盖稳定状态只 probe、多次漂移后重执行、UNKNOWN/离线保留 pending、关闭开关及重建执行器后 undoAll 还原首次模式、全撤销后新一轮使用新基线。该类实跑 **11/11 通过，失败/跳过 0**，测试使用固定 Clock 与自动清理的 TemporaryFolder。
+
 ## 文件与编号对照
 
 下表文件均相对 `src/test/kotlin/com/sentinel/system/`；测试函数前另有原始编号注释。
