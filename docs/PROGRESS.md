@@ -200,6 +200,7 @@
 | Task 5: 应用页与应用详情 | 完成 |
 | Task 6: 规则页 | 完成 |
 | Task 7: 快捷开关 | 完成 |
+| Task 8: 应用启动图标（三渲二盾牌之眼，自适应 + 单色主题层） | 完成（待真机看桌面效果） |
 
 - 验证（非真机部分）：`./gradlew :app:testDebugUnitTest --rerun` 37/37 通过（UT-AP-1～7、MT-AP-01～05，含 G8 专属的 UT-AP-1-04）；全仓 337 个测试 0 失败 0 跳过；`./gradlew assembleDebug` 成功。
 - 测试夹具已修复（FakeData 改用 Robolectric 内存 Room 数据库等，见 `docs/TEST_MODULE_REQUESTS.md` A 部分）。测试暴露并已修复的 app 缺陷：二级页面隐藏底部导航后没有可见的返回入口（MT-AP-03/05），已加统一的 ≥48dp 返回按钮。
