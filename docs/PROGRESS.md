@@ -239,3 +239,21 @@
 - 最终验证（2026-10-02）：`./gradlew :core-rules:test` 29/29；`./gradlew :engine-vpn:testDebugUnitTest` 58/58；`bash scripts/check-merge.sh core-rules` 全部通过；测试 XML 失败/错误/跳过均 0，`git diff --check` 通过。按本次写入边界将关卡结果记录在本节，未额外创建 testing 报告或修改其他通道。
 - 下一步：本通道三项已完成，保留 worktree 和分支，交合并通道审查；不 push。下面 UDP/53 语义差异与 SDK 回落效果仍须后续引擎/设备工作确认。
 - 已知问题：背景中“普通 UDP/53 不受影响”与当前源码不符。PacketLoop 的 DNS 分支还要求目的地址属于 TunSpec.DNS_SERVERS（`10.111.0.2`、`fd11:1::2`）；TunSpec 为每个 HTTPDNS CIDR 添加路由，因此新增 IP 的 TCP（含 HTTPS）会收到 RST，UDP（含直连该 IP 的 53 端口）会收到 ICMP 不可达。虚拟 DNS 的 UDP/53 处理保持不变。未改只读 engine-vpn；SDK 是否回落系统 DNS、是否减少开屏广告仍需设备验证，不能由目录测试证明。
+
+## [apk-ad-scan] 状态: 完成 | 负责方: Codex | 关卡: 自测通过
+
+| Task | 状态 | 最后提交 |
+|---|---|---|
+| Task 1: 标准库 APK/strings 扫描工具 | 完成 | c98d10b |
+| Task 2: 百度网盘域名包及人工清单对照 | 完成 | b67fb84 |
+| Task 3: 合成样本自测 | 完成 | 本提交 |
+
+- 基线：chan/apk-ad-scan 工作区干净；scripts/apk-ad-scan 不存在，无已有模块测试可跑；没有运行或改动 Gradle 模块。
+- Task 1：scan.py 解析所有根目录 classes*.dex 的 string_ids，支持 strings 文本、三类 TAB 清单和 --format domains；内置 12 家 SDK 数据表和离线 TLD 快照。已有种子/人工确认之外的新增特征用本机 dexdump 核对了 Vlion、Octopus、美数的引用类；未核实的 Mintegral/倍孜/趣盟只列疑似，不猜测专用域。
+- 验证：Python 3.9.6；Task 1 临时 smoke assertions 通过（URL/裸域名、大小写、标识符过滤、百度主域保护、后缀伪装）；真实 APK 的标准 DEX 读取成功，确认 28 个域名。scan.py --help、git diff --check 通过；正式自测在 Task 3 落地。
+- Task 2：对只读 base.apk 的 42 个 DEX 运行工具，生成 docs/device-survey/ad-domain-packs/com.baidu.netdisk.md 与 com.baidu.netdisk.domains.txt；28 个确认、4 个疑似、1798 个第一方/不能拦候选。人工清单实际 13 项，全部覆盖，新增 15 项、缺少 0 项。报告记录 APK SHA-256、逐域名分类依据、首个 DEX string_id、全部对照和复现命令。
+- Task 2 验证：scan.py <base.apk>、scan.py <base.apk> --format domains 均退出 0；回读确认纯清单 28 行排序去重，与 Markdown 确认章节一致，不含网盘主站或 bcebos；git diff --check 通过。首次输出因目录未创建失败，补建授权目录后重跑成功，没有保留部分结果。
+- Task 3：scripts/apk-ad-scan/tests/sample-strings.txt 为手写小样本；run_tests.py 只用标准库、合成多 DEX APK（临时目录在 tests 内且自动清理），不访问真实 APK。覆盖三类分类/全部 SDK 表条目、第一方及 bcebos 保护、后缀标签边界/精确主机不扩张、URL 路径与凭据/端口/转义/大小写/IDNA、去重/排序/文本和纯域名 CLI、ULEB128 与 DEX 长度字节、损坏/缺失输入/无 DEX/无效参数、失败无部分清单及空确认集。
+- Task 3 验证（2026-10-02）：python3 scripts/apk-ad-scan/tests/run_tests.py 退出 0，全部自测通过、没有跳过；git diff --check 通过。逐任务提交，仅写授权路径；PROGRESS 原有各通道内容未改；无遗留临时文件，无依赖版本或 Gradle 模块变更。
+- 下一步：本临时通道三项任务已完成，保留 chan/apk-ad-scan 和 /Users/binlei/wt-apkscan 供协调者合并；不 push，不自动装载规则。后续按设计另做真实流量/冷启动验证与 HTTPDNS 处理，不属于本通道。
+- 已知问题：静态字符串不证明实时请求或拦截效果；不扫描资源/native/动态拼接/split APK，不处理 HTTPDNS 或 pan.baidu.com 自营广告。公共 TLD 语法仍可能接受同形代码标识符（不会因此进入确认清单）；离线材料不足的三家 SDK 没有已核实专用域名。报告按本任务写入范围保存到 docs/device-survey/ad-domain-packs，不写 testing/reports。
