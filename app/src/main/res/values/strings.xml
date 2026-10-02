@@ -1,4 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="nav_back">返回</string>
     <string name="app_name">哨兵</string>
+
+    <string name="tab_home">首页</string>
+    <string name="tab_apps">应用</string>
+    <string name="tab_rules">规则</string>
+
+    <string name="home_shield_on">保护中</string>
+    <string name="home_shield_off">已关闭</string>
+    <string name="home_shield_paused">已暂停</string>
+    <string name="home_shield_tap_off">点击关闭保护</string>
+    <string name="home_shield_tap_on">点击开启保护</string>
+    <string name="home_today_blocked">今天已拦截 %1$d 次</string>
+
+    <string name="engine_vpn">网络拦截</string>
+    <string name="engine_a11y">界面处理</string>
+    <string name="engine_notify">通知过滤</string>
+    <string name="engine_system">系统净化</string>
+
+    <string name="state_running">运行中</string>
+    <string name="state_stopped">已停止</string>
+    <string name="state_degraded">能力下降</string>
+    <string name="state_not_setup">未开启</string>
+
+    <string name="onboarding_progress">第 %1$d 步，共 %2$d 步</string>
+    <string name="onboarding_step_done">这一步已完成</string>
+    <string name="onboarding_next">下一步</string>
+    <string name="onboarding_skip">先跳过</string>
+    <string name="onboarding_go">去设置</string>
+    <string name="step_shizuku_title">激活 Shizuku</string>
+    <string name="step_shizuku_body">系统净化需要 Shizuku 授权。打开 Shizuku，按它的提示用无线调试激活，再回到这里授权哨兵。不激活也可以先使用网络拦截与界面处理。</string>
+    <string name="step_vpn_title">开启网络拦截</string>
+    <string name="step_vpn_body">哨兵用本机 VPN 在 DNS 层拦截广告域名，不会上传你的流量。建议在系统 VPN 设置里开启「始终开启的 VPN」，但请不要开启「屏蔽未使用 VPN 的连接」，否则一旦哨兵停止会导致断网。</string>
+    <string name="step_a11y_title">开启界面处理</string>
+    <string name="step_a11y_body">在系统「无障碍」里找到「哨兵」并开启，用于自动跳过开屏广告、关闭弹窗。哨兵只在检测到广告时才会点击。</string>
+    <string name="step_notify_title">开启通知过滤</string>
+    <string name="step_notify_body">允许哨兵读取通知，用来过滤系统自带 App 的营销推送。通知内容只在本机处理。</string>
+    <string name="step_battery_title">允许后台运行</string>
+    <string name="step_battery_body">把哨兵加入电池优化白名单，避免被系统清理后台导致保护中断。</string>
+
+    <string name="apps_search">搜索应用名或包名</string>
+    <string name="apps_empty">没有找到应用</string>
+    <string name="apps_default_allowed">敏感应用，默认放行</string>
+    <string name="apps_blocked_7d">近 7 天拦截 %1$d 次</string>
+    <string name="level_off">关闭</string>
+    <string name="level_standard">标准</string>
+    <string name="level_strong">强力</string>
+
+    <string name="detail_temp_allow">一键临时放行（24 小时）</string>
+    <string name="detail_temp_allowed_until">已临时放行，到 %1$s 自动恢复</string>
+    <string name="detail_level">保护级别</string>
+    <string name="detail_observing">观察期还剩 %1$d 天</string>
+    <string name="detail_observing_hint">观察期内只记录、不拦截网络。下面是它「将要拦截」的域名，确认没问题再放心使用。</string>
+    <string name="detail_would_block_empty">最近 3 天还没有记录</string>
+    <string name="detail_advanced">高级选项</string>
+    <string name="detail_expand">展开</string>
+    <string name="detail_collapse">收起</string>
+    <string name="detail_rewarded">激励视频</string>
+    <string name="toggle_splash">自动跳过开屏广告</string>
+    <string name="toggle_shake">处理「摇一摇」跳转</string>
+    <string name="toggle_jump_back">无交互跳转时自动返回</string>
+    <string name="toggle_notify">过滤营销通知</string>
+    <string name="toggle_limit_overlay">限制悬浮窗与后台弹窗</string>
+    <string name="toggle_deny_clipboard">禁止读取剪贴板</string>
+    <string name="rewarded_silent">静默播完</string>
+    <string name="rewarded_block">直接拦截</string>
+    <string name="rewarded_ask">每次询问</string>
+
+    <string name="rules_subscriptions">订阅规则</string>
+    <string name="rules_update_now">立即更新</string>
+    <string name="rules_updating">正在更新…</string>
+    <string name="rules_never_updated">尚未更新</string>
+    <string name="rules_sub_meta">%1$d 条规则 · 上次更新 %2$s</string>
+    <string name="rules_user">我的规则</string>
+    <string name="rules_user_empty">还没有自己的规则。学习模式确认过的规则会出现在这里。</string>
+    <string name="rules_delete">删除</string>
+    <string name="rules_add">添加订阅</string>
+    <string name="rules_name">名称</string>
+    <string name="rules_url">订阅地址（必须是 https）</string>
+    <string name="rules_add_button">添加并更新</string>
+    <string name="tile_label">暂停哨兵</string>
+
+    <string name="home_setup_todo">还有 %1$d 步设置没完成</string>
+    <string name="home_setup_go">去完成</string>
+    <string name="home_guard_alert">「%1$s」的 %2$d 条规则被自动停用</string>
+    <string name="home_guard_undo">撤销（恢复并保持启用）</string>
+    <string name="home_system_cleanup">系统净化</string>
+    <string name="home_op_log">撤销记录</string>
+
+    <string name="cleanup_title">系统净化</string>
+    <string name="cleanup_hint">只执行已在你的手机上核实过的操作，随时可以撤销。</string>
+    <string name="cleanup_apply_all">一键应用</string>
+    <string name="cleanup_undo_all">全部撤销</string>
+    <string name="cleanup_empty">当前系统版本还没有可用的净化方案</string>
+    <string name="cleanup_unverified">尚未在你的手机上核实，暂不执行</string>
+    <string name="cleanup_wizard">需要你在系统设置里手动操作，点这里前往</string>
+    <string name="cleanup_applied">已应用</string>
+    <string name="cleanup_tap_apply">未应用，点击应用</string>
+    <string name="cleanup_tap_uninstall">未卸载，点击卸载（需确认）</string>
+    <string name="cleanup_unknown">状态未知</string>
+    <string name="cleanup_confirm_title">确认卸载</string>
+    <string name="cleanup_confirm_body">将卸载「%1$s」。这会影响系统功能，且可能无法完全恢复。</string>
+    <string name="cleanup_confirm">确认卸载</string>
+    <string name="cleanup_cancel">取消</string>
+
+    <string name="oplog_title">撤销记录</string>
+    <string name="oplog_empty">还没有执行过系统操作</string>
+    <string name="oplog_applied">已应用</string>
+    <string name="oplog_undone">已撤销</string>
+    <string name="oplog_failed">执行失败</string>
+    <string name="oplog_undo">撤销</string>
+
+    <string name="log_title">%1$s 日志</string>
+    <string name="log_empty">还没有记录</string>
 </resources>

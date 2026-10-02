@@ -189,20 +189,27 @@
   - R14 已补 R14-01～05：真实 Room 与 ObservationWorker，可控 Clock；USER_UNDO/TEMP_ALLOW 各自只延期一次，已处理信号仍留库但第二轮计数为 0；到期前 1ms 不结束、无新信号到期结束；第一轮起点等于 firstSeenAt，起点前 1ms 排除、等于起点计入；延迟执行从实际延期时刻开始，新轮同样验证毫秒边界与新信号再延期；其他 SignalKind 不延期。新增 5/5、guard 全量 23/23 均通过，无跳过或生产改动。
   - R13 未修（用户明确排除）：保留 GuardRunner.undo 的 remove→pin 行为及暂存 UT-AP-4-02 断言；非原子中断窗口仍由用户另行处理。
 
-## [app] 状态: 待办 | 负责方: claude | 关卡: G3(Task 1–2) / G8
+## [app] 状态: 进行中 | 负责方: codex | 关卡: G3(Task 1–2) / G8
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 应用骨架与全局接线 | 待办 | — |
-| Task 2: 最小首页（M3 可用版本） | 待办 | — |
-| Task 3: 引导向导 | 待办 | — |
-| Task 4: 完整首页、引擎日志、系统净化与撤销记录 | 待办 | — |
-| Task 5: 应用页与应用详情 | 待办 | — |
-| Task 6: 规则页 | 待办 | — |
-| Task 7: 快捷开关 | 待办 | — |
+| Task 1: 应用骨架与全局接线 | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
+| Task 2: 最小首页（M3 可用版本） | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
+| Task 3: 引导向导 | 代码完成（测试被夹具问题阻塞，见已知问题） | — |
+| Task 4: 完整首页、引擎日志、系统净化与撤销记录 | 代码完成（测试被夹具问题阻塞） | — |
+| Task 5: 应用页与应用详情 | 代码完成（测试被夹具问题阻塞） | — |
+| Task 6: 规则页 | 代码完成（测试被夹具问题阻塞） | — |
+| Task 7: 快捷开关 | 代码完成（测试被夹具问题阻塞） | — |
 
-- 下一步：Task 1–2（M3）；Task 5、6、7 只依赖 data，可提前做；Task 3 等 engine-system 合并，Task 4 等 guard 合并（此时把状态改为 `等待`）。测试已预先写好，暂存在 `testing/unit/pending/app/`（对照表与接口假设见其 README.md）：各 Task 的 Step 1 改为把对应测试搬入 `app/src/test/`，不重写；接口与暂存测试不一致时，按 README「接口假设」实现或同步修改测试并在提交说明中写明。
-- 已知问题：无
+- 下一步：app Debug 自动测试已全绿；继续 `./gradlew test`、`./gradlew :app:assembleDebug` 与 `bash scripts/check-merge.sh app`，之后更新 Task 表。UT-AP-1-04 按授权保持 Category 排除。
+- 测试补全 A1～A5：已修复并同步全部 18 个暂存 Kotlin 文件。FakeData 使用真实内存 Room、真实仓库与可控 Clock，Rows 属性直接读写数据库；调用记录只代理到真实 DAO。Koin verify 加入 File，并逐类声明生产模块 lambda 直接提供的参数（未豁免仓库类型）。磁贴停止监听后继续写库、推进虚拟时间，验证状态/副标题不再更新；不调用有 shadow 缺陷的 onDestroy。启动导航用真实 MainActivity，补齐日志/guard 测试接线；UI 用 native graphics 测量中文字。
+- 本轮结果：`:app:testDebugUnitTest` 36 项全部通过、0 失败（原 33 项 + 返回导航 1 项 + 检测器负例 2 项）。UT-AP-1-04 按授权继续排除。
+- 已知问题：
+  1. **MT-AP-02 测量接口误报，已修复**：native graphics 的 `已关闭` 文本实际宽 48、段落重建宽 103，未超高/行数；本机 Compose 1.12.1 `ParagraphLayoutCache.slowCreateTextLayoutResultOrNull` 字节码确认，它按 prevConstraints 重建 MultiParagraph 却保留原 layoutSize，导致 hasVisualOverflow 比较不同宽度。撤回未生效的 HomeScreen 改动；按同一输入/字体/密度在实际文本框内重新测量，保留 hasVisualOverflow/ellipsis 断言，并添加省略/截断的负例校验。4 项 MT-AP-02（明/暗布局与省略/截断负例）全部通过，未发现生产布局截断。
+  2. **app 日志页缺少界内返回入口，已修复**：MT_AP_05 在 `engine_log/VPN must contain actual clickable controls` 失败。日志页隐藏底部导航、没有可见返回控件；新增 MT_AP_03_log_pages_offer_a_back_action 也在缺少 nav:back 时失败。SentinelNavHost 为隐藏底部导航的详情/净化/日志/撤销记录页统一提供 ≥48dp 的「返回」按钮，popBackStack 返回原页面；MT-AP-03/05 及全量 36 项通过。
+  3. 原 A1～A5 阻塞已解决；首次真正执行的业务测试（Task 2～7）通过，导航修复完成，最终全仓/构建验证尚未完成，不能据此标 G8 完成。
+  4. 系统净化页无匹配档案时显示「暂无可用方案」；真实档案 verified=false，仍待实机核实。本轮仅用测试档案验证，不触碰设备。
+  5. 向导图示是通用矢量图，未按 DI-21 的真实 ColorOS 路径绘制，待真机核实后替换。DI-52/DI-61 等设备关卡不在本次无人值守授权范围。
 
 ## [merge] 状态: 待办 | 负责方: claude | 关卡: —
 
