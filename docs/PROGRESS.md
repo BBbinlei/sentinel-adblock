@@ -86,22 +86,24 @@
 | Task 6: 崩溃日志采集 | 完成 | (见 git log) |
 | Task 7: 接线 | 完成 | (见 git log) |
 | R03: AppOps 档案验证 | 未修（现有断言冲突） | 7b5920d |
-| R04: 复核失败后的恢复 | 已补测试（6/6） | 本提交 |
+| R04: 复核失败后的恢复 | 已补测试（6/6） | 611357c |
 | R17: 动态 AppOps 漂移恢复 | 未修（R03 验证门控阻塞） | 本提交 |
 
-- 下一步：Codex 修复复核完成，R04 已修；R03 等测试模块协调既有断言冲突后实施严格验证，再按该约束修复 R17。实机核实报告、DI-31/DI-32、RR-06 仍待补，不改 verified 标记，G5 保持进行中。历史 G5 报告见 testing/reports/G5-2026-10-02.md。
+- 下一步：本任务 R04 测试补全及本地检查已完成，保留 chan/tests-a11y-system 等待合并，不 push。R03/R17 与 AppOps 测试由其他任务负责；实机核实、DI-31/DI-32、RR-06 仍待补，G5 保持进行中。
 - 已知问题：RR-06 的 ProfileHealthTest 在 testing/ 中不存在，本通道未自写；Task 7 用 CurrentProfile 持有者提供「当前档案 ColorOsProfile?」（Koin 不支持可空绑定），ROM 版本经反射读 ro.build.version.oplusrom，读不到则无档案（所有操作不执行）；UT-SY-6 两项通过，但 dropbox_sample.txt 为合成样本非实机采集，待实机核实后替换；DropboxCrashWorker 首次运行以当前时间为 lastChecked 基线（不回放历史崩溃）；UT-SY-5 四项通过（DriftInspector 另暴露 driftedCount 供上报，reapply 在非 READY 时返回空 map）；暂存 TestSupport 缺少 DriftInspector 的跨包 import，补足 import 以编译，断言不变；UT-SY-4 四项通过；恢复使用原 AppOps 模式，离线不发命令并保留待同步意图；backgroundPopupOp 为空时不推断 OEM 操作名；UT-SY-3 七项及 FakeDevice 自检通过；TestSupport 的混合 arrayOf 显式声明 <Any> 以消除 Kotlin 2.4 编译错误；新增本模块 AtomicFile 撤销定义持久化，data 保持只读；TestSupport 仅适配冻结 data 的四个仓库构造参数，未改断言；未来 appSync/inspector 辅助方法暂缓导入；测试增加版本目录已有 libs.room.runtime 引用；UT-SY-2 四项通过；AIDL 已启用；FakeShizukuApi 从暂存 TestSupport 原样提取以避免引用尚未实施的 Task 3–5 类型；Shizuku Provider/绑定依据官方 API 文档及已安装 13.1.5 签名；Task 1 UT-SY-1 四项已通过；新增已冻结版本的 libs.serialization.json 引用；coloros-unverified.json 使用不可匹配的占位 ROM 前缀与通用设置入口，18 项全部 WIZARD/verified=false，无臆造设备键或包名；提供的基线任务路径无效，改用 :engine-system:assembleDebug；worktree 无 local.properties，使用已安装 SDK 的 ANDROID_HOME 环境变量，不写越界配置。实机核实报告不存在，全部档案操作 verified=false。
 
 - 修复复核 R03（2026-10-02）：报告属实，当前 AppOpsSync 在无匹配档案时仍生成 verified=true 的操作。未修改实现：用户要求“修法必然让现有测试失败时保留原行为”。`AppOpsSyncTest.UT_SY_4_01` 在无验证声明的 `ColorOsProfile("TEST", backgroundOp, emptyList())` 上断言 syncOnce()>0、deny/ignore 和 3 条成功日志；UT_SY_4_02 断言这三项的恢复命令；UT_SY_4_03 断言 READY 后 syncOnce()>0、pending=0 和 deny；UT_SY_4_04 断言无验证声明时发出 SYSTEM_ALERT_WINDOW deny。`SystemModuleTest.MT_SY_01/03` 同样断言无 AppOps 验证声明时执行并生成 6/3 条成功日志。默认空 verifiedAppOps 并严格门控必然违反这些断言，不能用 TEST ROM 特判或默认授权绕过。基线 :engine-system:testDebugUnitTest 28/28 通过，测试文件未改。
 - 已知问题（R03，待补测试）：测试模块需协调上述冲突，并覆盖旧 JSON 缺字段默认为空、profile=null/空验证集合不发任何命令、仅执行明确验证的 AppOps、未验证开关意图保留及 pending 数量。实机核实报告不存在，全部档案 verified=false；修复落地后的预期是真机 AppOpsSync 不执行任何操作，但当前因断言冲突尚未达到该行为。待真机：DI-31/DI-32 和未验证意图上报。
 - 修复复核 R04（2026-10-02）：报告属实，已仅修改 OpExecutor。沿用 AtomicFile，在修改前保存操作定义、before 和时间到 system-undo.json.recovery；区分未改变、可能已改变、已确认改变。复核失败时，只有成功 probe 与 before 完全一致才认定未改变；否则尽力回滚。回滚成功标 undone；失败保留恢复记录，undo/undoAll 不以 success 决定恢复资格；未完成恢复时禁止覆盖同项 before。命令/复核异常、取消、日志保存失败也尝试恢复；日志尚未落库的记录由 undoAll 恢复。保持原失败日志 success=false 和 Failed 结果。验证：现有 engine-system 全部 28/28、OpExecutorTest 7/7 通过，check-merge.sh engine-system 全部通过；没有新增/修改/删除测试文件，data 保持只读。
-- 已知问题（R04，待补测试）：现有断言只验证兼容性，没有覆盖新增恢复路径。测试模块需补修改成功后 probe 失败/异常且回滚成功、回滚失败后 undo/undoAll 重试（包括重建执行器读取恢复文件）、非零命令返回但实际已改变、命令取消、日志落库前中断/写入失败、旧撤销文件兼容、已 undone 的恢复记录不重复执行、同项多次修改保持撤销顺序。历史 success=false 且无恢复记录的日志无法判断是否曾修改，保守维持不可恢复，不自动臆测迁移。待真机：Shizuku 修改后断开、重新激活后恢复及重启恢复；本次未执行设备操作。
+- 已知问题（R04，修复时的历史测试清单；本轮覆盖见下）：修复时现有断言只验证兼容性，建议补修改成功后 probe 失败/异常且回滚成功、回滚失败后 undo/undoAll 重试（包括重建执行器读取恢复文件）、非零命令返回但实际已改变、命令取消、日志落库前中断/写入失败、旧撤销文件兼容、已 undone 的恢复记录不重复执行、同项多次修改保持撤销顺序。历史 success=false 且无恢复记录的日志无法判断是否曾修改，保守维持不可恢复，不自动臆测迁移。待真机：Shizuku 修改后断开、重新激活后恢复及重启恢复；本次未执行设备操作。
 - 修复复核 R17（2026-10-02）：报告属实；AppOpsSync 仅按 success 日志及相同命令去重，DriftInspector 只遍历 profile.ops。未修改实现：用户要求本项必须处于 R03 的验证约束下；R03 被 UT-SY-4-01～04、MT-SY-01/03 的无验证声明执行断言阻塞。在门控未落地时直接增加漂移重执行会扩大未核实 AppOps 的执行；增加默认空验证集合并对现有同步严格门控又会违反这些断言，故保守保留原行为，不能宣称动态 AppOps 已恢复巡检。R04 修复不等于 R17 修复。
 - 已知问题（R17，待补测试）：先协调 R03 断言，再覆盖明确验证的动态 AppOps：状态正常只 probe 不重执行；确认漂移才重执行；probe UNKNOWN/失败、profile=null、未验证操作不重执行；多次漂移后关闭开关/undoAll 恢复首次修改前模式；未知/离线仍保留 pending 意图。待真机：系统恢复 AppOps 后再次同步及原模式恢复；当前没有任何已核实 AppOps，应保持不执行的目标尚受 R03 冲突阻塞。
-- 本轮最终验证（2026-10-02）：使用 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools，依次运行 `./gradlew :engine-system:testDebugUnitTest`、`bash scripts/check-merge.sh engine-system`、`./gradlew test`，全部成功。模块 28 项，失败/跳过均为 0；git diff --check 通过；对比修复前提交，测试（含 testing 暂存测试）、冻结目录和其他模块均无改动，PROGRESS 仅 engine-system 节变化。R03/R17 未修原因、R04 待补测试和待真机均已登记；本轮不等于 G5 真机关卡完成。
+- 生产修复轮验证（2026-10-02，补测试前）：使用 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools，依次运行 `./gradlew :engine-system:testDebugUnitTest`、`bash scripts/check-merge.sh engine-system`、`./gradlew test`，全部成功。模块 28 项，失败/跳过均为 0；git diff --check 通过；对比修复前提交，测试（含 testing 暂存测试）、冻结目录和其他模块均无改动，PROGRESS 仅 engine-system 节变化。R03/R17 未修原因、R04 待补测试和待真机均已登记；本轮不等于 G5 真机关卡完成。
 
-- 测试补全 R04（2026-10-02）：新增 OpExecutorRecoveryTest，复用 FakeDevice/MemoryDataTest，不改现有测试及生产代码。6/6 通过：复核失败和异常后的实际回滚；失败回滚重建执行器后 undo/undoAll 重试；待恢复项拒绝 apply 且不执行命令；取消发生在修改后、日志前，以及日志 insert 失败时，恢复文件保留原值并在重建后恢复。取消用 CompletableDeferred，时间用现有 Clock，恢复文件由 TemporaryFolder 清理。基线 28/28 通过。下一步：最终模块/合并检查及全量测试。
+- 测试补全 R04（2026-10-02）：新增 OpExecutorRecoveryTest，复用 FakeDevice/MemoryDataTest，不改现有测试及生产代码。6/6 通过：复核失败和异常后的实际回滚；失败回滚重建执行器后 undo/undoAll 重试；待恢复项拒绝 apply 且不执行命令；取消发生在修改后、日志前，以及日志 insert 失败时，恢复文件保留原值并在重建后恢复。取消用 CompletableDeferred，时间用现有 Clock，恢复文件由 TemporaryFolder 清理。本次基线 29/29 通过（含 FakeDevice 自检）。
 - 已知问题（R04 测试边界）：本轮新增 6 项未暴露生产缺陷；中断用协程取消并令收尾回滚失败模拟，验证的是落库前已持久化及新执行器读取恢复文件，不是真机进程强杀。Shizuku/设备断电仍待真机。
+
+- 测试补全最终验证（2026-10-02）：`./gradlew :engine-a11y:testDebugUnitTest :engine-system:testDebugUnitTest` 成功，engine-system 35/35（原 29 + 新增 6）；`bash scripts/check-merge.sh engine-system` 全部通过；`./gradlew test` 全项目 272/272（Android debug 245 + core-rules 27），失败/错误/跳过均 0。新增测试未暴露生产缺陷；本任务授权项无未完成。仅新增本节对应的测试文件，未改现有测试、生产代码、版本、其他模块，也未执行真机操作。
 
 ## [engine-notify] 状态: 已合并 | 负责方: claude | 关卡: G6
 
@@ -137,13 +139,13 @@
 | R10: 中断来源切断直接跳转 | 已修 | a68dff6 |
 | R11: 删除旧坐标后备点击 | 已修 | 56b1f0f |
 | R12: 撤销各步独立容错 | 已修 | 4638eea |
-| 测试 R12: 回归补全 | 完成（5/5） | 本提交 |
-| 测试 R11: 回归补全 | 完成（3/3） | 本提交 |
-| 测试 R08: 回归补全 | 完成（2/2） | 本提交 |
-| 测试 R09: 回归补全 | 完成（4/4） | 本提交 |
-| 测试 R10: 回归补全 | 完成（3/3） | 本提交 |
+| 测试 R08: 回归补全 | 完成（2/2） | f39145c |
+| 测试 R09: 回归补全 | 完成（4/4） | ae67e1e |
+| 测试 R10: 回归补全 | 完成（3/3） | 1169469 |
+| 测试 R11: 回归补全 | 完成（3/3） | 8d98dd4 |
+| 测试 R12: 回归补全 | 完成（5/5） | ccf9edf |
 
-- 下一步：本轮 R08～R12 已修，2026-10-02 本地验证完成：:engine-a11y:testDebugUnitTest 59/59、bash scripts/check-merge.sh engine-a11y 全部通过、./gradlew test 全量 249/249（失败/错误/跳过均 0）；等待修复分支合并与测试模块补用例，未 push。G4 真机部分未执行，通道保持进行中：DI-05、DI-21～25 待真机，录制真实快照后补 RR-02/RR-03；既有非真机关卡报告见 testing/reports/G4-*.md。
+- 下一步：本任务 R08～R12 与 MT-AY-03 执行器缺口已补齐，保留 chan/tests-a11y-system 等待合并，不 push。G4 真机部分未执行，通道保持进行中：DI-05、DI-21～25 待真机，录制真实快照后补 RR-02/RR-03。
 - 已知问题：
   - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
@@ -151,19 +153,10 @@
   - MT-AY-03 执行器缺口已由 R12_MT_AY_03 补齐（见下述 R12 测试补全），暂存副本未改。
   - R08 测试补全（2026-10-02）：新增 2 项全部通过。真实回调先取 source、包名和 Activity；协程排队期间替换事件仍点击原页面节点并记录原包/规则；点击事件 recycle、source/文字替换后仍按原文字开奖励窗口，排队后不再访问事件。ServiceTestData 通过已有运行时 Room 建内存库；因可写边界不含 build.gradle，仅建库/SQL 接口使用反射，不改依赖。Android 11/12 真正系统事件回收仍待真机。
   - R09 测试补全（2026-10-02）：新增 4 项全部通过。showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException 被捕获，清理局部 current 和移除视图；失败后重试；close 前排队及 close 后新展示被拒绝；真实服务 onUnbind 关闭提示。窗口 token 撤销及 ColorOS 服务断开仍待真机。
-  - R10 测试补全（2026-10-02）：新增 3 项全部通过。A→Home→B 不产生 Transition，B 的 fromLauncher/startedAt/启动计数重记；直接 A→B 仍产生 Transition 并回退；Home→A 重启计数与 copy 中断标记。真正桌面/最近任务/输入法事件顺序及其他 ignored 窗口仍待真机。
-  - R11 测试补全（2026-10-02）：新增 3 项全部通过。旧节点及祖先 ACTION_CLICK 均失败且当前窗口已换包时，dispatchGesture 调用为零；正常节点与祖先点击保持有效。敏感 App 的实机切换仍待真机。
+  - R10 测试补全（2026-10-02）：新增 3 项全部通过。A→Home→B 不产生 Transition，B 的 fromLauncher/startedAt/启动计数重记；直接 A→B 仍产生 Transition 并回退；Home→A 重启计数与 copy 中断标记。仍保留忽略窗口一律打断的保守处理：输入法消失后同包继续使用时，中断标记保留至下次启动，可能漏拦一次跨包跳转。SystemUI/IME 中转及桌面反复启动的冷启动信号未在本轮新增测试中单独验证；真实事件顺序仍待真机。
+  - R11 测试补全（2026-10-02）：新增 3 项全部通过。旧节点及祖先 ACTION_CLICK 均失败且当前窗口已换包时，dispatchGesture 调用为零；正常节点与祖先点击保持有效。按 R11 要求删除坐标后备，无法 ACTION_CLICK 的节点不再自动点击；敏感 App 的实机切换仍待真机。
   - R12 测试补全（2026-10-02）：新增 5 项全部通过。通过 SQLite trigger 注入例外/信号写入故障，断言目标恢复和其余写入仍完成；目标启动失败不影响例外/USER_UNDO；临时例外在恢复前生效、超过 TTL/重新预取 false 后仍阻止回退，并按源/目标隔离、仅本进程有效；R12_MT_AY_03 经真实 ActionExecutor→悬浮撤销按钮→UndoJump 验证例外落库、USER_UNDO（ruleId=null）、目标启动及再次跳转不回退。后台恢复目标能力仍待真机。
-
-- 本轮测试任务 R10：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
-
-- 本轮测试任务 R09：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
-
-- 本轮测试任务 R08：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
-
-- 本轮测试任务 R11：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
-
-- 本轮测试任务 R12：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
+- 测试补全最终验证（2026-10-02）：新增 17/17，通过 `./gradlew :engine-a11y:testDebugUnitTest :engine-system:testDebugUnitTest`（engine-a11y 76/76，engine-system 35/35）；两个模块的 `bash scripts/check-merge.sh` 全部通过；`./gradlew test` 全项目 272/272（Android debug 245 + core-rules 27），失败/错误/跳过均 0。新增测试未暴露生产缺陷；本次授权项无未完成。只新增测试及更新本节，生产代码、已有测试、依赖版本未改；测试用临时文件由 TemporaryFolder 清理。
 
 ## [guard] 状态: 进行中 | 负责方: codex | 关卡: G7
 
