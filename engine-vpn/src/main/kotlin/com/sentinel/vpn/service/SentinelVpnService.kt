@@ -23,8 +23,6 @@ import com.sentinel.vpn.dns.DohUdpResolver
 import com.sentinel.vpn.dns.DnsCache
 import com.sentinel.vpn.tun.ConnectionPackageResolver
 import com.sentinel.vpn.tun.TunSpec
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.net.InetSocketAddress
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -42,7 +40,7 @@ class SentinelVpnService : VpnService() {
 
     private inner class ServiceTunFactory : TunFactory {
         override fun establish(spec: TunSpec): TunHandle? {
-            val builder = Builder().setSession("哨兵").setMtu(spec.mtu)
+            val builder = Builder().setSession("哨兵").setMtu(spec.mtu).setBlocking(true)
             spec.addresses.forEach { (ip, prefix) -> builder.addAddress(ip, prefix) }
             spec.dnsServers.forEach { builder.addDnsServer(it) }
             spec.routes.forEach { (ip, prefix) -> builder.addRoute(ip, prefix) }
@@ -54,10 +52,11 @@ class SentinelVpnService : VpnService() {
         }
     }
 
-    private class PfdHandle(private val fd: ParcelFileDescriptor) : TunHandle {
-        override val input = FileInputStream(fd.fileDescriptor)
-        override val output = FileOutputStream(fd.fileDescriptor)
-        override fun close() { try { fd.close() } catch (_: Exception) { } }
+    private class PfdHandle(fd: ParcelFileDescriptor) : TunHandle {
+        override val input = ParcelFileDescriptor.AutoCloseInputStream(fd)
+        override val output = ParcelFileDescriptor.AutoCloseOutputStream(fd)
+        // AutoClose 关闭同一个 PFD；Android 的异步关闭会唤醒阻塞读，无重复描述符残留。
+        @Synchronized override fun close() { try { input.close() } finally { output.close() } }
     }
 
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
