@@ -225,13 +225,14 @@
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
-| Task 1: 补百度 HTTPDNS IP | 完成 | 本提交 |
-| Task 2: 变更登记 | 待办 | — |
+| Task 1: 补百度 HTTPDNS IP | 完成 | 8e51c5a |
+| Task 2: 变更登记 | 完成 | 本提交 |
 | Task 3: 回归测试与关卡验证 | 待办 | — |
 
 - 范围：`chan/httpdns-baidu`，仅修改 core-rules、本节、CHANGE_REQUESTS 及直接相关 testing 断言；不 push、不改依赖、不改引擎。
 - 基线：`./gradlew :core-rules:test` 27/27、`./gradlew :engine-vpn:testDebugUnitTest` 58/58，失败/错误/跳过均 0。
 - Task 1：按原有 IPv4 顺序新增 `180.76.76.76/32`、`180.76.76.112/32`。CatalogTest 的固定数量断言 59→61，先运行目录测试确认数量断言失败，再补 IP；保留全部已有断言。APK 原始字符串 `allstrings.txt` 第 1651581 行的百度 TurboNet `bdns.customize_http_dns_server_url_prefix` 明确为 `https://180.76.76.112/v2/0010`，第 1351065～1351067 行还有 v6 服务 URL；`.200` 仅孤立字符串，未加入。
 - Task 1 验证：`./gradlew :core-rules:test` 27/27 通过，失败/错误/跳过均 0；`git diff --check` 通过。
-- 下一步：Task 2 登记用户批准与证据；Task 3 补命中、相邻 IP、去重和网络边界测试，完成指定验证。
+- Task 2：新增 `docs/CHANGE_REQUESTS.md`，以 CR-2026-10-02-HTTPDNS-BAIDU 登记两个 /32、兼容性、原始字符串与源码证据、用户书面批准及 UDP/53 实际影响；`git diff --check` 通过。
+- 下一步：Task 3 补命中、相邻 IP、去重和网络边界测试，完成指定验证。
 - 已知问题：背景中“普通 UDP/53 不受影响”与当前源码不符。PacketLoop 的 DNS 分支还要求目的地址属于 TunSpec.DNS_SERVERS（`10.111.0.2`、`fd11:1::2`）；TunSpec 为每个 HTTPDNS CIDR 添加路由，因此新增 IP 的 TCP（含 HTTPS）会收到 RST，UDP（含直连该 IP 的 53 端口）会收到 ICMP 不可达。虚拟 DNS 的 UDP/53 处理保持不变。未改只读 engine-vpn；SDK 是否回落系统 DNS、是否减少开屏广告仍需设备验证，不能由目录测试证明。
