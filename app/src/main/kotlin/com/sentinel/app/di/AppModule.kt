@@ -25,6 +25,7 @@ import org.koin.dsl.module
 
 const val PREFS_NAME = "sentinel"
 const val PREF_ONBOARDING_DONE = "onboarding_done"
+const val PREF_ASKED_NOTIFICATIONS = "asked_post_notifications"
 
 private const val PRIVATE_DNS_WARNING = "系统「私人 DNS」设为指定服务器，会让网络拦截失效，请改为「自动」或「关闭」"
 

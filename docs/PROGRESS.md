@@ -201,13 +201,13 @@
 | Task 6: 规则页 | 完成 |
 | Task 7: 快捷开关 | 完成 |
 
-- 验证（非真机部分）：`./gradlew :app:testDebugUnitTest --rerun` 36/36 通过（UT-AP-1～7、MT-AP-01～05，含 G8 专属的 UT-AP-1-04）；全仓 337 个测试 0 失败 0 跳过；`./gradlew assembleDebug` 成功。
+- 验证（非真机部分）：`./gradlew :app:testDebugUnitTest --rerun` 37/37 通过（UT-AP-1～7、MT-AP-01～05，含 G8 专属的 UT-AP-1-04）；全仓 337 个测试 0 失败 0 跳过；`./gradlew assembleDebug` 成功。
 - 测试夹具已修复（FakeData 改用 Robolectric 内存 Room 数据库等，见 `docs/TEST_MODULE_REQUESTS.md` A 部分）。测试暴露并已修复的 app 缺陷：二级页面隐藏底部导航后没有可见的返回入口（MT-AP-03/05），已加统一的 ≥48dp 返回按钮。
 - 下一步：**待真机** DI-51（首页开启后网络层拦截）、DI-52、DI-61；首个可用版本的真机验证。
 - 已知问题：
   1. 向导里与 ColorOS 路径相关的图示是通用矢量图，未按 DI-21 记录的真实路径绘制（真机核实后再换）。
   2. 系统净化页在当前系统版本没有档案时显示「暂无可用方案」；engine-system 的档案全部是 verified=false，所以现在页面没有可执行项，要等实机核实报告。
-  3. 学习通知、guard 通知、系统净化通知都需要 Android 13+ 的 POST_NOTIFICATIONS 运行时授权，app 目前没有主动申请（向导的通知步骤只管「通知使用权」）。**待补**：在向导或首页请求 POST_NOTIFICATIONS。
+  3. POST_NOTIFICATIONS（Android 13+）：已在 MainActivity 首次启动时请求一次（用户拒绝后不再反复弹）；拒绝时拦截本身不受影响，但撤销提醒、学习确认通知不会出现。**待真机**确认弹窗时机与 ColorOS 行为。
 
 ## [merge] 状态: 待办 | 负责方: claude | 关卡: —
 
