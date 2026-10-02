@@ -156,18 +156,24 @@
 | R10: 中断来源切断直接跳转 | 已修 | a68dff6 |
 | R11: 删除旧坐标后备点击 | 已修 | 56b1f0f |
 | R12: 撤销各步独立容错 | 已修 | 4638eea |
+| 测试 R08: 回归补全 | 完成（2/2） | f39145c |
+| 测试 R09: 回归补全 | 完成（4/4） | ae67e1e |
+| 测试 R10: 回归补全 | 完成（3/3） | 1169469 |
+| 测试 R11: 回归补全 | 完成（3/3） | 8d98dd4 |
+| 测试 R12: 回归补全 | 完成（5/5） | ccf9edf |
 
-- 下一步：本轮 R08～R12 已修，2026-10-02 本地验证完成：:engine-a11y:testDebugUnitTest 59/59、bash scripts/check-merge.sh engine-a11y 全部通过、./gradlew test 全量 249/249（失败/错误/跳过均 0）；等待修复分支合并与测试模块补用例，未 push。G4 真机部分未执行，通道保持进行中：DI-05、DI-21～25 待真机，录制真实快照后补 RR-02/RR-03；既有非真机关卡报告见 testing/reports/G4-*.md。
+- 下一步：本任务 R08～R12 与 MT-AY-03 执行器缺口已补齐，保留 chan/tests-a11y-system 等待合并，不 push。G4 真机部分未执行，通道保持进行中：DI-05、DI-21～25 待真机，录制真实快照后补 RR-02/RR-03。
 - 已知问题：
   - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
   - 设计取舍：激励关闭点击后保持静音至离开 App 或 3 秒收尾 tick；自动续费提醒每包 10 分钟去重；学习模式「窗口出现时间」按 Activity 变化/弹窗窗口记，内容变化不刷新。
-  - MT-AY-03 暂存测试未覆盖执行器写例外/USER_UNDO（见暂存 README 待确认 5）。
-  - R08 待补测试：由测试模块覆盖回调返回后事件回收/复用、IO 排队时仍使用原包名、Activity 和 source 节点；本次仅把 source 读取移到回调内，不保留 AccessibilityEvent。Android 11/12 事件生命周期待真机。
-  - R09 待补测试：由测试模块覆盖 showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException、部分添加失败后的移除与 current 清理、close 前后排队/新展示不执行、重复退出和展示失败后重试；本次异常保护位于 Runnable 内，shutdown 永久关闭 OverlayToast。窗口 token 撤销及 ColorOS 服务断开待真机。
-  - R10 待补测试：由测试模块覆盖 A→Home→B 不返回 Transition/不回退、A→Home→A 重新记录 fromLauncher/startedAt/启动计数、A→SystemUI/IME→B 不回退、copy 保留中断标记、桌面反复启动仍上报冷启动循环、直接 A→广告 App 仍回退。保留 UT_AY_1_03 与 UT_AY_6_19 的输入法前台/launch 断言；保守处理所有 ignored 窗口，输入法消失后同包继续使用也保留中断标记至下次实际启动，可能漏拦一次跨包跳转。真实桌面/最近任务/输入法事件顺序待真机。
-  - R11 待补测试：由测试模块覆盖目标节点及祖先 ACTION_CLICK 全失败后不调用 dispatchGesture、切换到银行/OFF App 后旧节点失败不触发全局点击、正常节点/祖先点击仍执行。本次按用户 R11 指令覆盖原 PLAN Task 8 的坐标后备行为，代价是无法 ACTION_CLICK 的节点不再自动点击；敏感 App 切换场景待真机。
-  - R12 待补测试：由测试模块覆盖 addException 写库失败仍发 USER_UNDO/打开目标、信号失败仍恢复、恢复失败不影响前两步、写库前已生效的源/目标临时例外、超过缓存 TTL 或刷新为 false 后临时例外仍有效、其他源/目标不受影响、进程重启后失败例外消失。临时例外仅存在单例 A11yRuntime 内存中，写库失败后仅本进程有效；后台恢复目标 App 能力待真机。
+  - MT-AY-03 执行器缺口已由 R12_MT_AY_03 补齐（见下述 R12 测试补全），暂存副本未改。
+  - R08 测试补全（2026-10-02）：新增 2 项全部通过。真实回调先取 source、包名和 Activity；协程排队期间替换事件仍点击原页面节点并记录原包/规则；点击事件 recycle、source/文字替换后仍按原文字开奖励窗口，排队后不再访问事件。ServiceTestData 通过已有运行时 Room 建内存库；因可写边界不含 build.gradle，仅建库/SQL 接口使用反射，不改依赖。Android 11/12 真正系统事件回收仍待真机。
+  - R09 测试补全（2026-10-02）：新增 4 项全部通过。showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException 被捕获，清理局部 current 和移除视图；失败后重试；close 前排队及 close 后新展示被拒绝；真实服务 onUnbind 关闭提示。窗口 token 撤销及 ColorOS 服务断开仍待真机。
+  - R10 测试补全（2026-10-02）：新增 3 项全部通过。A→Home→B 不产生 Transition，B 的 fromLauncher/startedAt/启动计数重记；直接 A→B 仍产生 Transition 并回退；Home→A 重启计数与 copy 中断标记。仍保留忽略窗口一律打断的保守处理：输入法消失后同包继续使用时，中断标记保留至下次启动，可能漏拦一次跨包跳转。SystemUI/IME 中转及桌面反复启动的冷启动信号未在本轮新增测试中单独验证；真实事件顺序仍待真机。
+  - R11 测试补全（2026-10-02）：新增 3 项全部通过。旧节点及祖先 ACTION_CLICK 均失败且当前窗口已换包时，dispatchGesture 调用为零；正常节点与祖先点击保持有效。按 R11 要求删除坐标后备，无法 ACTION_CLICK 的节点不再自动点击；敏感 App 的实机切换仍待真机。
+  - R12 测试补全（2026-10-02）：新增 5 项全部通过。通过 SQLite trigger 注入例外/信号写入故障，断言目标恢复和其余写入仍完成；目标启动失败不影响例外/USER_UNDO；临时例外在恢复前生效、超过 TTL/重新预取 false 后仍阻止回退，并按源/目标隔离、仅本进程有效；R12_MT_AY_03 经真实 ActionExecutor→悬浮撤销按钮→UndoJump 验证例外落库、USER_UNDO（ruleId=null）、目标启动及再次跳转不回退。后台恢复目标能力仍待真机。
+- 测试补全最终验证（2026-10-02）：新增 17/17，通过 `./gradlew :engine-a11y:testDebugUnitTest :engine-system:testDebugUnitTest`（engine-a11y 76/76，engine-system 35/35）；两个模块的 `bash scripts/check-merge.sh` 全部通过；`./gradlew test` 全项目 272/272（Android debug 245 + core-rules 27），失败/错误/跳过均 0。新增测试未暴露生产缺陷；本次授权项无未完成。只新增测试及更新本节，生产代码、已有测试、依赖版本未改；测试用临时文件由 TemporaryFolder 清理。
 
 ## [guard] 状态: 已合并 | 负责方: claude | 关卡: G7
 
