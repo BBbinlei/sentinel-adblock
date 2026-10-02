@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node class="android.widget.FrameLayout">
+  <node class="android.widget.TextView" text="阅读首页" clickable="true"/>
+</node>

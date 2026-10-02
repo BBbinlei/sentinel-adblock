@@ -1,0 +1,240 @@
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/FixtureSupport.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/FixtureSupport.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/FixtureSupport.kt	1970-01-01 08:00:00
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/FixtureSupport.kt	2026-10-02 06:18:47
+@@ -0,0 +1,19 @@
++package com.sentinel.regression
++
++import com.sentinel.rules.model.*
++import com.sentinel.rules.parse.*
++import java.io.File
++
++internal object Fixtures {
++    val root: File = listOf(File("fixtures"), File("testing/rule-regression/fixtures"))
++        .first { File(it, "top-domains-cn.txt").isFile }
++    val subscriptions: List<File> = File(root, "subscriptions").listFiles()!!
++        .filter { it.extension in listOf("txt", "json", "json5") }.sortedBy { it.name }
++    fun domainRules(file: File): ParseResult<DnsRule> =
++        AdGuardParser.parse(file.readText(), file.name, RuleLevel.STRONG, DomainTag.AD)
++    fun report(name: String, text: String) {
++        val file = File(root.parentFile, "build/reports/$name")
++        requireNotNull(file.parentFile).mkdirs()
++        file.writeText(text)
++    }
++}
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/SubscriptionHealthTest.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/SubscriptionHealthTest.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/SubscriptionHealthTest.kt	1970-01-01 08:00:00
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/SubscriptionHealthTest.kt	2026-10-02 06:18:47
+@@ -0,0 +1,60 @@
++package com.sentinel.regression
++
++import com.sentinel.rules.domain.DomainCompiler
++import com.sentinel.rules.model.*
++import com.sentinel.rules.parse.*
++import kotlinx.serialization.json.*
++import kotlin.test.*
++import org.junit.Test
++
++class SubscriptionHealthTest {
++    private fun rawGkdRuleCount(text: String): Int {
++        val root = Json.parseToJsonElement(Json5.toJson(text)).jsonObject
++        return root["apps"]!!.jsonArray.sumOf { app ->
++            app.jsonObject["groups"]!!.jsonArray.sumOf { group ->
++                when (val rules = group.jsonObject["rules"]) {
++                    is JsonArray -> rules.size
++                    null -> 0
++                    else -> 1
++                }
++            }
++        }
++    }
++    @Test fun RR_04a_all_samples_parse() {
++        val samples = Fixtures.subscriptions
++        assertEquals(3, samples.size)
++        for (file in samples) {
++            val result = if (file.extension == "txt") Fixtures.domainRules(file)
++                else GkdParser.parse(file.readText(), file.name)
++            assertTrue(result.rules.isNotEmpty(), "No accepted rules: ${file.name}")
++        }
++    }
++    @Test fun RR_04b_adguard_skipped_below_20_percent() {
++        val rows = Fixtures.subscriptions.filter { it.extension == "txt" }.map { file ->
++            val result = Fixtures.domainRules(file)
++            val total = result.rules.size + result.skipped
++            val ratio = result.skipped.toDouble() / total
++            Triple(file.name, ratio, "${file.name}: rules=${result.rules.size}, skipped=${result.skipped}, total=$total, skip_rate=$ratio")
++        }
++        Fixtures.report("adguard-coverage.txt", rows.joinToString("\n") { it.third } + "\n")
++        for ((_, ratio, row) in rows) assertTrue(ratio < 0.20, row)
++    }
++    @Test fun RR_04c_gkd_acceptance_report() {
++        val rows = Fixtures.subscriptions.filter { it.extension != "txt" }.map { file ->
++            val text = file.readText()
++            val result = GkdParser.parse(text, file.name)
++            val total = rawGkdRuleCount(text)
++            val accepted = result.rules.map { it.id }.distinct().size
++            assertEquals(total, accepted + result.skipped, "Every input rule accounted for")
++            assertTrue(accepted > 0)
++            "${file.name}: input_rules=$total, accepted_input_rules=$accepted, skipped=${result.skipped}, emitted_rules=${result.rules.size}, acceptance_rate=${accepted.toDouble() / total}"
++        }
++        Fixtures.report("gkd-coverage.txt", rows.joinToString("\n") + "\n")
++    }
++    @Test fun RR_04d_compiled_size_below_8_mb() {
++        val rules = Fixtures.subscriptions.filter { it.extension == "txt" }.flatMap { Fixtures.domainRules(it).rules }
++        val bytes = DomainCompiler.compile(rules)
++        Fixtures.report("subscription-size.txt", "parsed_dns_rules=${rules.size}\nbytes=${bytes.size}\n")
++        assertTrue(bytes.size < 8_000_000, "Compiled size ${bytes.size}")
++    }
++}
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/TopDomainsFalsePositiveTest.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/TopDomainsFalsePositiveTest.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/TopDomainsFalsePositiveTest.kt	1970-01-01 08:00:00
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/TopDomainsFalsePositiveTest.kt	2026-10-02 06:18:47
+@@ -0,0 +1,28 @@
++package com.sentinel.regression
++
++import com.sentinel.rules.catalog.*
++import com.sentinel.rules.domain.*
++import java.io.File
++import java.nio.ByteBuffer
++import kotlin.test.*
++import org.junit.Test
++
++class TopDomainsFalsePositiveTest {
++    private val topDomains get() = File(Fixtures.root, "top-domains-cn.txt").readLines()
++        .map { it.substringBefore('#').trim() }.filter { it.isNotEmpty() }
++    private val standard get() = StandardDomains.rules() + HttpDnsCatalog.rules()
++    @Test fun RR_01a_standard_no_false_positives() {
++        val domains = topDomains
++        assertEquals(987, domains.size, "Fixed fixture count documented in its header")
++        val matcher = DomainMatcher(ByteBuffer.wrap(DomainCompiler.compile(standard)))
++        val hits = domains.mapNotNull { domain -> matcher.lookup(domain)?.let { "$domain -> ${it.ruleDomain}" } }
++        Fixtures.report("standard-hits.txt", "domains=${domains.size}\nhits=${hits.size}\n" + hits.joinToString("\n"))
++        assertEquals(emptyList(), hits, "STANDARD hits:\n" + hits.joinToString("\n"))
++    }
++    @Test fun RR_01b_strong_report_only() {
++        val subscriptions = Fixtures.subscriptions.filter { it.extension == "txt" }.flatMap { Fixtures.domainRules(it).rules }
++        val matcher = DomainMatcher(ByteBuffer.wrap(DomainCompiler.compile(standard + subscriptions)))
++        val hits = topDomains.mapNotNull { domain -> matcher.lookup(domain)?.let { "$domain -> ${it.ruleDomain}" } }
++        Fixtures.report("strong-hits.txt", "domains=${topDomains.size}\nhits=${hits.size}\n" + hits.joinToString("\n"))
++    }
++}
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/UserRulesRegressionTest.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/UserRulesRegressionTest.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/UserRulesRegressionTest.kt	1970-01-01 08:00:00
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/UserRulesRegressionTest.kt	2026-10-02 06:18:47
+@@ -0,0 +1,24 @@
++package com.sentinel.regression
++
++import com.sentinel.rules.model.*
++import com.sentinel.rules.parse.JsonRuleParser
++import com.sentinel.rules.ui.*
++import java.io.File
++import kotlin.test.*
++import org.junit.Test
++
++class UserRulesRegressionTest {
++    private fun rules(): List<Rule> = JsonRuleParser.parse(File(Fixtures.root, "user-rules.json").readText())
++    @Test fun RR_05a_parse_and_compile_selectors() {
++        val rules = rules()
++        assertTrue(rules.count { it.source == "learning" } >= 10)
++        assertTrue(rules.count { it.source == "manual" } >= 10)
++        for (rule in rules.filterIsInstance<UiRule>()) Selector.parse(rule.selector)
++        assertEquals(rules, JsonRuleParser.parse(JsonRuleParser.encode(rules)))
++        assertEquals(JsonRuleParser.encode(rules), File(Fixtures.root, "user-rules.json").readText())
++    }
++    @Test fun RR_05b_index_valid() {
++        val index = UiRuleIndex.build(rules().filterIsInstance<UiRule>())
++        assertEquals(0, index.invalidCount)
++    }
++}
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/contract/ContractTest.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/ContractTest.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/contract/ContractTest.kt	2026-10-02 06:18:47
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/ContractTest.kt	2026-10-02 10:06:10
+@@ -36,6 +36,18 @@
+ @Config(sdk = [30], manifest = Config.NONE)
+ @OptIn(ExperimentalCoroutinesApi::class)
+ class ContractTest : ContractFixture() {
++    // Compile-only substitute for Robolectric.buildBroadcastReceiver (absent in Robolectric 4.17):
++    // deliver through the real platform broadcast path so goAsync() has a PendingResult.
++    private fun deliverUndo(intent: Intent) {
++        val receiver = A11yActionReceiver()
++        context.registerReceiver(receiver, android.content.IntentFilter(intent.action), android.content.Context.RECEIVER_NOT_EXPORTED)
++        try {
++            context.sendBroadcast(intent)
++            org.robolectric.shadows.ShadowLooper.idleMainLooper()
++            // Receiver finishes its work on Dispatchers.IO; give it real time to land.
++            Thread.sleep(300)
++        } finally { context.unregisterReceiver(receiver) }
++    }
+     private fun dns(domain: String, tag: DomainTag = DomainTag.AD) =
+         DnsRule("dns:$domain", domain, tag, RuleLevel.STANDARD, "contract")
+     private fun clicked() = UiInput.Clicked(pkg, "看视频领奖励", null, null,
+@@ -133,7 +145,7 @@
+             .map { it.signal.kind })
+         persistSignals(launchActions)
+         val undo = Intent(A11yActions.JUMP_UNDO).putExtra("source", pkg).putExtra("target", otherPkg)
+-        Robolectric.buildBroadcastReceiver(A11yActionReceiver::class.java).get().onReceive(context, undo)
++        deliverUndo(undo)
+         runCurrent()
+         assertEquals(1, signals.countSince(pkg, setOf(SignalKind.USER_UNDO), 0))
+         val before = upstream.calls.get()
+@@ -185,7 +197,7 @@
+         }
+         assertEquals(emptyList(), offLaunches.filterIsInstance<A11yAction.Signal>())
+         persistSignals(offLaunches)
+-        Robolectric.buildBroadcastReceiver(A11yActionReceiver::class.java).get().onReceive(context, undo)
++        deliverUndo(undo)
+         val forwardedBefore = upstream.calls.get()
+         repeat(10) { tunFactory.current.query("ad.contract.test", 100 + it); runCurrent() }
+         assertEquals(forwardedBefore + 10, upstream.calls.get())
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractFixture.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractFixture.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractFixture.kt	2026-10-02 06:18:47
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractFixture.kt	2026-10-02 10:06:58
+@@ -27,6 +27,7 @@
+ import com.sentinel.system.shell.*
+ import com.sentinel.vpn.di.vpnModule
+ import com.sentinel.vpn.dns.UpstreamResolver
++import com.sentinel.vpn.service.TunFactory
+ import com.sentinel.vpn.service.VpnController
+ import com.sentinel.vpn.tun.*
+ import java.io.File
+@@ -66,6 +67,7 @@
+     protected val shell = FixtureShell()
+     protected val api = ReadyApi()
+     protected var vpn: VpnController? = null
++    private var capturedDecisions: DecisionSource? = null
+     private var a11yService: ServiceController<SentinelAccessibilityService>? = null
+     private var notifyService: ServiceController<SentinelNotificationListener>? = null
+     protected val apps get() = koin.get<AppConfigRepository>()
+@@ -97,6 +99,8 @@
+                 single<UpstreamResolver> { upstream }
+                 single<PackageResolver> { packageResolver }
+                 single<ShizukuApi> { api }
++                single<com.sentinel.a11y.core.A11yState> { get<com.sentinel.a11y.di.A11yRuntime>().state }
++                single<DecisionSource> { checkNotNull(capturedDecisions) { "VpnController not started" } }
+                 single<Shell> { shell }
+                 single<ShizukuGateway> { ShizukuGateway(api) { shell.binder() } }
+             })
+@@ -141,7 +145,11 @@
+ 
+     protected suspend fun startReaders(scope: CoroutineScope) {
+         // Assumed production DI bindings are listed in README; no test reloader exists here.
+-        vpn = koin.get<VpnController> { parametersOf(scope) }
++        // Compile/wiring-only: engine-vpn has no Koin binding for VpnController (the service builds it
++        // by hand), so construct the production class with the same container-resolved dependencies.
++        vpn = VpnController(scope, koin.get(), context.packageName, koin.get(), koin.get(), koin.get(), koin.get(),
++            koin.get<RuleStore>(), koin.get(), koin.get(), koin.get(), koin.get(), koin.get(), koin.get<Clock>(), { },
++            { source -> source.also { capturedDecisions = it } })
+         vpn!!.start()
+         a11yService = Robolectric.buildService(SentinelAccessibilityService::class.java).create()
+         val connected = SentinelAccessibilityService::class.java.getDeclaredMethod("onServiceConnected")
+diff -ruN testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractPorts.kt testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractPorts.kt
+--- testing/unit/pending/contract/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractPorts.kt	2026-10-02 06:18:47
++++ testing/rule-regression/src/test/kotlin/com/sentinel/regression/contract/fakes/ContractPorts.kt	2026-10-02 10:05:18
+@@ -6,6 +6,8 @@
+ import com.sentinel.system.shell.*
+ import com.sentinel.vpn.dns.*
+ import com.sentinel.vpn.packet.IpPacket
++import com.sentinel.vpn.service.TunFactory
++import com.sentinel.vpn.service.TunHandle
+ import com.sentinel.vpn.tun.*
+ import java.io.*
+ import java.nio.ByteBuffer
