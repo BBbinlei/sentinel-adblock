@@ -120,7 +120,7 @@ class SentinelAccessibilityService : AccessibilityService() {
                     val activity = activityOf(pkg, event.className?.toString())
                     lastStatePkg = pkg
                     lastActivity[pkg] = activity
-                    dispatchWindow(UiInput.WindowChanged(pkg, activity, ts), event)
+                    dispatchWindow(UiInput.WindowChanged(pkg, activity, ts), event.source)
                 }
                 AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
                     if (pkg != lastStatePkg) return
@@ -147,8 +147,8 @@ class SentinelAccessibilityService : AccessibilityService() {
         } catch (e: Exception) { warn("事件处理失败", e) }
     }
 
-    private fun dispatchWindow(input: UiInput.WindowChanged, event: AccessibilityEvent) {
-        scope.launch { process(input, event.source) }
+    private fun dispatchWindow(input: UiInput.WindowChanged, source: AccessibilityNodeInfo?) {
+        scope.launch { process(input, source) }
     }
 
     private suspend fun process(input: UiInput, source: AccessibilityNodeInfo?) {
@@ -205,7 +205,7 @@ class SentinelAccessibilityService : AccessibilityService() {
         stopped = true
         if (current === this) current = null
         try { keeper?.restore() } catch (e: Exception) { warn("恢复音量失败", e) }
-        overlay?.dismiss()
+        overlay?.close()
         contentJob?.cancel(); tickJob?.cancel(); labelJob?.cancel()
         val rt = try { runtime } catch (_: Exception) { null }
         // 状态上报在独立协程里完成，不随服务作用域取消。

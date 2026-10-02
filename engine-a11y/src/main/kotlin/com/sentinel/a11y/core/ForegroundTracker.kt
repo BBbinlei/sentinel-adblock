@@ -14,7 +14,7 @@ data class Transition(val from: String, val to: String, val ts: Long)
 
 /**
  * 跟踪前台 App、启动信息与交互时间。忽略包（自身、systemui、输入法、桌面）不算前台变化，
- * 但桌面窗口会被记为「下一次启动的来源」。
+ * 但会打断直接跳转，桌面窗口另记为「下一次启动的来源」。
  */
 class ForegroundTracker(private val ignored: () -> Set<String>, private val launchers: () -> Set<String>) {
     var currentPkg: String? = null
@@ -25,6 +25,7 @@ class ForegroundTracker(private val ignored: () -> Set<String>, private val laun
         private set
 
     private var originIsLauncher = false
+    private var directTransitionBroken = false
     private val interactions = HashMap<String, Long>()
     private val windows = HashMap<String, Long>()
     private val launches = HashMap<String, ArrayList<Long>>()
@@ -39,18 +40,21 @@ class ForegroundTracker(private val ignored: () -> Set<String>, private val laun
         windows[w.pkg] = w.ts
         if (w.pkg in ignored()) {
             originIsLauncher = w.pkg in launchers()
+            // ponytail: 忽略窗口一律打断跳转，需要减少漏拦时再细分系统窗口来源。
+            directTransitionBroken = true
             return null
         }
-        if (w.pkg == currentPkg) {
+        if (w.pkg == currentPkg && !originIsLauncher) {
             if (w.activity != null) currentActivity = w.activity
             return null
         }
         if (w.activity == null) return null // 其他包的非 Activity 窗口不改变前台。
-        val from = currentPkg
+        val from = currentPkg.takeUnless { directTransitionBroken }
         currentPkg = w.pkg
         currentActivity = w.activity
         launch = LaunchInfo(w.pkg, w.ts, originIsLauncher)
         originIsLauncher = false
+        directTransitionBroken = false
         launches.getOrPut(w.pkg) { ArrayList() }.also { list ->
             list += w.ts
             list.removeAll { it < w.ts - RETAIN_MS }
@@ -70,6 +74,7 @@ class ForegroundTracker(private val ignored: () -> Set<String>, private val laun
         c.currentActivity = currentActivity
         c.launch = launch
         c.originIsLauncher = originIsLauncher
+        c.directTransitionBroken = directTransitionBroken
         c.interactions.putAll(interactions)
         c.windows.putAll(windows)
         launches.forEach { (k, v) -> c.launches[k] = ArrayList(v) }

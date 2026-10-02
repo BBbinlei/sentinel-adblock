@@ -49,8 +49,10 @@ class A11yActionReceiver : BroadcastReceiver() {
 object UndoJump {
     suspend fun run(runtime: A11yRuntime, source: String, target: String) {
         val context = runtime.context
-        runtime.addException(source, target)
-        runtime.signals.emit(source, com.sentinel.data.db.SignalKind.USER_UNDO)
+        try { runtime.addException(source, target) }
+        catch (e: Exception) { Log.w(A11yRuntime.TAG, "撤销例外保存失败，保留本进程临时例外", e) }
+        try { runtime.signals.emit(source, com.sentinel.data.db.SignalKind.USER_UNDO) }
+        catch (e: Exception) { Log.w(A11yRuntime.TAG, "撤销信号上报失败", e) }
         try {
             context.packageManager.getLaunchIntentForPackage(target)
                 ?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)?.let(context::startActivity)

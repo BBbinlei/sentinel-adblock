@@ -42,6 +42,7 @@ class A11yRuntime(val context: Context, val appConfigs: AppConfigRepository, pri
     private val configs = ConcurrentHashMap<String, Cached<EffectiveConfig>>()
     private val disabledRules = ConcurrentHashMap<String, Set<String>>()
     private val exceptions = ConcurrentHashMap<Pair<String, String>, Cached<Boolean>>()
+    private val temporaryExceptions = ConcurrentHashMap.newKeySet<Pair<String, String>>()
 
     val state = object : A11yState {
         // 读不到数据时按更宽松的一侧处理：关闭防护、不停用规则、无例外。
@@ -49,7 +50,8 @@ class A11yRuntime(val context: Context, val appConfigs: AppConfigRepository, pri
             configs[pkg]?.value ?: EffectiveConfig(pkg, ProtectLevel.OFF, false, false,
                 RewardedMode.BLOCK, false, false, false, false, false)
         override fun disabled(pkg: String): Set<String> = disabledRules[pkg].orEmpty()
-        override fun excepted(src: String, tgt: String): Boolean = exceptions[src to tgt]?.value ?: false
+        override fun excepted(src: String, tgt: String): Boolean =
+            (src to tgt) in temporaryExceptions || exceptions[src to tgt]?.value == true
         override fun index(): UiRuleIndex = index
     }
 
@@ -79,6 +81,8 @@ class A11yRuntime(val context: Context, val appConfigs: AppConfigRepository, pri
     }
 
     suspend fun addException(source: String, target: String) {
+        // 先放行本次恢复；写库失败或缓存刷新都不能撤销用户在本进程内的选择。
+        temporaryExceptions += source to target
         jumpExceptions.add(source, target)
         exceptions[source to target] = Cached(true, clock.now())
     }

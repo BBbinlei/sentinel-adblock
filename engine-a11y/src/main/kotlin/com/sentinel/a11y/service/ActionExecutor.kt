@@ -1,9 +1,7 @@
 package com.sentinel.a11y.service
 
 import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.GestureDescription
 import android.content.Intent
-import android.graphics.Path
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
 import com.sentinel.a11y.core.A11yAction
@@ -74,11 +72,6 @@ class ActionExecutor(
             cur = cur.parent
             depth++
         }
-        val b = node.bounds
-        val path = Path().apply { moveTo((b.l + b.r) / 2f, (b.t + b.b) / 2f) }
-        val gesture = GestureDescription.Builder()
-            .addStroke(GestureDescription.StrokeDescription(path, 0, GESTURE_MS)).build()
-        service.dispatchGesture(gesture, null, null)
     }
 
     private suspend fun revert(a: A11yAction.Revert) {
@@ -108,6 +101,5 @@ class ActionExecutor(
     companion object {
         const val TOAST_MS = 3_000L
         private const val MAX_ANCESTORS = 6
-        private const val GESTURE_MS = 50L
     }
 }
