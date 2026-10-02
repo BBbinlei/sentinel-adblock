@@ -38,7 +38,7 @@ class SystemModuleTest : MemoryDataTest() {
             "pm list packages $ads", "^$", optional = true),
         settingOp("not-verified", verified = false),
         ProfileOp("manual", 2, "设置引导", OpKind.WIZARD, true, intent = SettingsIntent(action = "android.settings.SETTINGS")),
-    ))
+    ), verifiedAppOps = setOf("SYSTEM_ALERT_WINDOW", "READ_CLIPBOARD"))
 
     // MT-SY-01
     @Test fun MT_SY_01_purify_then_undo_restores_complete_device_snapshot() = runTest {

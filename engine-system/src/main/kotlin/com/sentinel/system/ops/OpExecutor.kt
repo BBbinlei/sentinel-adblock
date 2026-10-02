@@ -114,11 +114,17 @@ class OpExecutor(
             if (!initial.ok) return@withLock OpOutcome.Failed(initial.stderr.ifBlank { "无法读取操作前状态" })
             val before = initial.stdout.trim()
             if (regex.containsMatchIn(before)) return@withLock OpOutcome.AlreadyApplied
-            // 修改前验证恢复命令，并持久保存 before；复核失败不取消恢复资格。
             revertCommand(op, before)
+            // 动态 AppOps 漂移重执行仍沿用首次修改前的恢复值，不把漂移值写成新基线。
+            val restoreBefore = if (op.kind == OpKind.APPOP && op.id.startsWith("appop:")) {
+                log.observeAll().first().filter { it.opId == op.id && it.success && !it.undone }
+                    .minByOrNull { it.id }?.beforeState ?: before
+            } else before
+            // 修改前验证并持久保存恢复基线；复核失败不取消恢复资格。
+            revertCommand(op, restoreBefore)
             remember(op.id, op)
             val command = substitute(apply, before)
-            val recovery = Recovery(op, before, clock.now())
+            val recovery = Recovery(op, restoreBefore, clock.now())
             recoveries[op.id] = recovery
             saveRecoveries()
             val execution = shell.exec(command)
@@ -131,7 +137,7 @@ class OpExecutor(
             }
             val success = execution.ok && after.ok && regex.containsMatchIn(after.stdout.trim())
             val entry = OpLogEntity(ts = recovery.ts, opId = op.id, target = op.id,
-                beforeState = before, command = command, success = success,
+                beforeState = recovery.before, command = command, success = success,
                 output = listOf(execution.stdout, execution.stderr, after.stdout, after.stderr).filter { it.isNotEmpty() }.joinToString("\n"))
             val id = log.append(entry)
             val recorded = recovery.copy(logId = id)
