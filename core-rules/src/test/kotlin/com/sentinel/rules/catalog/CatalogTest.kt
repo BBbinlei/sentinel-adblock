@@ -14,7 +14,7 @@ class CatalogTest {
     @Test fun UT_CR_3_02_httpdns_cidrs() {
         assertTrue(HttpDnsCatalog.cidrs.any { it.contains(InetAddress.getByName("203.107.1.33").address) })
         assertEquals(58, HttpDnsCatalog.domains.size)
-        assertEquals(59, HttpDnsCatalog.cidrs.size)
+        assertEquals(61, HttpDnsCatalog.cidrs.size)
         assertTrue(HttpDnsCatalog.rules().all { it.tag == DomainTag.HTTPDNS && it.level == RuleLevel.STANDARD })
         assertTrue(Cidr.parse("240e:928:1400:10::25/128").contains(InetAddress.getByName("240e:928:1400:10::25").address))
         assertFalse(Cidr.parse("203.107.1.0/24").contains(InetAddress.getByName("203.107.2.33").address))
