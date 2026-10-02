@@ -120,7 +120,7 @@ class SentinelAccessibilityService : AccessibilityService() {
                     val activity = activityOf(pkg, event.className?.toString())
                     lastStatePkg = pkg
                     lastActivity[pkg] = activity
-                    dispatchWindow(UiInput.WindowChanged(pkg, activity, ts), event)
+                    dispatchWindow(UiInput.WindowChanged(pkg, activity, ts), event.source)
                 }
                 AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
                     if (pkg != lastStatePkg) return
@@ -147,8 +147,8 @@ class SentinelAccessibilityService : AccessibilityService() {
         } catch (e: Exception) { warn("事件处理失败", e) }
     }
 
-    private fun dispatchWindow(input: UiInput.WindowChanged, event: AccessibilityEvent) {
-        scope.launch { process(input, event.source) }
+    private fun dispatchWindow(input: UiInput.WindowChanged, source: AccessibilityNodeInfo?) {
+        scope.launch { process(input, source) }
     }
 
     private suspend fun process(input: UiInput, source: AccessibilityNodeInfo?) {
