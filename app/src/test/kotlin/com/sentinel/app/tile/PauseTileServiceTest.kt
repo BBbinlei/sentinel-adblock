@@ -37,7 +37,7 @@ class PauseTileServiceTest : AppTest() {
             service.onClick(); runCurrent()
             assertNull(data.globalRows.value.pausedUntil)
             assertTrue(data.globalRows.value.enabled)
-        } finally { service.onStopListening(); service.onDestroy() }
+        } finally { service.onStopListening() }
     }
 
     @Test fun UT_AP_7_02_tile_state_tracks_repository_changes() = runTest(main.dispatcher) {
@@ -54,6 +54,12 @@ class PauseTileServiceTest : AppTest() {
             runCurrent()
             assertEquals(Tile.STATE_ACTIVE, service.qsTile.state)
             assertEquals("防护中", service.qsTile.subtitle.toString())
-        } finally { service.onStopListening(); service.onDestroy() }
+            service.onStopListening()
+            data.globalRows.value = GlobalStateEntity(pausedUntil = data.clock.now() + 300_000)
+            data.clock.time += 1_000
+            advanceTimeBy(1_000); runCurrent()
+            assertEquals(Tile.STATE_ACTIVE, service.qsTile.state)
+            assertEquals("防护中", service.qsTile.subtitle.toString(), "Stopped listener must not update the tile")
+        } finally { service.onStopListening() }
     }
 }

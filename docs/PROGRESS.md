@@ -160,7 +160,7 @@
   - R14 待补测试：由测试模块覆盖第一轮起点等于 firstSeenAt、一个 USER_UNDO/TEMP_ALLOW 只触发一次延期且下一轮无新信号时结束、新一轮新增信号再延期、Worker 延迟执行后以实际延期时刻为起点、COUNTED 之外的信号不延期、起点毫秒边界。本次只按 observationEndsAt - EXTEND_MS 推导起点，未新增持久状态。
   - R13 未修（用户明确排除）：保留 GuardRunner.undo 的 remove→pin 行为及暂存 UT-AP-4-02 断言；非原子中断窗口仍由用户另行处理。
 
-## [app] 状态: 进行中 | 负责方: claude | 关卡: G3(Task 1–2) / G8
+## [app] 状态: 进行中 | 负责方: codex | 关卡: G3(Task 1–2) / G8
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -172,19 +172,15 @@
 | Task 6: 规则页 | 代码完成（测试被夹具问题阻塞） | — |
 | Task 7: 快捷开关 | 代码完成（测试被夹具问题阻塞） | — |
 
-- 下一步：夹具问题（见已知问题 1、2、6、8）由测试模块修复后，把全部暂存 UT-AP / MT-AP 复制进来重跑，再过 G3 的 app 部分和 G8；之后删除 build.gradle.kts 里对 UT-AP-1-04 的排除。
+- 下一步：执行授权 A1～A5 测试适配及全部暂存测试同步；保持 UT-AP-1-04 的 G8 Category 排除，验证 app、全仓测试与 assembleDebug。
+- 测试补全 A1～A5：已修复并同步全部 18 个暂存 Kotlin 文件。FakeData 使用真实内存 Room、真实仓库与可控 Clock，Rows 属性直接读写数据库；调用记录只代理到真实 DAO。Koin verify 加入 File，并逐类声明生产模块 lambda 直接提供的参数（未豁免仓库类型）。磁贴停止监听后继续写库、推进虚拟时间，验证状态/副标题不再更新；不调用有 shadow 缺陷的 onDestroy。启动导航用真实 MainActivity，补齐日志/guard 测试接线；UI 用 native graphics 测量中文字。
+- 本轮结果：原有全量 33 项已运行，30 通过/3 失败（MT-AP-02 两项、MT-AP-05）；新增 MT-AP-03 返回导航回归待跑。UT-AP-1-04 按授权继续排除。
 - 已知问题：
-  1. **测试夹具与 data 实际构造器不符（阻塞 UT-AP-2-01～03、UT-AP-1-03）**：`FakeData.construct` 假设仓库用 DAO 构造（README A02），但 data 里 `GlobalStateRepository`、`AppConfigRepository`、`AppRegistry`、`OverrideRepository`、`SignalRepository` 实际用 `SentinelDatabase` + `Clock` 构造，夹具报 `No unique DAO-based constructor`。需要测试模块改夹具（例如用 Robolectric 的内存 Room 数据库）。我没有改。
-  2. **UT-AP-1-01 的 Koin verify 缺 `File`**：`RuleStore(File, ...)` 需要在测试的 `extraTypes` 里加入 `File::class`。需要测试模块改。
-  3. **UT-AP-1-03 的 `Robolectric.buildApplication` 在 Robolectric 4.17 不存在**：只做了让它能编译的最小改动（`ReflectionHelpers` 调 `Application.attach` 再 `onCreate`），断言未变。
-  4. UT-AP-1-04 为 G8 专属，已在 `app/build.gradle.kts` 用 JUnit Category 排除，M8 结束时删除该排除。
-  5. 向导的 Shizuku 步骤已接到 engine-system 的 `ShizukuGateway`（经 Koin `getOrNull`，取不到时显示「未完成」）。
-  6. **UT-AP-7-01/02 的 `service.onDestroy()` 在 Robolectric 4.17 抛 `ClassCastException`**（`ShadowTileService` 不是 `ShadowService` 的子类），发生在测试的 finally 里，与生产代码无关。需要测试模块改（例如不直接调用 onDestroy）。
-  7. UT-AP-5-*、UT-AP-7-* 和 UT-AP-2-* 都因问题 1 无法运行；Task 5/6/7 的业务逻辑（排序/搜索、观察期天数向上取整、`wouldBlock` 去重、https 校验、暂停磁贴）**目前只做过编译和人工对照，没有经过测试验证**。夹具修好后必须重跑。UT-AP-6-01～03 已通过。
-  8. **ComposeAppTest 构造 `GuardRunner` 传 6 个参数（多了 `clock`），而 guard 实际是 5 个参数**：整个 app 测试源集一旦复制进 `ComposeAppTest`（Task 4、MT-AP 都要用）就会编译失败。需要测试模块（或 guard）统一签名。我没有改。
-  9. UT-AP-4-*、MT-AP-* 目前无法编译或运行；Task 4 的逻辑（guard 提醒按 App 合并、系统净化的 canAuto/一键应用跳过规则、卸载二次确认）**只做过编译，没有经过测试验证**。
-  10. 系统净化页在当前系统版本没有档案时用空方案，页面显示「暂无可用方案」；engine-system 的档案全部是 verified=false，所以现在页面不会有可执行项，要等实机核实报告。
-  11. 向导图示是通用矢量图，未按 DI-21 记录的真实 ColorOS 路径绘制（真机核实后再换）。
+  1. **app 布局缺陷，待修复**：MT_AP_02_360dp_large_font_has_no_overflow_or_ellipsis 与 dark_mode 用 native graphics 仍在 `home: clipped text: 已关闭` 失败；HomeScreen 的引擎状态文字加最小高度与 padding，TextLayoutResult.hasVisualOverflow=true。保留断言，下一步只修 app 布局。
+  2. **app 日志页缺少界内返回入口，待修复**：MT_AP_05 在 `engine_log/VPN must contain actual clickable controls` 失败。日志页隐藏底部导航、没有可见返回控件；新增 MT_AP_03_log_pages_offer_a_back_action 验证引擎日志/撤销记录返回首页，待按导航可用性修复。
+  3. 原 A1～A5 阻塞已解决；首次真正执行的业务测试（Task 2～7）通过，布局修复与最终全仓/构建验证尚未完成，不能据此标 G8 完成。
+  4. 系统净化页无匹配档案时显示「暂无可用方案」；真实档案 verified=false，仍待实机核实。本轮仅用测试档案验证，不触碰设备。
+  5. 向导图示是通用矢量图，未按 DI-21 的真实 ColorOS 路径绘制，待真机核实后替换。DI-52/DI-61 等设备关卡不在本次无人值守授权范围。
 
 ## [merge] 状态: 待办 | 负责方: claude | 关卡: —
 

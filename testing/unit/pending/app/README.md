@@ -1,3 +1,5 @@
+> 2026-10-02 更新：A1～A5 已在 chan/app 修复并同步至 app/src/test；夹具使用真实内存 Room 和真实仓库，native graphics 测量中文，启动测试执行真实 MainActivity。增加 MT-AP-03 日志返回导航回归，当前 35 个 @Test（含排除的 UT-AP-1-04）。执行结果与未决项以 docs/PROGRESS.md [app] 为准。以下接口假设与静态检查记录保留为原暂存测试的历史说明。
+
 # app 暂存测试
 
 本目录尚未加入任何 Gradle 源集。覆盖 `testing/unit/PLAN.md`「Task AP」全部 **30/30** 编号：25 个 UT、5 个 MT，共 **34 个 `@Test` 函数**。UT-AP-1-04 只在 G8 执行。没有产品代码、同名产品替身、空测试、`@Ignore` 或 `Assume`。

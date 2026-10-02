@@ -7,6 +7,8 @@ import com.sentinel.app.onboarding.OnboardingViewModel
 import com.sentinel.app.onboarding.SetupChecker
 import org.robolectric.RuntimeEnvironment
 import com.sentinel.data.apps.AppRegistry
+import com.sentinel.guard.runtime.GuardRunner
+import com.sentinel.guard.runtime.GuardNotifier
 import com.sentinel.data.module.ModuleEntry
 import com.sentinel.data.module.ProcessKind
 import java.io.ByteArrayInputStream
@@ -33,6 +35,13 @@ class EntryClassLoader(private vararg val types: Class<out ModuleEntry>) : Class
         return Collections.enumeration(listOf(url))
     }
 }
+
+fun FakeData.guardRunner() = GuardRunner(signals, events, overrides, apps,
+    object : GuardNotifier {
+        override fun notifyDisabled(pkg: String, label: String, ruleIds: List<String>, reason: String) = Unit
+        override fun notifyNoRule(pkg: String, label: String, reason: String) = Unit
+        override fun notifyObservationExtended(pkg: String, label: String) = Unit
+    })
 
 object EntryStarts {
     val started = mutableListOf<String>()
@@ -80,6 +89,7 @@ class HealthyEntry : ModuleEntry {
             RuntimeEnvironment.getApplication().getSharedPreferences("sentinel", Context.MODE_PRIVATE)
         }
         single<SetupChecker> { FakeSetupChecker() }
+        single { EntryStarts.data.guardRunner() }
         factory {
             val d = EntryStarts.data
             HomeViewModel(d.global, d.events, d.statuses, d.overrides, d.apps, d.clock,

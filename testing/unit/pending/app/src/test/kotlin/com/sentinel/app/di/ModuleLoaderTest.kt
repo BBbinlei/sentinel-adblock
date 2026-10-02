@@ -10,7 +10,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import org.robolectric.util.ReflectionHelpers
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class, sdk = [35])
@@ -42,7 +44,12 @@ class ModuleLoaderTest : AppTest() {
         try {
             thread.contextClassLoader = loader
             // Runs the real production startup loop, not a test copy of it.
-            val app = Robolectric.buildApplication(SentinelApp::class.java).create().get()
+            val app = SentinelApp().also { instance ->
+                // Robolectric 4.17 has no buildApplication(); attach the real Application to the test context and run its onCreate.
+                ReflectionHelpers.callInstanceMethod<Any>(instance, "attach",
+                    ReflectionHelpers.ClassParameter.from(Context::class.java, RuntimeEnvironment.getApplication()))
+                instance.onCreate()
+            }
             assertEquals(listOf("failing", "healthy"), EntryStarts.started)
             app.getSharedPreferences("sentinel", Context.MODE_PRIVATE).edit()
                 .putBoolean("onboarding_done", true).commit()

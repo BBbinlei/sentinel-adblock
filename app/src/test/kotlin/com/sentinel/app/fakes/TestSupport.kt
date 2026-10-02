@@ -34,7 +34,7 @@ abstract class AppTest {
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { state.collect {} }
         runCurrent()
     }
-    @After fun cleanUp() { viewModels.clear(); stopKoin() }
+    @After fun cleanUp() { viewModels.clear(); stopKoin(); data.close() }
 }
 
 /** Prevent production Application/module startup in tests other than startup-isolation. */

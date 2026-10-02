@@ -53,6 +53,7 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
     testImplementation(libs.robolectric)
+    testImplementation(libs.room.runtime)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.mockwebserver)
