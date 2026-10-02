@@ -33,7 +33,7 @@
 - 下一步：G2 已通过：data 46/46、./gradlew test 全量 81/81、check-merge.sh data 全部通过；报告 testing/reports/G2-2026-10-02.md。等待合并通道确认并登记 g2-frozen，再放行后续引擎开发。
 - 已知问题：GKD 官方 README 标明规则暂时停止维护（2026-10-02 核对）；保留计划指定的官方订阅，离线内置规则仍可用，不阻塞 G2。
 
-## [engine-vpn] 状态: 完成 | 负责方: codex | 关卡: G3
+## [engine-vpn] 状态: 已合并 | 负责方: claude | 关卡: G3
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -74,7 +74,7 @@
 - 接手说明：由 Claude 接手（Codex 额度耗尽）；Task 5 的 Codex 未提交半成品已核对并完成，worktree 以 local.properties（gitignore）指向 SDK。
 - Task 7 测试最小修正：VpnFailSafeTest、VpnModuleTest 缺 runCurrent 扩展 import，已补，不改断言。
 
-## [engine-system] 状态: 进行中 | 负责方: codex | 关卡: G5
+## [engine-system] 状态: 进行中 | 负责方: claude | 关卡: G5
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -138,7 +138,7 @@
   - 实机核实报告尚不存在，保留 PLAN 六个内置包名，等用户真机核对。学习通知已声明 POST_NOTIFICATIONS；Android 13+ 运行时授权需由 app 引导完成并在真机核验。
   - 用户给出的基线命令含另一项目的绝对路径及拼写错误，按目标执行 :engine-notify:assembleDebug。SDK 以 ANDROID_HOME=/opt/homebrew/share/android-commandlinetools 指定，未写 local.properties 或修改冻结配置。
 
-## [engine-a11y] 状态: 进行中 | 负责方: codex | 关卡: G4
+## [engine-a11y] 状态: 已合并 | 负责方: claude | 关卡: G4
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
@@ -168,7 +168,7 @@
   - R11 待补测试：由测试模块覆盖目标节点及祖先 ACTION_CLICK 全失败后不调用 dispatchGesture、切换到银行/OFF App 后旧节点失败不触发全局点击、正常节点/祖先点击仍执行。本次按用户 R11 指令覆盖原 PLAN Task 8 的坐标后备行为，代价是无法 ACTION_CLICK 的节点不再自动点击；敏感 App 切换场景待真机。
   - R12 待补测试：由测试模块覆盖 addException 写库失败仍发 USER_UNDO/打开目标、信号失败仍恢复、恢复失败不影响前两步、写库前已生效的源/目标临时例外、超过缓存 TTL 或刷新为 false 后临时例外仍有效、其他源/目标不受影响、进程重启后失败例外消失。临时例外仅存在单例 A11yRuntime 内存中，写库失败后仅本进程有效；后台恢复目标 App 能力待真机。
 
-## [guard] 状态: 已合并 | 负责方: codex | 关卡: G7
+## [guard] 状态: 已合并 | 负责方: claude | 关卡: G7
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
