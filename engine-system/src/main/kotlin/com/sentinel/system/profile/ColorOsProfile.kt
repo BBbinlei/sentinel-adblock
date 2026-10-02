@@ -12,4 +12,5 @@ import kotlinx.serialization.Serializable
 )
 @Serializable data class ColorOsProfile(
     val romPrefix: String, val backgroundPopupOp: String? = null, val ops: List<ProfileOp>,
+    val verifiedAppOps: Set<String> = emptySet(),
 )

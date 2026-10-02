@@ -39,35 +39,41 @@ class AppOpsSync(
     }
 
     suspend fun syncOnce(): Int = mutex.withLock {
+        val requested = linkedSetOf<String>()
         val desired = linkedMapOf<String, ProfileOp>()
+        val verified = profile?.verifiedAppOps.orEmpty()
+        fun request(pkg: String, name: String, mode: String) {
+            val id = "appop:$name:$pkg"
+            requested += id
+            if (name in verified) desired[id] = appOp(pkg, name, mode)
+        }
         for (cfg in configs.observeAll().first()) {
             if (!cfg.pkg.matches(Regex("[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+"))) continue
             val effective = configs.effective(cfg.pkg)
             if (effective.level == ProtectLevel.OFF) continue
             if (effective.limitOverlay) {
-                val op = appOp(cfg.pkg, "SYSTEM_ALERT_WINDOW", "deny")
-                desired[op.id] = op
+                request(cfg.pkg, "SYSTEM_ALERT_WINDOW", "deny")
                 profile?.backgroundPopupOp?.takeIf { it.matches(Regex("[A-Za-z0-9_.]+")) }?.let {
-                    val popup = appOp(cfg.pkg, it, "ignore")
-                    desired[popup.id] = popup
+                    request(cfg.pkg, it, "ignore")
                 }
             }
             if (effective.denyClipboard) {
-                val op = appOp(cfg.pkg, "READ_CLIPBOARD", "ignore")
-                desired[op.id] = op
+                request(cfg.pkg, "READ_CLIPBOARD", "ignore")
             }
         }
         val active = log.observeAll().first().filter { it.success && !it.undone && it.opId.startsWith("appop:") }
-        val restore = active.filter { it.opId !in desired }
+        val restore = active.filter { it.opId !in requested }
         val apply = desired.filter { (id, op) -> active.none { it.opId == id && it.command == op.apply } }
+        val unverified = requested.count { it !in desired }
         if (shizukuState.value != ShizukuState.READY) {
-            pending.value = apply.size + restore.map { it.opId }.distinct().size
+            pending.value = unverified + apply.size + restore.map { it.opId }.distinct().size
             return@withLock 0
         }
         var changed = 0
-        var remaining = 0
+        var remaining = unverified
         for (entry in restore.sortedByDescending { it.id }) {
-            if (shizukuState.value != ShizukuState.READY || !executor.undo(entry.id)) remaining++ else changed++
+            if (entry.opId.split(':').getOrNull(1) !in verified ||
+                shizukuState.value != ShizukuState.READY || !executor.undo(entry.id)) remaining++ else changed++
         }
         for ((_, op) in apply) {
             if (shizukuState.value != ShizukuState.READY) { remaining++; continue }
@@ -83,7 +89,7 @@ class AppOpsSync(
 
     private fun appOp(pkg: String, op: String, mode: String) = ProfileOp(
         id = "appop:$op:$pkg", trick = if (op == "READ_CLIPBOARD") 23 else 20,
-        title = "$pkg $op", kind = OpKind.APPOP, verified = true,
+        title = "$pkg $op", kind = OpKind.APPOP, verified = op in profile?.verifiedAppOps.orEmpty(),
         apply = "appops set $pkg $op $mode", revert = "appops set $pkg $op {before}",
         probe = "appops get $pkg $op", appliedRegex = "(?m)^${Regex.escape(op)}:\\s*$mode(?:[;\\s]|$)",
     )
