@@ -155,10 +155,11 @@
 | Task 1: 决策策略 | 完成（UT-GD-1-01～10 通过） | feat(guard): decision policy |
 | Task 2: 运行时执行、通知与观察期评估 | 完成（UT-GD-2-01～06、MT-GD-01～02 通过） | feat(guard): runtime runner, notifications and observation check |
 | R14: 按本轮起点评估观察期 | 已修 | 本提交 |
+| 测试补全 E：R14 本轮信号与时间边界 | 完成（新增 5 项，23/23） | 本提交 |
 
-- 下一步：R14 已修并同步 PLAN；2026-10-02 本地验证完成：:guard:testDebugUnitTest 18/18、bash scripts/check-merge.sh guard 全部通过、./gradlew test 全量 249/249（失败/错误/跳过均 0）；等待修复分支合并与测试模块补用例，未 push。以下是既有 G7 接力问题（当前全量只含已落地测试，未搬入暂存契约测试）：guard 自身（Task 1–2、UT/MT-GD）已通过；G7 仍 `进行中`，因 MT-CT-01～04 实跑 4/4 未通过——生产代码未按 CT-A2 暴露快照（详见 `testing/reports/G7-2026-10-02.md` 第 3 节与适配补丁 `testing/reports/G7-contract-wiring-attempt.diff`）。需要用户/协调者裁定：(a) 授权在 engine-vpn/engine-notify/engine-a11y 暴露只读访问器（DecisionSource、NotifyState、EnabledServicesChecker 生产实现、快照预取），或 (b) 由测试模块负责人重写 `testing/unit/pending/contract` 夹具的快照获取方式；并裁定 CT-A7（OFF 过滤在 Brain 还是 SignalRepository）。裁定后按补丁搬入 `testing/rule-regression/src/test` 重跑 `./gradlew :testing:rule-regression:testDebugUnitTest --tests 'com.sentinel.regression.contract.*'`，全部通过再改 `完成`。
+- 下一步：本轮 E 部分 R14 测试补全完成，保留 chan/tests-vpn-guard 等协调者合并，不 push。2026-10-02 验证：./gradlew :engine-vpn:testDebugUnitTest :guard:testDebugUnitTest 为 58/58、23/23；bash scripts/check-merge.sh engine-vpn 与 guard 全部通过；./gradlew test 264/264（失败/错误/跳过均 0），git diff --check 通过。未发现新增生产缺陷，生产代码只读。G7 仍为进行中：暂存 MT-CT-01～04 的接线修复不在本轮授权的 E 部分范围，历史报告见 testing/reports/G7-2026-10-02.md；后续测试模块应按 docs/TEST_MODULE_REQUESTS.md B 部分已给出的裁定修正夹具并执行契约测试，再标完成。
 - 已知问题：(1) RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；(2) 通知依赖 app 申请 POST_NOTIFICATIONS；(3) guard 暂存测试未改，仅增加 testImplementation(libs.room.runtime)；(4) testing/rule-regression/build.gradle.kts 已按协调者授权增加 room.runtime、koin.android、koin.test、work.testing 的 testImplementation（无版本改动）；(5) MT-CT 适配（编译性）：TunFactory/TunHandle 导入、buildBroadcastReceiver 替换、手工构造 VpnController、A11yState/DecisionSource 绑定，仅在补丁中，未提交；(6) MT-CT 剩余阻塞见 G7 报告第 3 节（快照预取、NotifyState、EnabledServicesChecker 不可获取；CT-A7 歧义）。
-  - R14 待补测试：由测试模块覆盖第一轮起点等于 firstSeenAt、一个 USER_UNDO/TEMP_ALLOW 只触发一次延期且下一轮无新信号时结束、新一轮新增信号再延期、Worker 延迟执行后以实际延期时刻为起点、COUNTED 之外的信号不延期、起点毫秒边界。本次只按 observationEndsAt - EXTEND_MS 推导起点，未新增持久状态。
+  - R14 已补 R14-01～05：真实 Room 与 ObservationWorker，可控 Clock；USER_UNDO/TEMP_ALLOW 各自只延期一次，已处理信号仍留库但第二轮计数为 0；到期前 1ms 不结束、无新信号到期结束；第一轮起点等于 firstSeenAt，起点前 1ms 排除、等于起点计入；延迟执行从实际延期时刻开始，新轮同样验证毫秒边界与新信号再延期；其他 SignalKind 不延期。新增 5/5、guard 全量 23/23 均通过，无跳过或生产改动。
   - R13 未修（用户明确排除）：保留 GuardRunner.undo 的 remove→pin 行为及暂存 UT-AP-4-02 断言；非原子中断窗口仍由用户另行处理。
 
 ## [app] 状态: 待办 | 负责方: claude | 关卡: G3(Task 1–2) / G8
