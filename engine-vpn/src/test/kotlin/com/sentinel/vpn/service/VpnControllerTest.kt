@@ -1,5 +1,6 @@
 package com.sentinel.vpn.service
 
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runCurrent
 import com.sentinel.data.contract.RewardWindowContract
 import com.sentinel.data.db.*
@@ -31,6 +32,10 @@ class VpnControllerTest {
         start(); Wire.assertDnsAnswer(query(), Wire.query(), ByteArray(4))
         val before = data.global.get().ruleVersion; data.install(rule("newads.example.test")); test.runCurrent()
         assertTrue(data.global.get().ruleVersion > before)
+        // runCurrent does not wait for loadRules on real Dispatchers.IO.
+        withContext(Dispatchers.IO) { withTimeout(5000) {
+            while (decisionSource.matcher()?.lookup("newads.example.test") == null) yield()
+        } }
         assertContentEquals(Wire.answer(Wire.query()), query())
         Wire.assertDnsAnswer(query("newads.example.test"), Wire.query("newads.example.test"), ByteArray(4))
         assertEquals(1, factory.handles.size); assertFalse(factory.current.closed)
