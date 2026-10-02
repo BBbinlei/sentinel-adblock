@@ -5,6 +5,15 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
+import com.sentinel.app.ui.theme.SentinelTheme
 import com.sentinel.app.fakes.*
 import com.sentinel.app.ui.nav.Routes
 import com.sentinel.data.db.*
@@ -37,6 +46,22 @@ class LayoutRobustnessTest : ComposeAppTest() {
     @Test fun MT_AP_02_dark_mode_renders_home_detail_and_cleanup() {
         fixtures(); render(dark = true, largeFont = true)
         checkHomeDetailCleanup(::assertTextFits)
+    }
+
+    @Test fun MT_AP_02_fit_check_rejects_ellipsis() {
+        compose.setContent {
+            SentinelTheme {
+                Text("这段文字必须被省略", Modifier.width(30.dp), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        }
+        assertFailsWith<AssertionError> { assertTextFits("ellipsis detector") }
+    }
+
+    @Test fun MT_AP_02_fit_check_rejects_height_clipping() {
+        compose.setContent {
+            SentinelTheme { Text("这段文字必须被截断", Modifier.height(1.dp)) }
+        }
+        assertFailsWith<AssertionError> { assertTextFits("height detector") }
     }
 
     @Test fun MT_AP_05_every_click_target_is_at_least_48dp() {
@@ -104,8 +129,16 @@ class LayoutRobustnessTest : ComposeAppTest() {
             assertNotNull(action, "$label: no layout result for ${node.config}")
             compose.runOnIdle { assertTrue(action(layouts)) }
             assertTrue(layouts.isNotEmpty(), "$label: text measurement missing")
-            layouts.forEach { result ->
-                assertFalse(result.hasVisualOverflow, "$label: clipped text: ${result.layoutInput.text}; size=${result.size}, constraints=${result.layoutInput.constraints}, bounds=${node.boundsInRoot}, lines=${result.lineCount}")
+            layouts.forEach { reported ->
+                // Compose 1.12's plain-string semantics rebuilds MultiParagraph at maxWidth,
+                // but retains the narrower rendered size. Measure in that actual box so
+                // hasVisualOverflow describes glyph clipping, not unused paragraph width.
+                val input = reported.layoutInput
+                val result = TextMeasurer(input.fontFamilyResolver, input.density, input.layoutDirection)
+                    .measure(text = input.text, style = input.style, overflow = input.overflow,
+                        softWrap = input.softWrap, maxLines = input.maxLines, placeholders = input.placeholders,
+                        constraints = Constraints.fixed(reported.size.width, reported.size.height))
+                assertFalse(result.hasVisualOverflow, "$label: clipped text: ${result.layoutInput.text}")
                 if (node.layoutInfo.isPlaced && node.boundsInRoot.width > 0 && node.boundsInRoot.height > 0) {
                     assertTrue(result.size.width <= node.boundsInRoot.width + 1f,
                         "$label: text clipped horizontally by its parent: ${result.layoutInput.text}")
