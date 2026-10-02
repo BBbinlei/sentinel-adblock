@@ -28,6 +28,7 @@
 - **引擎只发信号、不处置**；停用规则、通知、观察期延长只有 guard 做。引擎不得依赖 guard。
 - **每个 `SignalKind` 必须在 guard 的决策表里有明确处理**（包括「忽略」）。新增 `SignalKind` 必须同时改 guard 决策表和本表。
 - 信号只写 `pkg` 有效的 App；该 App 生效级别为 `OFF`（含排除名单）时不发。
+  **在哪一层过滤**：契约只约束最终结果——OFF 的 App 不会有任何信号行落库。过滤由 data 的 `SignalRepository.emit` 统一完成（先校验包名格式，再按 `EffectivePolicy` 判断生效级别），引擎**不要求**自己先过滤，也不得依赖「引擎已过滤」这个假设；测试验证契约时应断言「落库结果」，不要断言引擎对象是否返回了信号。
 - 发信号失败不得影响引擎主流程（吞掉异常、记日志）。
 
 常量：`SignalContract.EMITTERS: Map<SignalKind, EngineId?>`（`null` 表示由 data/app 层发出）。
