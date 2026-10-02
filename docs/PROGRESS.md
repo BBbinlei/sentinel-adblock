@@ -137,6 +137,7 @@
 | R10: 中断来源切断直接跳转 | 已修 | a68dff6 |
 | R11: 删除旧坐标后备点击 | 已修 | 56b1f0f |
 | R12: 撤销各步独立容错 | 已修 | 4638eea |
+| 测试 R08: 回归补全 | 完成（2/2） | 本提交 |
 | 测试 R09: 回归补全 | 完成（4/4） | 本提交 |
 | 测试 R10: 回归补全 | 完成（3/3） | 本提交 |
 
@@ -146,7 +147,7 @@
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
   - 设计取舍：激励关闭点击后保持静音至离开 App 或 3 秒收尾 tick；自动续费提醒每包 10 分钟去重；学习模式「窗口出现时间」按 Activity 变化/弹窗窗口记，内容变化不刷新。
   - MT-AY-03 暂存测试未覆盖执行器写例外/USER_UNDO（见暂存 README 待确认 5）。
-  - R08 待补测试：由测试模块覆盖回调返回后事件回收/复用、IO 排队时仍使用原包名、Activity 和 source 节点；本次仅把 source 读取移到回调内，不保留 AccessibilityEvent。Android 11/12 事件生命周期待真机。
+  - R08 测试补全（2026-10-02）：新增 2 项全部通过。真实回调先取 source、包名和 Activity；协程排队期间替换事件仍点击原页面节点并记录原包/规则；点击事件 recycle、source/文字替换后仍按原文字开奖励窗口，排队后不再访问事件。ServiceTestData 通过已有运行时 Room 建内存库；因可写边界不含 build.gradle，仅建库/SQL 接口使用反射，不改依赖。Android 11/12 真正系统事件回收仍待真机。
   - R09 测试补全（2026-10-02）：新增 4 项全部通过。showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException 被捕获，清理局部 current 和移除视图；失败后重试；close 前排队及 close 后新展示被拒绝；真实服务 onUnbind 关闭提示。窗口 token 撤销及 ColorOS 服务断开仍待真机。
   - R10 测试补全（2026-10-02）：新增 3 项全部通过。A→Home→B 不产生 Transition，B 的 fromLauncher/startedAt/启动计数重记；直接 A→B 仍产生 Transition 并回退；Home→A 重启计数与 copy 中断标记。真正桌面/最近任务/输入法事件顺序及其他 ignored 窗口仍待真机。
   - R11 待补测试：由测试模块覆盖目标节点及祖先 ACTION_CLICK 全失败后不调用 dispatchGesture、切换到银行/OFF App 后旧节点失败不触发全局点击、正常节点/祖先点击仍执行。本次按用户 R11 指令覆盖原 PLAN Task 8 的坐标后备行为，代价是无法 ACTION_CLICK 的节点不再自动点击；敏感 App 切换场景待真机。
@@ -155,6 +156,8 @@
 - 本轮测试任务 R10：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
 
 - 本轮测试任务 R09：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
+
+- 本轮测试任务 R08：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
 
 ## [guard] 状态: 进行中 | 负责方: codex | 关卡: G7
 
