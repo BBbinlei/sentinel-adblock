@@ -104,9 +104,10 @@
 | R08: 回调内提取事件数据 | 已修 | 37b3cd5 |
 | R09: 悬浮窗异常与退出保护 | 已修 | 052f3a7 |
 | R10: 中断来源切断直接跳转 | 已修 | a68dff6 |
-| R11: 删除旧坐标后备点击 | 已修 | 本提交 |
+| R11: 删除旧坐标后备点击 | 已修 | 56b1f0f |
+| R12: 撤销各步独立容错 | 已修 | 本提交 |
 
-- 下一步：继续 R12 修复；基线 :engine-a11y:testDebugUnitTest、:guard:testDebugUnitTest 均通过。原接力事项：等用户真机：DI-05、DI-21～25，用 SnapshotDumper 录制快照后补 RR-02/RR-03；G4 非真机部分已通过，见 testing/reports/G4-*.md。
+- 下一步：R08～R12 实现完成，待最终模块测试、check-merge 与全量 test；基线 :engine-a11y:testDebugUnitTest、:guard:testDebugUnitTest 均通过。原接力事项：等用户真机：DI-05、DI-21～25，用 SnapshotDumper 录制快照后补 RR-02/RR-03；G4 非真机部分已通过，见 testing/reports/G4-*.md。
 - 已知问题：
   - 暂存测试对 `EffectiveConfig` 的包名假设（`com.sentinel.data.policy`）与 data 实际不符，实际在 `com.sentinel.data.db`。编译性修正：所有拷入的测试文件把 import 改为 `com.sentinel.data.db.EffectiveConfig`（断言未改）。
   - 暂存 TestSupport.kt 引用 Task 5/7 才存在的类型（VolumePort、KeyValueStore、A11yState）。Task 1–4 期间拷入的是截去 FakeVolume/MemoryStore/FakeA11yState 的版本，Task 5/7 补回，最终版与暂存版仅有上述 import 差异。
@@ -117,6 +118,7 @@
   - R09 待补测试：由测试模块覆盖 showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException、部分添加失败后的移除与 current 清理、close 前后排队/新展示不执行、重复退出和展示失败后重试；本次异常保护位于 Runnable 内，shutdown 永久关闭 OverlayToast。窗口 token 撤销及 ColorOS 服务断开待真机。
   - R10 待补测试：由测试模块覆盖 A→Home→B 不返回 Transition/不回退、A→Home→A 重新记录 fromLauncher/startedAt/启动计数、A→SystemUI/IME→B 不回退、copy 保留中断标记、桌面反复启动仍上报冷启动循环、直接 A→广告 App 仍回退。保留 UT_AY_1_03 与 UT_AY_6_19 的输入法前台/launch 断言；保守处理所有 ignored 窗口，输入法消失后同包继续使用也保留中断标记至下次实际启动，可能漏拦一次跨包跳转。真实桌面/最近任务/输入法事件顺序待真机。
   - R11 待补测试：由测试模块覆盖目标节点及祖先 ACTION_CLICK 全失败后不调用 dispatchGesture、切换到银行/OFF App 后旧节点失败不触发全局点击、正常节点/祖先点击仍执行。本次按用户 R11 指令覆盖原 PLAN Task 8 的坐标后备行为，代价是无法 ACTION_CLICK 的节点不再自动点击；敏感 App 切换场景待真机。
+  - R12 待补测试：由测试模块覆盖 addException 写库失败仍发 USER_UNDO/打开目标、信号失败仍恢复、恢复失败不影响前两步、写库前已生效的源/目标临时例外、超过缓存 TTL 或刷新为 false 后临时例外仍有效、其他源/目标不受影响、进程重启后失败例外消失。临时例外仅存在单例 A11yRuntime 内存中，写库失败后仅本进程有效；后台恢复目标 App 能力待真机。
 
 ## [guard] 状态: 进行中 | 负责方: claude | 关卡: G7
 
