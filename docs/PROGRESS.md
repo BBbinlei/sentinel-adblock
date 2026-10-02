@@ -45,13 +45,17 @@
 | Task 6: 私人 DNS 检测与服务守护 | 完成（UT 3/3） | 本提交 |
 | Task 7: 故障安全 | 完成（UT 5/5） | 本提交 |
 | R01（Task 3/5）: DNS 上游连续传输失败退出 | 已修，48/48 通过 | 867bd0b |
+| R01 离线补修（Task 5/6）: 底层网络可用时才累计失败，恢复清零 | 已修，48/48 通过；待真机；未做停后自动重启 | 本提交 |
 | R02（Task 5/7）: 销毁先同步关闭 TUN，异步写库 | 已修，48/48 通过 | c6dfbb4 |
 | R05（Task 5）: 禁用不兼容的 always-on | 已修，48/48 通过 | 215a842 |
 | R06（Task 4/5）: 阻塞 TUN 与描述符关闭 | 已修，48/48 通过；待真机 | 9a21a00 |
 | R15（Task 6）: 持久保存曾经运行的守护意图 | 已修，48/48 通过 | 本提交 |
 
-- 下一步：本次 R01/R02/R05/R06/R15 五项修复完成，留在 chan/fix-vpn 等合并，不 push；测试模块补下列回归用例，DI-01～03、DI-11～14、DI-51 及本次设备事项待真机。最终 :engine-vpn:testDebugUnitTest 48/48（失败/错误/跳过 0）、bash scripts/check-merge.sh engine-vpn 全部通过、./gradlew test BUILD SUCCESSFUL（249 项，失败/错误/跳过均 0）；本次报告只写本节，未越界写 testing/reports。
+- 下一步：R01 离线补修完成，留在 chan/fix-vpn-offline 等合并，不 push。2026-10-02 验证：基线及修改后 :engine-vpn:testDebugUnitTest 均 48/48（失败/错误/跳过 0），bash scripts/check-merge.sh engine-vpn 全部通过，./gradlew test BUILD SUCCESSFUL（XML 汇总 249 项，失败/错误/跳过 0）；静态核对回调集合、恢复清零与 STOPPED 首次原因保留路径，git diff --check 通过，测试/暂存测试及冻结项零改动。已有五项修复保留，测试模块补下列回归用例，DI-01～03、DI-11～14、DI-51 及本次设备事项待真机；本次报告只写本节，未越界写 testing/reports。
 - 已知问题：
+  - R01 离线补修待补测试：由测试模块补状态未知/无网络/仅 VPN/无 INTERNET/未 VALIDATED 时连续传输失败不累计、不关闭 TUN；有非 VPN 且 INTERNET+VALIDATED 时第三次失败关闭 TUN、保留 UPSTREAM_UNAVAILABLE 的 STOPPED 原因、停止服务；两次失败→断网期间多次失败→恢复后重新满三次才停止；重复可用通知不清零，成功应答清零，缓存不改变计数；Wi-Fi/蜂窝并存时一个丢失或撤销 VALIDATED 而另一个仍可用；回调初始通知、登记失败按未知处理、销毁注销且不遗留回调。现有 UT-VP-5-*、UT-VP-7-*、MT-VP-* 断言已阅读；基线 48/48 通过，本次不新增/修改/删除任何测试或暂存测试。
+  - R01 离线补修自动重启未实现（按本轮指令允许的保守方案）：onUpstreamTransport→closeTun 将控制器永久 closed，stop→stopService→onDestroy 注销网络回调并取消 scope，batcher 也已关闭；服务停止后没有可接收恢复事件的存活观察者。安全重启须另行设计跨服务生命周期的观察与一次性重启标记，并处理 GlobalState.enabled=false、用户关闭、onRevoke 与恢复同时发生的竞争；本轮不保留已销毁服务的回调、不重新开启已关闭控制器、不增加持续存活组件。仅离线导致的 DNS 失败现在不会停 VPN，网络恢复继续使用原 TUN；真实在线上游故障仍退出，需要用户重新开启。
+  - R01 离线补修待真机：飞行模式/电梯断网/网络切换及 Wi-Fi 与蜂窝并存时，TUN 保留、恢复后解析与保护继续、上游确实连续不可用仍恢复直连；未执行设备验证。网络状态只由服务的非 VPN 网络回调传入纯 Boolean，控制器不引用 Android 网络类型，未知保守视为不可用。使用独立底层网络回调保留已有默认网络私人 DNS 检测语义，按 [Android NetworkCallback 文档](https://developer.android.com/reference/android/net/ConnectivityManager.NetworkCallback) 使用 onCapabilitiesChanged 参数而不在回调内同步查询；回调自动提供初始状态，以网络集合避免一个网络丢失覆盖另一个的可用状态。首次 STOPPED 原因原本已正确保存，无需改动文案或停止路径。
   - R15 待补测试：测试模块补 RUNNING→STOPPED 后仍提醒、RUNNING→DEGRADED 后仍为 wanted、重启 :vpn 后从 SharedPreferences 恢复、已有 STOPPED/DEGRADED 行的首次迁移、空状态/NOT_SETUP 从未开启不提醒、状态行删除或 NOT_SETUP 不抹去已保存历史、两个引擎标记互不影响、短暂 RUNNING 的持续订阅捕获；EnabledServicesChecker 接口未改，现有 48/48 通过。历史由 :vpn 独占本地持久保存，跨进程输入仍仅 Room；按 C4 将既有 STOPPED/DEGRADED 作为运行历史证据（保守迁移），标记只增不删，不推断用户永久关闭意图。磁盘写入失败仅日志提醒，持久性/真实关闭后通知待真机。
   - 范围确认：只改 engine-vpn 生产代码/PLAN 与本节；所有测试（含暂存）、data/core-rules/app/依赖版本/模块列表零改动。R07 按指令未修，需要真实转发路径，仍由用户另行处理。
   - R06 待补测试/待真机：测试模块补设备用例：空闲 TUN 无空转、空闲阻塞读时 stop/onRevoke/onDestroy/重建能解除读等待且循环结束，反复启停无线程/描述符残留；JVM 现有 UT-VP-4-07 与退出路径通过，只能验证假阻塞流，不能验证 Android TUN。Builder 已 setBlocking(true)，AutoCloseInputStream/AutoCloseOutputStream 共享同一个 PFD，close 幂等关闭 PFD 后关闭流；静态核对 Android AutoClose→ParcelFileDescriptor.close→IoUtils.close→IoBridge.closeAndSignalBlockedThreads 的唤醒路径（[AOSP PFD](https://android.googlesource.com/platform/frameworks/base/+/5301928/core/java/android/os/ParcelFileDescriptor.java)、[AOSP IoUtils](https://android.googlesource.com/platform/prebuilts/fullsdk/sources/+/refs/heads/androidx-constraintlayout-release/android-35/libcore/io/IoUtils.java)、[AOSP IoBridge](https://android.googlesource.com/platform/prebuilts/fullsdk/sources/+/refs/heads/androidx-media-release/android-34/libcore/io/IoBridge.java)）；未运行真机，不能宣称实际解除读等待已验证。

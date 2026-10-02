@@ -8,6 +8,8 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.provider.Settings
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
@@ -62,6 +64,7 @@ class SentinelVpnService : VpnService() {
     }
 
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
+    private var underlyingNetworkCallback: ConnectivityManager.NetworkCallback? = null
 
     private class SettingsChecker(private val context: Context, private val history: SharedPreferences) : EnabledServicesChecker {
         fun remember(states: Map<EngineId, EngineStatusEntity>) {
@@ -84,6 +87,26 @@ class SentinelVpnService : VpnService() {
 
     private fun startHealth(koin: Koin, c: VpnController) {
         val manager = getSystemService(ConnectivityManager::class.java)
+        // 默认网络可能是本 VPN；单独监听底层网络，不能把 VPN 自身算作联网证据。
+        val underlying = object : ConnectivityManager.NetworkCallback() {
+            private val validated = mutableSetOf<Network>()
+            override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
+                if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN) &&
+                    caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                    caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) validated.add(network)
+                else validated.remove(network)
+                c.onUnderlyingNetwork(validated.isNotEmpty())
+            }
+            override fun onLost(network: Network) {
+                validated.remove(network)
+                c.onUnderlyingNetwork(validated.isNotEmpty())
+            }
+        }
+        val request = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+        try { manager.registerNetworkCallback(request, underlying); underlyingNetworkCallback = underlying }
+        catch (e: Exception) { Log.w("SentinelVpn", "底层网络回调登记失败，暂停累计上游失败", e) }
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onLinkPropertiesChanged(network: Network, lp: LinkProperties) {
                 val warning = PrivateDnsDetector.evaluate(lp.isPrivateDnsActive, lp.privateDnsServerName)
@@ -166,6 +189,7 @@ class SentinelVpnService : VpnService() {
         val wasActive = c?.closeTun("服务已停止") == true
         runCatching { watcher?.stop() }
         networkCallback?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }
+        underlyingNetworkCallback?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }
         scope.cancel()
         // 独立于已取消的服务 scope；不阻塞主线程，控制器保留首次停止原因。
         if (c != null && (wasActive || c.state.value.let { it == EngineState.RUNNING || it == EngineState.DEGRADED })) {
