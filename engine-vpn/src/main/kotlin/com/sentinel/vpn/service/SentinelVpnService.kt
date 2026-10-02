@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
@@ -18,13 +19,12 @@ import com.sentinel.data.repo.*
 import com.sentinel.data.rules.RuleStore
 import com.sentinel.data.db.EngineId
 import com.sentinel.data.db.EngineState
+import com.sentinel.data.db.EngineStatusEntity
 import com.sentinel.vpn.health.*
 import com.sentinel.vpn.dns.DohUdpResolver
 import com.sentinel.vpn.dns.DnsCache
 import com.sentinel.vpn.tun.ConnectionPackageResolver
 import com.sentinel.vpn.tun.TunSpec
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.net.InetSocketAddress
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -42,7 +42,7 @@ class SentinelVpnService : VpnService() {
 
     private inner class ServiceTunFactory : TunFactory {
         override fun establish(spec: TunSpec): TunHandle? {
-            val builder = Builder().setSession("哨兵").setMtu(spec.mtu)
+            val builder = Builder().setSession("哨兵").setMtu(spec.mtu).setBlocking(true)
             spec.addresses.forEach { (ip, prefix) -> builder.addAddress(ip, prefix) }
             spec.dnsServers.forEach { builder.addDnsServer(it) }
             spec.routes.forEach { (ip, prefix) -> builder.addRoute(ip, prefix) }
@@ -54,21 +54,32 @@ class SentinelVpnService : VpnService() {
         }
     }
 
-    private class PfdHandle(private val fd: ParcelFileDescriptor) : TunHandle {
-        override val input = FileInputStream(fd.fileDescriptor)
-        override val output = FileOutputStream(fd.fileDescriptor)
-        override fun close() { try { fd.close() } catch (_: Exception) { } }
+    private class PfdHandle(fd: ParcelFileDescriptor) : TunHandle {
+        override val input = ParcelFileDescriptor.AutoCloseInputStream(fd)
+        override val output = ParcelFileDescriptor.AutoCloseOutputStream(fd)
+        // AutoClose 关闭同一个 PFD；Android 的异步关闭会唤醒阻塞读，无重复描述符残留。
+        @Synchronized override fun close() { try { input.close() } finally { output.close() } }
     }
 
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
-    private class SettingsChecker(private val context: Context, private val wanted: Set<EngineId>) : EnabledServicesChecker {
+    private class SettingsChecker(private val context: Context, private val history: SharedPreferences) : EnabledServicesChecker {
+        fun remember(states: Map<EngineId, EngineStatusEntity>) {
+            // C4: STOPPED 表示曾经运行；兼容升级前已停止或已降级的引擎，标记只增不删。
+            val seen = states.filter { (id, status) ->
+                status.state != EngineState.NOT_SETUP && !history.getBoolean(id.name, false)
+            }.keys
+            if (seen.isEmpty()) return
+            val edit = history.edit()
+            seen.forEach { edit.putBoolean(it.name, true) }
+            if (!edit.commit()) Log.w("SentinelVpn", "服务运行历史保存失败")
+        }
         private fun listed(key: String) = Settings.Secure.getString(context.contentResolver, key)
             .orEmpty().split(':').any { it.startsWith(context.packageName + "/") }
         override fun accessibilityEnabled() = listed(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
         override fun notificationListenerEnabled() = listed("enabled_notification_listeners")
-        override fun userWantsA11y() = EngineId.A11Y in wanted
-        override fun userWantsNotify() = EngineId.NOTIFY in wanted
+        override fun userWantsA11y() = history.getBoolean(EngineId.A11Y.name, false)
+        override fun userWantsNotify() = history.getBoolean(EngineId.NOTIFY.name, false)
     }
 
     private fun startHealth(koin: Koin, c: VpnController) {
@@ -82,11 +93,17 @@ class SentinelVpnService : VpnService() {
         try { manager.registerDefaultNetworkCallback(callback); networkCallback = callback }
         catch (e: Exception) { Log.w("SentinelVpn", "网络回调登记失败", e) }
         val status = koin.get<EngineStatusRepository>()
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
+            // 仅由 :vpn 进程维护本地历史；跨进程状态仍从 Room 获取。
+            val checker = SettingsChecker(this@SentinelVpnService, getSharedPreferences("vpn_engine_history", MODE_PRIVATE))
+            launch {
+                try { status.observeAll().collect { checker.remember(it) } }
+                catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "服务运行历史订阅失败", e) }
+            }
             while (true) {
                 try {
-                    val wanted = status.observeAll().first().filterValues { it.state == EngineState.RUNNING }.keys
-                    ServiceWatchdog(SettingsChecker(this@SentinelVpnService, wanted), status, ::notifyLost).checkOnce()
+                    checker.remember(status.observeAll().first())
+                    ServiceWatchdog(checker, status, ::notifyLost).checkOnce()
                 } catch (e: Exception) { currentCoroutineContext().ensureActive(); Log.w("SentinelVpn", "守护检查失败", e) }
                 delay(5 * 60_000L)
             }
@@ -117,7 +134,8 @@ class SentinelVpnService : VpnService() {
     private fun begin(koin: Koin) {
         val clock = koin.get<Clock>()
         val resolver = DohUdpResolver("https://223.5.5.5/dns-query", InetSocketAddress("223.5.5.5", 53),
-            { protect(it) }, { protect(it) }, koin.get<DnsCache>())
+            { protect(it) }, { protect(it) }, koin.get<DnsCache>(),
+            { success -> controller?.onUpstreamTransport(success) })
         val c = VpnController(scope, ServiceTunFactory(), packageName, koin.get(), koin.get(), koin.get(), koin.get(),
             koin.get<RuleStore>(), koin.get(), koin.get(), koin.get(), resolver, ConnectionPackageResolver(this), clock,
             { scope.launch { stopSelf() } })
@@ -145,11 +163,14 @@ class SentinelVpnService : VpnService() {
     override fun onDestroy() {
         // 任何退出路径都先关闭 TUN。
         val c = controller; controller = null
+        val wasActive = c?.closeTun("服务已停止") == true
         runCatching { watcher?.stop() }
         networkCallback?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }
-        // 已因故障/撤销停止的不再覆盖其上报原因。
-        if (c != null && c.state.value.let { it == EngineState.RUNNING || it == EngineState.DEGRADED }) runBlocking { c.stop("服务已停止") }
         scope.cancel()
+        // 独立于已取消的服务 scope；不阻塞主线程，控制器保留首次停止原因。
+        if (c != null && (wasActive || c.state.value.let { it == EngineState.RUNNING || it == EngineState.DEGRADED })) {
+            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch { c.stop("服务已停止") }
+        }
         super.onDestroy()
     }
 }

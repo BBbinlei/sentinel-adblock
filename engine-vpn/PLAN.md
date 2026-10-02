@@ -17,6 +17,7 @@
 见 `MASTER_PLAN.md`。本模块固定值：
 - TUN 地址 `10.111.0.1/32`、`fd11:1::1/128`；虚拟 DNS `10.111.0.2`、`fd11:1::2`；MTU 1500；会话名「哨兵」。
 - 上游：DoH `https://223.5.5.5/dns-query`（POST `application/dns-message`，超时 3s）；失败回退 UDP `223.5.5.5:53`（超时 2s）；都失败返回 SERVFAIL。
+  修正（R01，服从 Global Constraints）：单次传输失败可返回 SERVFAIL；连续 3 次 DoH 与 UDP 都失败则关闭 TUN、上报带原因的 STOPPED 并停止服务；有效 DNS 错误应答不计为传输失败，缓存命中不改变上游传输计数。
 - DNS 缓存 2000 条，TTL 取应答中的最小 TTL，并夹在 [30s, 3600s]。
 - 拦截应答：A → `0.0.0.0`，AAAA → `::`，TTL 60；其他类型 → NOERROR 空应答。
 - 重试风暴：同一 (pkg, ruleId) 60 秒内 ≥10 次；触发后 10 分钟内不重复上报。
