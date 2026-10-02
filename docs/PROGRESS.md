@@ -175,9 +175,13 @@
 | Task 1: 决策策略 | 完成（UT-GD-1-01～10 通过） | feat(guard): decision policy |
 | Task 2: 运行时执行、通知与观察期评估 | 完成（UT-GD-2-01～06、MT-GD-01～02 通过） | feat(guard): runtime runner, notifications and observation check |
 | R14: 按本轮起点评估观察期 | 已修 | 本提交 |
+| Task CT（TEST_MODULE_REQUESTS B）: MT-CT-01～04 夹具修复并落地 | 完成（4/4；全量 253/253） | 本提交 |
 
-- 下一步：R14 已修并同步 PLAN；2026-10-02 本地验证完成：:guard:testDebugUnitTest 18/18、bash scripts/check-merge.sh guard 全部通过、./gradlew test 全量 249/249（失败/错误/跳过均 0）；等待修复分支合并与测试模块补用例，未 push。以下是既有 G7 接力问题（当前全量只含已落地测试，未搬入暂存契约测试）：guard 自身（Task 1–2、UT/MT-GD）已通过；G7 仍 `进行中`，因 MT-CT-01～04 实跑 4/4 未通过——生产代码未按 CT-A2 暴露快照（详见 `testing/reports/G7-2026-10-02.md` 第 3 节与适配补丁 `testing/reports/G7-contract-wiring-attempt.diff`）。需要用户/协调者裁定：(a) 授权在 engine-vpn/engine-notify/engine-a11y 暴露只读访问器（DecisionSource、NotifyState、EnabledServicesChecker 生产实现、快照预取），或 (b) 由测试模块负责人重写 `testing/unit/pending/contract` 夹具的快照获取方式；并裁定 CT-A7（OFF 过滤在 Brain 还是 SignalRepository）。裁定后按补丁搬入 `testing/rule-regression/src/test` 重跑 `./gradlew :testing:rule-regression:testDebugUnitTest --tests 'com.sentinel.regression.contract.*'`，全部通过再改 `完成`。
-- 已知问题：(1) RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；(2) 通知依赖 app 申请 POST_NOTIFICATIONS；(3) guard 暂存测试未改，仅增加 testImplementation(libs.room.runtime)；(4) testing/rule-regression/build.gradle.kts 已按协调者授权增加 room.runtime、koin.android、koin.test、work.testing 的 testImplementation（无版本改动）；(5) MT-CT 适配（编译性）：TunFactory/TunHandle 导入、buildBroadcastReceiver 替换、手工构造 VpnController、A11yState/DecisionSource 绑定，仅在补丁中，未提交；(6) MT-CT 剩余阻塞见 G7 报告第 3 节（快照预取、NotifyState、EnabledServicesChecker 不可获取；CT-A7 歧义）。
+- 下一步：本轮 Task CT 已完成，契约测试已迁入 testing/rule-regression 并同步 testing/unit/pending/contract；公开 prefetch、NotifyRuntime.engineFor、真实 ModuleEntry 热更新订阅、测试 checker 和 C2 落库断言替代旧接线假设。2026-10-02 验证：基线规则回归 8/8，契约专跑 4/4，最终 ./gradlew test 253/253（失败/错误/跳过均 0），git diff --check 通过；报告 testing/reports/G7-2026-10-02.md。一个相关改动组提交在 chan/ct，不 push，不改生产代码或依赖版本。[guard] 状态保持「进行中」，由用户确认关卡与放行；R14 专门回归及 R13 裁定仍由对应任务处理。
+- 已知问题：
+  - Task CT：本轮没有确认的生产缺陷，也没有因可见性无法完成的 B 项。旧 CT-A2/A3/A6 快照获取阻塞和 CT-A7 歧义均已解决。MT-CT-04 按授权自行实现公开 EnabledServicesChecker，不宣称测试 SentinelVpnService 私有 SettingsChecker 的 SharedPreferences 历史持久化；后者属于 R15 专门回归。
+  - 全量首次出现范围外偶发失败：engine-vpn 的 UT-VP-5-03，在 VpnControllerTest.kt:34 断言规则更新后旧域名转发，期望 A=1.2.3.4/TTL=120，实际旧快照仍拦截为 A=0.0.0.0/TTL=60。测试只 runCurrent()，生产重载在 Dispatchers.IO；独立 VpnControllerTest 复跑 6/6、随后完整 test 253/253。符合异步等待不足，尚不能确认生产缺陷；保守保留记录，engine-vpn 测试目录只读，本轮没有修改、跳过或放宽该断言。若再复现，由对应测试通道补重载完成同步。
+  - 既有项：RETRY_STORM 无 ruleId 时 PLAN 无分支，实现为 NoRuleFound；通知依赖 app 申请 POST_NOTIFICATIONS。
   - R14 待补测试：由测试模块覆盖第一轮起点等于 firstSeenAt、一个 USER_UNDO/TEMP_ALLOW 只触发一次延期且下一轮无新信号时结束、新一轮新增信号再延期、Worker 延迟执行后以实际延期时刻为起点、COUNTED 之外的信号不延期、起点毫秒边界。本次只按 observationEndsAt - EXTEND_MS 推导起点，未新增持久状态。
   - R13 未修（用户明确排除）：保留 GuardRunner.undo 的 remove→pin 行为及暂存 UT-AP-4-02 断言；非原子中断窗口仍由用户另行处理。
 
