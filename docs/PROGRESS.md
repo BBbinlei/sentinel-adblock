@@ -137,6 +137,7 @@
 | R10: 中断来源切断直接跳转 | 已修 | a68dff6 |
 | R11: 删除旧坐标后备点击 | 已修 | 56b1f0f |
 | R12: 撤销各步独立容错 | 已修 | 4638eea |
+| 测试 R09: 回归补全 | 完成（4/4） | 本提交 |
 | 测试 R10: 回归补全 | 完成（3/3） | 本提交 |
 
 - 下一步：本轮 R08～R12 已修，2026-10-02 本地验证完成：:engine-a11y:testDebugUnitTest 59/59、bash scripts/check-merge.sh engine-a11y 全部通过、./gradlew test 全量 249/249（失败/错误/跳过均 0）；等待修复分支合并与测试模块补用例，未 push。G4 真机部分未执行，通道保持进行中：DI-05、DI-21～25 待真机，录制真实快照后补 RR-02/RR-03；既有非真机关卡报告见 testing/reports/G4-*.md。
@@ -146,12 +147,14 @@
   - 设计取舍：激励关闭点击后保持静音至离开 App 或 3 秒收尾 tick；自动续费提醒每包 10 分钟去重；学习模式「窗口出现时间」按 Activity 变化/弹窗窗口记，内容变化不刷新。
   - MT-AY-03 暂存测试未覆盖执行器写例外/USER_UNDO（见暂存 README 待确认 5）。
   - R08 待补测试：由测试模块覆盖回调返回后事件回收/复用、IO 排队时仍使用原包名、Activity 和 source 节点；本次仅把 source 读取移到回调内，不保留 AccessibilityEvent。Android 11/12 事件生命周期待真机。
-  - R09 待补测试：由测试模块覆盖 showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException、部分添加失败后的移除与 current 清理、close 前后排队/新展示不执行、重复退出和展示失败后重试；本次异常保护位于 Runnable 内，shutdown 永久关闭 OverlayToast。窗口 token 撤销及 ColorOS 服务断开待真机。
+  - R09 测试补全（2026-10-02）：新增 4 项全部通过。showUndo/showRewardedAsk 的主线程 addView 抛 BadTokenException 被捕获，清理局部 current 和移除视图；失败后重试；close 前排队及 close 后新展示被拒绝；真实服务 onUnbind 关闭提示。窗口 token 撤销及 ColorOS 服务断开仍待真机。
   - R10 测试补全（2026-10-02）：新增 3 项全部通过。A→Home→B 不产生 Transition，B 的 fromLauncher/startedAt/启动计数重记；直接 A→B 仍产生 Transition 并回退；Home→A 重启计数与 copy 中断标记。真正桌面/最近任务/输入法事件顺序及其他 ignored 窗口仍待真机。
   - R11 待补测试：由测试模块覆盖目标节点及祖先 ACTION_CLICK 全失败后不调用 dispatchGesture、切换到银行/OFF App 后旧节点失败不触发全局点击、正常节点/祖先点击仍执行。本次按用户 R11 指令覆盖原 PLAN Task 8 的坐标后备行为，代价是无法 ACTION_CLICK 的节点不再自动点击；敏感 App 切换场景待真机。
   - R12 待补测试：由测试模块覆盖 addException 写库失败仍发 USER_UNDO/打开目标、信号失败仍恢复、恢复失败不影响前两步、写库前已生效的源/目标临时例外、超过缓存 TTL 或刷新为 false 后临时例外仍有效、其他源/目标不受影响、进程重启后失败例外消失。临时例外仅存在单例 A11yRuntime 内存中，写库失败后仅本进程有效；后台恢复目标 App 能力待真机。
 
 - 本轮测试任务 R10：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
+
+- 本轮测试任务 R09：仅新增测试及更新本节；生产代码、现有测试只读。新增用例通过，未暴露生产缺陷。下一步：其余授权测试及最终三组检查。
 
 ## [guard] 状态: 进行中 | 负责方: codex | 关卡: G7
 
