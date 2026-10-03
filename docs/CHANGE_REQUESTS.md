@@ -16,7 +16,7 @@
 
 证据来源：
 
-- `/Users/binlei/广告拦截软件/docs/SPLASH_NO_AD_DESIGN.md` 第 2 节与 A2：百度网盘 dex 中存在 `https://httpsdns.baidu.com/v6/0010/` 与硬编码 `180.76.76.76`，允许补服务 IP，需登记冻结目录的兼容新增。
+- `docs/SPLASH_NO_AD_DESIGN.md` 第 2 节与 A2：百度网盘 dex 中存在 `https://httpsdns.baidu.com/v6/0010/` 与硬编码 `180.76.76.76`，允许补服务 IP，需登记冻结目录的兼容新增。
 - APK 只读提取文件：`/private/tmp/claude-501/-Users-binlei-------/953adea0-24f5-4d8e-b26f-f3118c929464/scratchpad/apk/allstrings.txt`。`rg -n '180\.76\.76\.|httpsdns'` 显示第 3325 行为 `180.76.76.76`，第 97265、109637 行为百度 httpsdns v6 URL。
 - 同文件第 1651581 行：百度 TurboNet 配置的 `bdns` 对象启用 `baidu_dns_enabled`，且 `customize_http_dns_server_url_prefix` 明确为 `https://180.76.76.112/v2/0010`；第 1351065～1351067 行还有该 IP 的 `/v6/0010` 与 `/v6/0025` 服务 URL。因此 `.112` 也作为精确 /32 收录。
 - `180.76.76.200` 仅在第 361808 行以孤立字符串出现，没有明确的 HTTPDNS 服务关联，保守不加入；不把既有 `186.76.76.200/32` 改成此地址。
