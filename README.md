@@ -8,7 +8,7 @@
 
 <p align="center">
 <a href="https://github.com/BBbinlei/sentinel-adblock/releases/latest/download/sentinel-adblock.apk"><b>⬇ 下载 APK</b></a> ·
-<a href="https://bbbinlei.github.io/sentinel-adblock/">介绍网页</a> ·
+<a href="http://binlei.site/sentinel-adblock/">介绍网页</a> ·
 <a href="https://github.com/BBbinlei/sentinel-adblock/releases">所有版本</a>
 </p>
 
