@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>哨兵 · 不 root 的 Android 广告拦截</title>
+<meta name="description" content="哨兵：不需要 root 的 Android 广告拦截，网络、界面、通知、系统四层协同，开源免费。">
+<meta property="og:image" content="assets/banner.png">
+<style>
+:root{--bg:#f6fafc;--fg:#10222b;--mut:#4b616b;--card:#fff;--ac:#006688;--line:#d6e4ea}
+@media(prefers-color-scheme:dark){:root{--bg:#0a161c;--fg:#e8f3f7;--mut:#9ab3bd;--card:#112630;--ac:#4cc3e6;--line:#1e3a46}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 -apple-system,"PingFang SC","Helvetica Neue",sans-serif}
+.w{max-width:960px;margin:0 auto;padding:0 16px}
+.hero{background:linear-gradient(135deg,#04202c,#006688);color:#fff;padding:56px 0 48px}
+.hero .w{display:flex;gap:40px;align-items:center;flex-wrap:wrap}
+.hero h1{font-size:56px;margin:0;letter-spacing:4px}.hero p{font-size:20px;color:#cfeefa;margin:8px 0 24px}
+.btn{display:inline-block;background:#5fe3b0;color:#04202c;font-weight:700;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:18px}
+.btn.alt{background:transparent;color:#fff;border:1.5px solid #ffffff88;margin-left:8px}
+.hero img{width:240px;border-radius:28px;border:6px solid #0b1b22;box-shadow:0 16px 48px #0007}
+section{padding:36px 0}h2{font-size:26px;margin:0 0 16px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}.c b{color:var(--ac)}
+ol,ul{padding-left:1.3em}code{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 6px;word-break:break-all;font-size:13px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px}summary{cursor:pointer;font-weight:600}
+footer{padding:28px 0;color:var(--mut);font-size:14px;text-align:center}a{color:var(--ac)}
+</style></head><body>
+<header class="hero"><div class="w">
+<div style="flex:1;min-width:260px"><h1>哨兵</h1><p>不 root 的 Android 广告拦截<br>开源 · 免费 · 无账号 · 无云端</p>
+<a class="btn" href="https://github.com/BBbinlei/sentinel-adblock/releases/latest/download/sentinel-adblock.apk">⬇ 下载 APK（v0.1.0 · 29 MB）</a>
+<a class="btn alt" href="https://github.com/BBbinlei/sentinel-adblock">GitHub</a></div>
+<img src="assets/shot-home.png" alt="哨兵首页截图"></div></header>
+<main class="w">
+<section><h2>四层协同</h2><div class="g">
+<div class="c"><b>网络拦截</b><br>本机 VPN 按域名拦截广告 SDK，不解密 HTTPS。</div>
+<div class="c"><b>界面处理</b><br>无障碍自动跳过开屏、关弹窗、处理激励视频与跳转。</div>
+<div class="c"><b>通知过滤</b><br>过滤系统自带 App 的营销通知。</div>
+<div class="c"><b>系统净化</b><br>可选，借助 Shizuku 关闭 ColorOS 内置广告项，可撤销。</div></div></section>
+<section><h2>为什么放心用</h2><ul>
+<li>每个自动操作都有记录，可单项撤销；App 打不开可一键放行 24 小时。</li>
+<li>新装 App 先观察 3 天再拦截，降低误伤。</li>
+<li>任何故障只会让拦截变弱，不会让手机断网。</li></ul></section>
+<section><h2>安装步骤</h2><ol>
+<li>点击上方按钮下载并安装 APK（允许安装未知来源应用）。</li>
+<li>按首次启动向导授权：Shizuku（可选）→ VPN → 无障碍 → 通知使用权 → 电池不限制。</li>
+<li>建议开启「始终开启的 VPN」，不要开启「屏蔽未使用 VPN 的连接」；关闭「私人 DNS」。</li></ol>
+<p>SHA-256：<code>62e46c1f299d95c70f990e139aae88f6c1811b0096abeaced9d29ddd6cd2eb94</code></p></section>
+<section><h2>常见问题</h2>
+<details><summary>支持哪些手机？</summary>Android 11 及以上；目前只在 OPPO（ColorOS）实机验证，其他机型欢迎反馈。</details>
+<details><summary>需要 root 吗？</summary>不需要。系统净化功能可选用 Shizuku（无线调试激活）。</details>
+<details><summary>能拦截所有广告吗？</summary>不能保证。效果取决于 App 版本和系统，这是 v0.1.0 早期版本。</details>
+<details><summary>会收集我的数据吗？</summary>不会。无账号、无云端服务器，规则全部在本机处理，源码公开可查。</details></section>
+</main>
+<footer>GPL-3.0 · <a href="https://github.com/BBbinlei/sentinel-adblock">源码</a> · <a href="https://github.com/BBbinlei/sentinel-adblock/issues">反馈问题</a></footer>
+</body></html>
