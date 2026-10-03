@@ -257,3 +257,7 @@
 - Task 3 验证（2026-10-02）：python3 scripts/apk-ad-scan/tests/run_tests.py 退出 0，全部自测通过、没有跳过；git diff --check 通过。逐任务提交，仅写授权路径；PROGRESS 原有各通道内容未改；无遗留临时文件，无依赖版本或 Gradle 模块变更。
 - 下一步：本临时通道三项任务已完成，保留 chan/apk-ad-scan 和 本地 worktree wt-apkscan 供协调者合并；不 push，不自动装载规则。后续按设计另做真实流量/冷启动验证与 HTTPDNS 处理，不属于本通道。
 - 已知问题：静态字符串不证明实时请求或拦截效果；不扫描资源/native/动态拼接/split APK，不处理 HTTPDNS 或 pan.baidu.com 自营广告。公共 TLD 语法仍可能接受同形代码标识符（不会因此进入确认清单）；离线材料不足的三家 SDK 没有已核实专用域名。报告按本任务写入范围保存到 docs/device-survey/ad-domain-packs，不写 testing/reports。
+
+## 公开发布（2026-10-04）
+- 仓库：https://github.com/BBbinlei/sentinel-adblock（公开，GPL-3.0）；Release v0.1.0 附签名 APK；介绍页 http://binlei.site/sentinel-adblock/（Pages，源 main:/docs）。
+- 签名密钥在仓库外 ~/.sentinel-release/，后续版本必须用同一密钥才能覆盖升级。
