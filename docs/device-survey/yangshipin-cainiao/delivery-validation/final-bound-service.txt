@@ -1,0 +1,2 @@
+Bound services:{Service[label=哨兵界面拦截, feedbackType[FEEDBACK_GENERIC], capabilities=33, eventTypes=[TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED, TYPE_WINDOW_STATE_CHANGED, TYPE_WINDOW_CONTENT_CHANGED, TYPE_VIEW_SCROLLED], notificationTimeout=100, requestA11yBtn=false]}
+Enabled services:{{com.sentinel.adblock/com.sentinel.a11y.service.SentinelAccessibilityService}}

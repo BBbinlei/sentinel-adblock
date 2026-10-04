@@ -5,6 +5,7 @@ data class LaunchProfile(
     val id: String, val packageName: String, val label: String,
     val versionCode: Long, val versionName: String, val component: String,
     val uri: String?, val verified: Boolean, val scenario: String, val evidence: String,
+    val notice: String? = null,
 )
 data class InstalledTarget(val versionCode: Long, val versionName: String, val entryAvailable: Boolean)
 enum class LaunchStatus { VERIFIED, PENDING, UNSUPPORTED }

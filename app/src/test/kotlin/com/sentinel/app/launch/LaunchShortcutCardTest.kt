@@ -34,6 +34,13 @@ class LaunchShortcutCardTest {
         compose.onNodeWithText("当前版本不支持").assertIsDisplayed()
         compose.onNodeWithTag("launch:create").assertDoesNotExist()
     }
+    @Test fun yangshipinExplainsSplashAndPopupSeparately() {
+        val p = LaunchCatalog.policy.byId("yangshipin")!!
+        compose.setContent { LaunchShortcutContent(p, LaunchStatus.VERIFIED) }
+        compose.onNodeWithTag("launch:create").assertIsEnabled()
+        compose.onNodeWithTag("launch:notice").assertTextContains("首页弹窗仍可能短暂出现", substring = true)
+        compose.onNodeWithTag("launch:notice").assertTextContains("原央视频图标仍走普通启动", substring = true)
+    }
     @Test fun waitingRequestDoesNotShowAddedSuccess() {
         compose.setContent { LaunchShortcutContent(profile, LaunchStatus.VERIFIED, PinFeedback.REQUESTED, true) }
         compose.onNodeWithTag("launch:create").assertIsNotEnabled()

@@ -64,6 +64,7 @@ internal fun LaunchShortcutContent(profile: LaunchProfile, status: LaunchStatus,
                 LaunchStatus.UNSUPPORTED -> "目标应用未安装、版本不匹配或入口不可用，需要重新验证。已添加的快捷方式将尝试普通启动。"
             }, style = MaterialTheme.typography.bodySmall)
             if (status == LaunchStatus.VERIFIED) {
+                profile.notice?.let { Text(it, modifier = Modifier.testTag("launch:notice"), style = MaterialTheme.typography.bodySmall) }
                 Button(onClick = onCreate, enabled = !busy,
                     modifier = Modifier.fillMaxWidth().testTag("launch:create")) { Text("添加到桌面") }
             }
