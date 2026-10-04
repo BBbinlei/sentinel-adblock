@@ -1,0 +1,614 @@
+[
+  {
+    "app": "cainiao",
+    "pair": 1,
+    "kind": "normal",
+    "wall_time": "2026-10-04T11:29:56+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.cainiao.wireless/.homepage.view.activity.WelcomeActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cainiao.wireless/.homepage.view.activity.WelcomeActivity\nTotalTime: 1006\nWaitTime: 1011\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.24,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ec35fb2 u0 com.cainiao.wireless/.homepage.view.activity.WelcomeActivity t89231}"
+        ]
+      },
+      {
+        "elapsed": 1.77,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ec35fb2 u0 com.cainiao.wireless/.homepage.view.activity.WelcomeActivity t89231}"
+        ]
+      },
+      {
+        "elapsed": 2.42,
+        "activity": [
+          "mResumedActivity: ActivityRecord{b5a118d u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89231}"
+        ]
+      },
+      {
+        "elapsed": 5.33,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6533dd4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89231}"
+        ]
+      },
+      {
+        "elapsed": 6.3,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6533dd4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89231}"
+        ]
+      },
+      {
+        "elapsed": 8.64,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6533dd4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89231}"
+        ]
+      },
+      {
+        "elapsed": 12.57,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6533dd4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89231}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "cainiao",
+    "pair": 1,
+    "kind": "candidate",
+    "wall_time": "2026-10-04T11:31:08+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN flg=0x10200000 cmp=com.cainiao.wireless/.homepage.view.activity.HomePageActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cainiao.wireless/.homepage.view.activity.HomePageActivity\nTotalTime: 1165\nWaitTime: 1178\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.15,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      },
+      {
+        "elapsed": 2.14,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      },
+      {
+        "elapsed": 2.91,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      },
+      {
+        "elapsed": 3.61,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      },
+      {
+        "elapsed": 5.56,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      },
+      {
+        "elapsed": 8.6,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      },
+      {
+        "elapsed": 12.57,
+        "activity": [
+          "mResumedActivity: ActivityRecord{da01fa6 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89232}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "cainiao",
+    "pair": 2,
+    "kind": "normal",
+    "wall_time": "2026-10-04T11:32:21+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.cainiao.wireless/.homepage.view.activity.WelcomeActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cainiao.wireless/.homepage.view.activity.WelcomeActivity\nTotalTime: 925\nWaitTime: 929\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.62,
+        "activity": [
+          "mResumedActivity: ActivityRecord{4f20330 u0 com.cainiao.wireless/.homepage.view.activity.WelcomeActivity t89233}"
+        ]
+      },
+      {
+        "elapsed": 2.8,
+        "activity": [
+          "mResumedActivity: ActivityRecord{634b6dd u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89233}"
+        ]
+      },
+      {
+        "elapsed": 4.46,
+        "activity": [
+          "mResumedActivity: ActivityRecord{634b6dd u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89233}"
+        ]
+      },
+      {
+        "elapsed": 5.19,
+        "activity": [
+          "mResumedActivity: ActivityRecord{634b6dd u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89233}"
+        ]
+      },
+      {
+        "elapsed": 5.78,
+        "activity": [
+          "mResumedActivity: ActivityRecord{634b6dd u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89233}"
+        ]
+      },
+      {
+        "elapsed": 8.95,
+        "activity": [
+          "mResumedActivity: ActivityRecord{827c3fa u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89233}"
+        ]
+      },
+      {
+        "elapsed": 13.06,
+        "activity": [
+          "mResumedActivity: ActivityRecord{827c3fa u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89233}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "cainiao",
+    "pair": 2,
+    "kind": "candidate",
+    "wall_time": "2026-10-04T11:33:33+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN flg=0x10200000 cmp=com.cainiao.wireless/.homepage.view.activity.HomePageActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cainiao.wireless/.homepage.view.activity.HomePageActivity\nTotalTime: 1235\nWaitTime: 1238\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.29,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      },
+      {
+        "elapsed": 2.35,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      },
+      {
+        "elapsed": 2.97,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      },
+      {
+        "elapsed": 3.54,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      },
+      {
+        "elapsed": 5.57,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      },
+      {
+        "elapsed": 8.5,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      },
+      {
+        "elapsed": 12.52,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c9eea4b u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89234}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "cainiao",
+    "pair": 3,
+    "kind": "normal",
+    "wall_time": "2026-10-04T11:34:46+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.cainiao.wireless/.homepage.view.activity.WelcomeActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cainiao.wireless/.homepage.view.activity.WelcomeActivity\nTotalTime: 883\nWaitTime: 887\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.08,
+        "activity": [
+          "mResumedActivity: ActivityRecord{dc0336d u0 com.cainiao.wireless/.homepage.view.activity.WelcomeActivity t89235}"
+        ]
+      },
+      {
+        "elapsed": 1.54,
+        "activity": [
+          "mResumedActivity: ActivityRecord{dc0336d u0 com.cainiao.wireless/.homepage.view.activity.WelcomeActivity t89235}"
+        ]
+      },
+      {
+        "elapsed": 2.23,
+        "activity": [
+          "mResumedActivity: ActivityRecord{28c97d6 u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89235}"
+        ]
+      },
+      {
+        "elapsed": 3.51,
+        "activity": [
+          "mResumedActivity: ActivityRecord{28c97d6 u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89235}"
+        ]
+      },
+      {
+        "elapsed": 5.58,
+        "activity": [
+          "mResumedActivity: ActivityRecord{28c97d6 u0 com.cainiao.wireless/.homepage.view.activity.AdsActivity t89235}"
+        ]
+      },
+      {
+        "elapsed": 8.53,
+        "activity": [
+          "mResumedActivity: ActivityRecord{be46bb0 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89235}"
+        ]
+      },
+      {
+        "elapsed": 12.7,
+        "activity": [
+          "mResumedActivity: ActivityRecord{be46bb0 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89235}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "cainiao",
+    "pair": 3,
+    "kind": "candidate",
+    "wall_time": "2026-10-04T11:35:58+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN flg=0x10200000 cmp=com.cainiao.wireless/.homepage.view.activity.HomePageActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cainiao.wireless/.homepage.view.activity.HomePageActivity\nTotalTime: 1197\nWaitTime: 1201\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.36,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      },
+      {
+        "elapsed": 2.1,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      },
+      {
+        "elapsed": 2.77,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      },
+      {
+        "elapsed": 3.63,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      },
+      {
+        "elapsed": 5.61,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      },
+      {
+        "elapsed": 8.54,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      },
+      {
+        "elapsed": 12.57,
+        "activity": [
+          "mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "yangshipin",
+    "pair": 1,
+    "kind": "normal",
+    "wall_time": "2026-10-04T11:37:02+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.SplashActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity\nTotalTime: 1099\nWaitTime: 1106\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.49,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      },
+      {
+        "elapsed": 2.17,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      },
+      {
+        "elapsed": 5.8,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      },
+      {
+        "elapsed": 9.84,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      },
+      {
+        "elapsed": 12.76,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      },
+      {
+        "elapsed": 16.09,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      },
+      {
+        "elapsed": 20.88,
+        "activity": [
+          "mResumedActivity: ActivityRecord{9526c87 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89237}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "yangshipin",
+    "pair": 1,
+    "kind": "candidate",
+    "wall_time": "2026-10-04T11:38:07+0800",
+    "launch": "Starting: Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=cctvvideo://cctv.com/HomeActivity?from=third_h5 flg=0x10200000 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity\nWaitTime: 400\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.26,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      },
+      {
+        "elapsed": 1.65,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      },
+      {
+        "elapsed": 1.99,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      },
+      {
+        "elapsed": 4.05,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      },
+      {
+        "elapsed": 6.66,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      },
+      {
+        "elapsed": 9.46,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      },
+      {
+        "elapsed": 13.42,
+        "activity": [
+          "mResumedActivity: ActivityRecord{748317d u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89238}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "yangshipin",
+    "pair": 2,
+    "kind": "normal",
+    "wall_time": "2026-10-04T11:39:20+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.SplashActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity\nTotalTime: 933\nWaitTime: 937\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.32,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      },
+      {
+        "elapsed": 1.7,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      },
+      {
+        "elapsed": 2.75,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      },
+      {
+        "elapsed": 4.13,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      },
+      {
+        "elapsed": 6.73,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      },
+      {
+        "elapsed": 9.48,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      },
+      {
+        "elapsed": 13.56,
+        "activity": [
+          "mResumedActivity: ActivityRecord{59ff344 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89239}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "yangshipin",
+    "pair": 2,
+    "kind": "candidate",
+    "wall_time": "2026-10-04T11:40:32+0800",
+    "launch": "Starting: Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=cctvvideo://cctv.com/HomeActivity?from=third_h5 flg=0x10200000 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity\nWaitTime: 397\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.5,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      },
+      {
+        "elapsed": 1.91,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      },
+      {
+        "elapsed": 2.8,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      },
+      {
+        "elapsed": 4.05,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      },
+      {
+        "elapsed": 6.44,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      },
+      {
+        "elapsed": 9.3,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      },
+      {
+        "elapsed": 13.6,
+        "activity": [
+          "mResumedActivity: ActivityRecord{6d45424 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89240}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "yangshipin",
+    "pair": 3,
+    "kind": "normal",
+    "wall_time": "2026-10-04T11:41:45+0800",
+    "launch": "Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.SplashActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity\nTotalTime: 993\nWaitTime: 1009\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.66,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      },
+      {
+        "elapsed": 2.67,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      },
+      {
+        "elapsed": 3.8,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      },
+      {
+        "elapsed": 5.31,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      },
+      {
+        "elapsed": 7.08,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      },
+      {
+        "elapsed": 9.5,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      },
+      {
+        "elapsed": 13.6,
+        "activity": [
+          "mResumedActivity: ActivityRecord{ee83f9b u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89241}"
+        ]
+      }
+    ]
+  },
+  {
+    "app": "yangshipin",
+    "pair": 3,
+    "kind": "candidate",
+    "wall_time": "2026-10-04T11:43:02+0800",
+    "launch": "Starting: Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=cctvvideo://cctv.com/HomeActivity?from=third_h5 flg=0x10200000 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity\nWaitTime: 412\nComplete\n",
+    "samples": [
+      {
+        "elapsed": 1.62,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      },
+      {
+        "elapsed": 2.13,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      },
+      {
+        "elapsed": 3.08,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      },
+      {
+        "elapsed": 4.08,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      },
+      {
+        "elapsed": 6.63,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      },
+      {
+        "elapsed": 9.69,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      },
+      {
+        "elapsed": 13.67,
+        "activity": [
+          "mResumedActivity: ActivityRecord{c35f290 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89242}"
+        ]
+      }
+    ]
+  }
+]

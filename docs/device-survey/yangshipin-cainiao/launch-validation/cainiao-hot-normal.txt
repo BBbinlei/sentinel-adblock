@@ -1,0 +1,4 @@
+    mResumedActivity: ActivityRecord{74aeb1 u0 com.cainiao.wireless/.homepage.view.activity.WelcomeActivity t89236}
+    mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}
+    mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}
+    mResumedActivity: ActivityRecord{368b2d4 u0 com.cainiao.wireless/.homepage.view.activity.HomePageActivity t89236}

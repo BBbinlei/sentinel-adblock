@@ -281,3 +281,18 @@
 - 菜鸟 HomePageActivity 明确 exported=true，有 home_page 深链；WelcomeActivity 内有开屏请求，是直接进首页候选，但未验证 Application/父类/热启动是否再次触发广告。isHotLaunch 的 true 分支仍请求广告，不当作免广告参数。
 - 央视频 parseIntent 的 from=push_* / third_* 会设置 needHideADSplash，initSplash 的 true 分支隐藏开屏并进首页；HomeActivity 非导出，需追踪导出的 OpenActivity 能否转发所需 extra。SplashActivity 新 Intent 仅写 ImUrFather，不据此假设外部 extra 自动传递。
 - 修正用户前提：仓库百度网盘报告没有证实免开屏成功，冷启动缺对照、热启动 filterad 无效。下一步优先菜鸟候选对照验证、央视频路由追踪；未执行 DI/AC 或设置修改，尚无实机通过的方案。仅静态材料，无生产修改或新增测试需求；临时 APK/完整转储已清理，git diff --check 通过，不 push。
+
+## [launch-shortcuts] 状态: 进行中 | 负责方: Codex | 关卡: 用户授权实现与实机验证
+
+| Task | 状态 | 最后提交 |
+|---|---|---|
+| Task 1: 研究与冷/热启动对照 | 完成 | 本提交 |
+| Task 2: app 入口、快捷方式及首页弹窗控制 | 进行中 | — |
+| Task 3: 同签名 APK、覆盖安装与功能验证 | 待办 | — |
+
+- 授权：用户明确要求在 app 集成并实机验证；本次覆盖旧 app 角色边界和不得自主实机步骤，仍冻结 data/core-rules/引擎及依赖，不 push/不公开发布。在附加 worktree launch-shortcuts、codex/launch-shortcuts 开发。
+- 基线：先运行现有 :app:testDebugUnitTest，37 tests，失败/错误/跳过 0。
+- Task 1：菜鸟 475/8.11.923 三组普通启动都有商业广告，三组直接 HomePageActivity 均进入首页，未回欢迎/广告 Activity；冷启动通过。精确央视频 OpenActivity+from=third_h5 路由按代码追踪证实可转发 from，但三组候选仍出现首页广告弹窗，因此入口不开放。后台样本单独记录，不扩张承诺。报告 docs/device-survey/yangshipin-cainiao/launch-entry-validation.md。
+- 范围补充：用户要求一并处理央视频首页弹窗；将利用已有界面规则契约自动点实测关闭控件，这项依赖无障碍，与标准快捷启动分开。当前菜鸟快递列表为空，用户明确选择稍后自查物流详情。
+- 下一步：完成 app 的固定目录/版本与组件校验/失效回退/桌面请求与确认分离/界面按钮测试；再签名构建、验证手机真实快捷入口与首页弹窗关闭，完成回归。
+- 已知问题：测试进程曾因 locale 类路径编码报 ClassNotFound，UTF-8 环境重跑恢复执行；新快捷方式图标 fake 缺少模拟图标导致一例失败，正在修复并重跑，未跳过失败。央视频候选存在商业弹窗，不标成功。
