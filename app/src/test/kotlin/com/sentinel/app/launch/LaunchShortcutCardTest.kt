@@ -39,7 +39,7 @@ class LaunchShortcutCardTest {
         compose.setContent { LaunchShortcutContent(p, LaunchStatus.VERIFIED) }
         compose.onNodeWithTag("launch:create").assertIsEnabled()
         compose.onNodeWithTag("launch:notice").assertTextContains("首页弹窗仍可能短暂出现", substring = true)
-        compose.onNodeWithTag("launch:notice").assertTextContains("原央视频图标仍走普通启动", substring = true)
+        compose.onNodeWithTag("launch:notice").assertTextContains("Shizuku 自动转接", substring = true)
     }
     @Test fun waitingRequestDoesNotShowAddedSuccess() {
         compose.setContent { LaunchShortcutContent(profile, LaunchStatus.VERIFIED, PinFeedback.REQUESTED, true) }

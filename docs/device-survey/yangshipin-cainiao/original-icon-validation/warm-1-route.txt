@@ -1,0 +1,4 @@
+10-04 17:00:57.243  1707  2727 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 hwFlg=0x10 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.SplashActivity bnds=[34,1689][287,1987] (has extras)} from uid 10081
+10-04 17:00:57.247  1707  2727 I ActivityTaskManager: start activity: {com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.SplashActivity} result = 102
+10-04 17:00:57.359  1707  9745 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] flg=0x10200000 hwFlg=0x10 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity} from uid 2000
+10-04 17:00:57.371  1707  9745 I ActivityTaskManager: start activity: {com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.component.literoute.OpenActivity} result = 2

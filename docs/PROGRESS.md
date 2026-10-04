@@ -282,14 +282,14 @@
 - 央视频 parseIntent 的 from=push_* / third_* 会设置 needHideADSplash，initSplash 的 true 分支隐藏开屏并进首页；HomeActivity 非导出，需追踪导出的 OpenActivity 能否转发所需 extra。SplashActivity 新 Intent 仅写 ImUrFather，不据此假设外部 extra 自动传递。
 - 修正用户前提：仓库百度网盘报告没有证实免开屏成功，冷启动缺对照、热启动 filterad 无效。下一步优先菜鸟候选对照验证、央视频路由追踪；未执行 DI/AC 或设置修改，尚无实机通过的方案。仅静态材料，无生产修改或新增测试需求；临时 APK/完整转储已清理，git diff --check 通过，不 push。
 
-## [launch-shortcuts] 状态: 进行中 | 负责方: Codex | 关卡: 用户授权实现与实机验证
+## [launch-shortcuts] 状态: 完成 | 负责方: Codex | 关卡: 用户授权实现与实机验证
 
 | Task | 状态 | 最后提交 |
 |---|---|---|
 | Task 1: 研究与冷/热启动对照 | 完成 | b34efbf |
 | Task 2: app 入口、快捷方式及首页弹窗控制 | 完成 | 1ed126a |
 | Task 3: 同签名 APK、覆盖安装与功能验证 | 完成 | 本提交 |
-| Task 4: 原央视频桌面点击路径追加要求 | 待办 | — |
+| Task 4: 原央视频桌面点击路径追加要求 | 完成 | 本提交 |
 
 - 授权：用户明确要求在 app 集成并实机验证；本次覆盖旧 app 角色边界和不得自主实机步骤，仍冻结 data/core-rules/引擎及依赖，不 push/不公开发布。在附加 worktree launch-shortcuts、codex/launch-shortcuts 开发。
 - 基线：先运行现有 :app:testDebugUnitTest，37 tests，失败/错误/跳过 0。
@@ -316,3 +316,17 @@
 - 下一步：根据用户对桌面方案的选择处理 Task 4；若坚持原 launcher 组件自动改路，在当前不修改目标 APK/组件的边界下无法交付已验证方案，明确保留失败证据。
 
 - 收尾复核：13:05:48 快捷路径启动央视频后有新 POPUP_CLOSED，首页可操作；系统无障碍 Enabled/Bound 均存在，首页状态仍显示已停止，现有状态上报不一致未修复，冻结引擎未改。记录 final-bound-service.txt / latest-events.txt / final-home.txt。补充菜鸟对照正常与候选均无商业开屏，本轮只标待验证，不作为新成功证据。
+
+### [launch-shortcuts] Task 4 进行中：真正原图标转接
+
+- 用户坚持点真正的原图标；临时 shell IActivityController 在启动前拒绝原 SplashActivity，再启动固定 OpenActivity 深链。普通 MAIN/LAUNCHER 与真实原桌面图标都成功进入 HomeActivity，无全屏开屏；首页弹窗仍单独处理。此前“只能换图标”的结论撤回。
+- 仅 app 增加 Shizuku UserService，复用现有 13.1.5 依赖版本，精确 Android API 31 / 央视频 305030 与启动组件校验；未知应用、深链、内部启动及版本失配放行，不改目标 APK/组件或冻结引擎。新功能依赖 Shizuku 服务授权，服务死亡后普通启动，手机重启后需重启 Shizuku。
+- 本轮先跑已有 app 58 用例通过，再实现。初步 app 63 用例、assembleRelease 通过；补充权限/界面与服务协议验证后继续全项目测试和实机安装。当前 ADB 连接丢失，已请求恢复连接，未将离线测试当实机完成。
+
+### [launch-shortcuts] Task 4 完成
+
+- app 内实现固定版本/API31 原央视频图标转接；复用 Shizuku 13.1.5，不修改目标 APK/组件/数据或冻结模块。修复实机发现的 UserServiceArgs 缺少 processNameSuffix 的连接失败，追加序列化回归；am 错误即使退出0也触发回退。
+- 0.1.3 / code4 最终包同证书覆盖安装 Success，原设置保留。真实原图标三组 OFF/ON 对照、各启动间隔至少70秒：OFF全有商业全屏，ON取消Splash转固定Open，无全屏开屏；首页弹窗约数秒后自动关闭，POPUP_CLOSED证据与首页截图一致。直播/点播播放正常；原图标位置保留，转接当前开启。
+- app70 / 全项目373 全通过，失败/错误/跳过0；assembleRelease、check-merge app及签名核对通过。报告 testing/reports/original-icon-2026-10-04.md，最终两种签名APK在主目录deliverables/launch-shortcuts/。
+- 限制：新增转接需要 Shizuku，手机重启后需重新启动 Shizuku；只验证Huawei API31和央视频305030。首页弹窗仍可短暂出现；单次后台样本不扩张承诺；菜鸟物流详情按用户要求其自行补验。前述“当前边界无法原图标转接”的推断被新的启动前实测推翻。
+- 下一步：本功能完成。用户最新明确授权更新GitHub和下载链接，追加Task5发布通道；此授权覆盖先前不push/不Release/不网站发布的限制，不扩展代码范围。

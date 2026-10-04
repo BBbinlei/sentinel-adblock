@@ -1,0 +1,3 @@
+    mResumedActivity: ActivityRecord{5a822e5 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89316}
+  ResumedActivity: ActivityRecord{5a822e5 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89316}
+mLastResumedActivity=ActivityRecord{5a822e5 u0 com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity t89316}

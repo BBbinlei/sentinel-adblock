@@ -93,6 +93,7 @@ fun AppDetailScreen(pkg: String, modifier: Modifier = Modifier,
             }
         }
 
+        com.sentinel.app.launch.OriginalIconCard(pkg)
         com.sentinel.app.launch.LaunchShortcutCard(pkg)
         com.sentinel.app.launch.PopupControlCard(pkg)
 

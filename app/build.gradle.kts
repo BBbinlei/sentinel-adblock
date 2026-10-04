@@ -10,8 +10,8 @@ android {
     buildToolsVersion = libs.versions.build.tools.get()
     defaultConfig {
         applicationId = "com.sentinel.adblock"
-        versionCode = 3
-        versionName = "0.1.2"
+        versionCode = 4
+        versionName = "0.1.3"
         minSdk = 30
         targetSdk = 36
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.work.runtime)
     implementation(libs.coroutines.android)
+    implementation(libs.shizuku.api)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
     testImplementation(libs.robolectric)

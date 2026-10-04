@@ -29,6 +29,10 @@ class SentinelApp : Application() {
             try { koin.get<com.sentinel.app.launch.PopupRuleControl>().removeUnsupported(this@SentinelApp) }
             catch (e: Exception) { Log.w("SentinelApp", "首页弹窗规则版本检查失败", e) }
         }
+        if (process == ProcessKind.MAIN && getSharedPreferences("launch", MODE_PRIVATE)
+                .getBoolean("originalIconEnabled", false)) {
+            com.sentinel.app.launch.OriginalIconControl.get(this)
+        }
         // 每个模块自己创建通知渠道、启动协程、注册周期任务；单个入口失败不影响其他入口与界面
         entries.forEach { entry ->
             try {

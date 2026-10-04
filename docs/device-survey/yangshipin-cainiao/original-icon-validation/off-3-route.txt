@@ -1,0 +1,2 @@
+10-04 16:54:40.316  1707  2948 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 hwFlg=0x10 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.SplashActivity bnds=[34,1689][287,1987] (has extras)} from uid 10081
+10-04 16:54:40.681  1707  4066 I ActivityTaskManager: START u0 {hwFlg=0x10 cmp=com.cctv.yangshipin.app.androidp/com.tencent.videolite.android.ui.HomeActivity (has extras)} from uid 10408
