@@ -330,3 +330,13 @@
 - app70 / 全项目373 全通过，失败/错误/跳过0；assembleRelease、check-merge app及签名核对通过。报告 testing/reports/original-icon-2026-10-04.md，最终两种签名APK在主目录deliverables/launch-shortcuts/。
 - 限制：新增转接需要 Shizuku，手机重启后需重新启动 Shizuku；只验证Huawei API31和央视频305030。首页弹窗仍可短暂出现；单次后台样本不扩张承诺；菜鸟物流详情按用户要求其自行补验。前述“当前边界无法原图标转接”的推断被新的启动前实测推翻。
 - 下一步：本功能完成。用户最新明确授权更新GitHub和下载链接，追加Task5发布通道；此授权覆盖先前不push/不Release/不网站发布的限制，不扩展代码范围。
+
+## [release-0.1.3] 状态: 进行中 | 负责方: Codex | 关卡: 用户授权公开发布
+
+| Task | 状态 | 最后提交 |
+|---|---|---|
+| Task 5: GitHub更新、v0.1.3下载和介绍页更新 | 进行中 | 本提交 |
+
+- 用户2026-10-04最新明确要求从现在更新GitHub和新下载链接，覆盖本任务旧“不push/不Release/不网站发布”限制。发布正式签名包与当前开发签名安装兼容包，分别标注用途；不改既有签名密钥。
+- README与Pages下载页更新版本、校验值、原图标启用方式、Shizuku与无障碍的不同用途及已验证范围；APK不提交源码仓库，作为Release附件。
+- 下一步：推送main，发布v0.1.3，回读Release附件及Pages线上新链接。

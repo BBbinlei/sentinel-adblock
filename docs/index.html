@@ -24,7 +24,7 @@ footer{padding:28px 0;color:var(--mut);font-size:14px;text-align:center}a{color:
 </style></head><body>
 <header class="hero"><div class="w">
 <div style="flex:1;min-width:260px"><h1>哨兵</h1><p>不 root 的 Android 广告拦截<br>开源 · 免费 · 无账号 · 无云端</p>
-<a class="btn" href="https://github.com/BBbinlei/sentinel-adblock/releases/latest/download/sentinel-adblock.apk">⬇ 下载 APK（v0.1.0 · 29 MB）</a>
+<a class="btn" href="https://github.com/BBbinlei/sentinel-adblock/releases/download/v0.1.3/sentinel-adblock.apk">⬇ 下载 APK（v0.1.3 · 29 MB）</a>
 <a class="btn alt" href="https://github.com/BBbinlei/sentinel-adblock">GitHub</a></div>
 <img src="assets/shot-home.png" alt="哨兵首页截图"></div></header>
 <main class="w">
@@ -33,6 +33,11 @@ footer{padding:28px 0;color:var(--mut);font-size:14px;text-align:center}a{color:
 <div class="c"><b>界面处理</b><br>无障碍自动跳过开屏、关弹窗、处理激励视频与跳转。</div>
 <div class="c"><b>通知过滤</b><br>过滤系统自带 App 的营销通知。</div>
 <div class="c"><b>系统净化</b><br>可选，借助 Shizuku 关闭 ColorOS 内置广告项，可撤销。</div></div></section>
+<section><h2>v0.1.3 新增启动入口</h2><ul>
+<li>菜鸟 8.11.923、央视频 3.5.3.26910：应用详情页创建经验证的桌面快捷方式，版本不匹配时回退普通启动。</li>
+<li>央视频原图标自动转接：华为 Android 12 实测，在哨兵的央视频详情页启用，需要 Shizuku 运行并授权；手机重启后需重新启动 Shizuku。</li>
+<li>首页广告弹窗由无障碍自动关闭，可能短暂显示；不承诺移除所有广告或所有后台场景。</li></ul>
+<p>从原正式发布版升级，请使用上方正式签名 APK。若原来安装的是本项目开发签名版本，请下载 <a href="https://github.com/BBbinlei/sentinel-adblock/releases/download/v0.1.3/sentinel-0.1.3-phone-upgrade.apk">同开发签名升级包</a>，保留设置。</p></section>
 <section><h2>为什么放心用</h2><ul>
 <li>每个自动操作都有记录，可单项撤销；App 打不开可一键放行 24 小时。</li>
 <li>新装 App 先观察 3 天再拦截，降低误伤。</li>
@@ -41,11 +46,11 @@ footer{padding:28px 0;color:var(--mut);font-size:14px;text-align:center}a{color:
 <li>点击上方按钮下载并安装 APK（允许安装未知来源应用）。</li>
 <li>按首次启动向导授权：Shizuku（可选）→ VPN → 无障碍 → 通知使用权 → 电池不限制。</li>
 <li>建议开启「始终开启的 VPN」，不要开启「屏蔽未使用 VPN 的连接」；关闭「私人 DNS」。</li></ol>
-<p>SHA-256：<code>62e46c1f299d95c70f990e139aae88f6c1811b0096abeaced9d29ddd6cd2eb94</code></p></section>
+<p>SHA-256：<code>9ee476ea7c3d8e0388e1d9a44913c8b9d4b1cbf42a05d4e4d5540b7744e9dcbe</code></p></section>
 <section><h2>常见问题</h2>
-<details><summary>支持哪些手机？</summary>Android 11 及以上；目前只在 OPPO（ColorOS）实机验证，其他机型欢迎反馈。</details>
+<details><summary>支持哪些手机？</summary>Android 11 及以上；原有功能在 OPPO（ColorOS）验证；新版启动入口在华为 OCE_AN50 验证。央视频原图标转接首轮仅支持 Android 12 / API 31 和指定央视频版本。</details>
 <details><summary>需要 root 吗？</summary>不需要。系统净化功能可选用 Shizuku（无线调试激活）。</details>
-<details><summary>能拦截所有广告吗？</summary>不能保证。效果取决于 App 版本和系统，这是 v0.1.0 早期版本。</details>
+<details><summary>能拦截所有广告吗？</summary>不能保证。效果取决于 App 版本和系统，这是 v0.1.3 早期版本。</details>
 <details><summary>会收集我的数据吗？</summary>不会。无账号、无云端服务器，规则全部在本机处理，源码公开可查。</details></section>
 </main>
 <footer>GPL-3.0 · <a href="https://github.com/BBbinlei/sentinel-adblock">源码</a> · <a href="https://github.com/BBbinlei/sentinel-adblock/issues">反馈问题</a></footer>
