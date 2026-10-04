@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-04",
+  "device": "OCE_AN50",
+  "apps": {
+    "yangshipin": {
+      "package": "com.cctv.yangshipin.app.androidp",
+      "apk_bytes": 150882723,
+      "sha256": "ded396b535e74533072c4a3254d28d59a15da53ee7d0636b7ebc785261ad7442",
+      "package_info": [
+        "versionCode=305030 minSdk=21 targetSdk=31",
+        "versionName=3.5.3.26910",
+        "firstInstallTime=2026-10-04 11:05:29",
+        "lastUpdateTime=2026-10-04 11:05:29"
+      ],
+      "dex_count": 11
+    },
+    "cainiao": {
+      "package": "com.cainiao.wireless",
+      "apk_bytes": 97199939,
+      "sha256": "d09deab83b7e7a6853aba56033ba5d1f696bade566a9bae768b2f7ee9812d581",
+      "package_info": [
+        "versionCode=475 minSdk=21 targetSdk=30",
+        "versionName=8.11.923",
+        "firstInstallTime=2026-10-04 11:07:35",
+        "lastUpdateTime=2026-10-04 11:07:35"
+      ],
+      "dex_count": 13
+    }
+  }
+}

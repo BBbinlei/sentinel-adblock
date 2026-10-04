@@ -261,3 +261,16 @@
 ## 公开发布（2026-10-04）
 - 仓库：https://github.com/BBbinlei/sentinel-adblock（公开，GPL-3.0）；Release v0.1.0 附签名 APK；介绍页 http://binlei.site/sentinel-adblock/（Pages，源 main:/docs）。
 - 签名密钥在仓库外 ~/.sentinel-release/，后续版本必须用同一密钥才能覆盖升级。
+
+## [yangshipin-cainiao-survey] 状态: 完成 | 负责方: Codex | 关卡: 静态研究（非 DI/AC）
+
+| Task | 状态 | 最后提交 |
+|---|---|---|
+| Task 1: 手机已安装央视频、菜鸟广告机制静态逆向 | 完成 | 本提交 |
+
+- 授权：2026-10-04 用户要求研究手机上央视频与菜鸟的广告机制。写入本通道 `docs/device-survey/yangshipin-cainiao/` 及本节；生产代码、运行规则、依赖版本未改，不 push。
+- 现场：ADB 已连接 OCE_AN50；央视频 3.5.3.26910 / 305030、菜鸟 8.11.923 / 475，两个包各只返回 base.apk。从手机读取原 APK，记录 SHA-256，扫描全部根 DEX 字符串并反汇编关键类。
+- 发现：央视频 ZSplash→CMG fetch/show、CMG 正式广告池/配置/上报/缓存地址和 CMS 启动素材链路；菜鸟 MTOP 广告 API、穿山甲/优量汇/美数/Ubix SDK 加载适配及竞价胜负通知、预加载；关闭摇一摇桥接入口解析 isShakeClose 并清理预加载开屏数据。详细证据和推断边界见本通道 README.md。
+- 验证：先运行 scripts/apk-ad-scan/tests/run_tests.py 全部通过，无跳过；关键调用回读定位、APK 指纹/版本记录、git diff --check。未改生产实现，无需 Gradle 测试。临时 APK/Manifest 删除，保留脱敏文本证据及提取脚本。
+- 下一步：本次静态研究完成；实时请求、广告选择/频率、设置页与拦截兼容性未测，不宣称已验证可安全拦截。DI/AC 仍等用户，不自动装载规则。
+- 已知问题：现有扫描器不识别 CMG，还会误把部分 MTOP 方法名当疑似域名；报告按字节码解释，不将扫描结果直接当阻断清单。动态热补丁/native/广告插件内部代码未完整覆盖。

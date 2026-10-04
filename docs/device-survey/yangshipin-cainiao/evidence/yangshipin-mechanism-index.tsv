@@ -1,0 +1,40 @@
+1821	61d4a6: 6e10 ac90 0000                         |004f: invoke-virtual {v0}, Lcom/cmg/ads/splash/SplashAD;.fetchAdOnly:()V // method@90ac
+3734	61e66e: 6e10 d190 0000                         |004f: invoke-virtual {v0}, Lcom/cmg/ads/splash/SplashProAD;.fetchAdOnly:()V // method@90d1
+6019	      name          : 'getPreloadPath'
+6027	63e7e4:                                        |[63e7e4] com.cmg.ads.ZDPreloadCacheManager.getPreloadPath:(Ljava/lang/String;)Ljava/lang/String;
+6283	      name          : 'fetchAdOnly'
+6291	63ea40:                                        |[63ea40] com.cmg.ads.ad.AdSuspensionView.fetchAdOnly:(Ljava/lang/String;)V
+6300	63ea6e: 7220 e49e 3000                         |000f: invoke-interface {v0, v3}, Ln/a/a/g/a;.fetchAdOnly:(Ljava/lang/String;)V // method@9ee4
+6785	      name          : 'fetchAdOnly'
+6793	63ee78:                                        |[63ee78] com.cmg.ads.ad.AdView.fetchAdOnly:(Ljava/lang/String;)V
+6802	63eea8: 7220 e49e 3000                         |0010: invoke-interface {v0, v3}, Ln/a/a/g/a;.fetchAdOnly:(Ljava/lang/String;)V // method@9ee4
+7455	      name          : 'fetchAdOnly'
+7463	63f42c:                                        |[63f42c] com.cmg.ads.ad.BaseAdView.fetchAdOnly:(Ljava/lang/String;)V
+7840	      name          : 'fetchAdOnly'
+8295	      name          : 'fetchAdOnly'
+8303	673244:                                        |[673244] n.a.a.i.b.d.fetchAdOnly:(Ljava/lang/String;)V
+8348	6732da: 6e20 889f 3200                         |0015: invoke-virtual {v2, v3}, Ln/a/a/i/b/d;.fetchAdOnly:(Ljava/lang/String;)V // method@9f88
+8930	67394e: 6e20 a78f 3200                         |00bf: invoke-virtual {v2, v3}, Lcom/cmg/ads/ZDPreloadCacheManager;.getPreloadPath:(Ljava/lang/String;)Ljava/lang/String; // method@8fa7
+16646	      name          : 'fetchAdOnly'
+16654	6443c8:                                        |[6443c8] com.cmg.ads.nterstitial.InterstitialAD.fetchAdOnly:(Ljava/lang/String;)V
+17152	      name          : 'fetchAdOnly'
+17160	644848:                                        |[644848] com.cmg.ads.splash.SplashAD.fetchAdOnly:()V
+18708	      name          : 'fetchAdOnly'
+18716	6458bc:                                        |[6458bc] com.cmg.ads.splash.SplashProAD.fetchAdOnly:()V
+20048	      name          : 'fetchAdOnly'
+20056	646804:                                        |[646804] com.cmg.ads.video.VideoAd.fetchAdOnly:(Ljava/lang/String;)V
+21359	6473ca: 6e20 c08f 3000                         |000f: invoke-virtual {v0, v3}, Lcom/cmg/ads/ad/AdView;.fetchAdOnly:(Ljava/lang/String;)V // method@8fc0
+25130	66d554: 1b00 5f8f 0000                         |001a: const-string/jumbo v0, "https://adsdk002.cmgadx.com/sdk/reports" // string@00008f5f
+25132	66d55c: 1b00 7b8f 0000                         |001e: const-string/jumbo v0, "https://rapi.cmgadx.com/sdk/reports" // string@00008f7b
+25165	66d5b8: 1b02 808f 0000                         |0022: const-string/jumbo v2, "https://test-pub-cdn.cmgadx.com/sdk/urlCache/" // string@00008f80
+25174	66d5e4: 1b02 668f 0000                         |0038: const-string/jumbo v2, "https://cdn.cmgadx.com/sdk/urlCache/" // string@00008f66
+25209	66d64c: 1b00 7e8f 0000                         |001a: const-string/jumbo v0, "https://test-pub-cdn.cmgadx.com/sdk/config/sdkConfig.json" // string@00008f7e
+25211	66d654: 1b00 648f 0000                         |001e: const-string/jumbo v0, "https://cdn.cmgadx.com/sdk/config/sdkConfig.json" // string@00008f64
+25244	66d6b0: 1b02 7f8f 0000                         |0022: const-string/jumbo v2, "https://test-pub-cdn.cmgadx.com/sdk/pool/" // string@00008f7f
+25253	66d6dc: 1b02 658f 0000                         |0038: const-string/jumbo v2, "https://cdn.cmgadx.com/sdk/pool/" // string@00008f65
+25288	66d744: 1b00 5e8f 0000                         |001a: const-string/jumbo v0, "https://adsdk001.cmgadx.com/sdk/pool" // string@00008f5e
+25290	66d74c: 1b00 698f 0000                         |001e: const-string/jumbo v0, "https://gapi.cmgadx.com/sdk/pool" // string@00008f69
+35127	6748f8: 6e20 a78f 2100                         |004c: invoke-virtual {v1, v2}, Lcom/cmg/ads/ZDPreloadCacheManager;.getPreloadPath:(Ljava/lang/String;)Ljava/lang/String; // method@8fa7
+38682	676ba0: 6e20 a78f 2000                         |0020: invoke-virtual {v0, v2}, Lcom/cmg/ads/ZDPreloadCacheManager;.getPreloadPath:(Ljava/lang/String;)Ljava/lang/String; // method@8fa7
+46841	3b4bca: 2201 5605                              |0013: new-instance v1, Lcom/tencent/videolite/android/datamodel/cctvjce/GetAppStartUpPictureConfigRequest; // type@0556
+46842	3b4bce: 7010 ea0f 0100                         |0015: invoke-direct {v1}, Lcom/tencent/videolite/android/datamodel/cctvjce/GetAppStartUpPictureConfigRequest;.<init>:()V // method@0fea

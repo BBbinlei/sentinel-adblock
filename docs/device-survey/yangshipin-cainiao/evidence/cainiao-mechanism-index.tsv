@@ -1,0 +1,57 @@
+2150	312146: 1a01 f9f6                              |0019: const-string v1, "server_bidding_real_time" // string@f6f9
+2539	313024: 7220 369c 0800                         |004a: invoke-interface {v8, v0}, Lcom/meishu/sdk/core/ad/splash/ISplashAd;.sendLossNotification:(Ljava/util/Map;)V // method@9c36
+2818	3133a8: 7220 379c 5400                         |0020: invoke-interface {v4, v5}, Lcom/meishu/sdk/core/ad/splash/ISplashAd;.sendWinNotification:(Ljava/util/Map;)V // method@9c37
+6087	316886: 1a00 28f6                              |0073: const-string v0, "sendLossNotification" // string@f628
+6256	316a74: 1a02 5ef6                              |003a: const-string v2, "sendWinNotification" // string@f65e
+10926	31c160: 6e10 809c 0000                         |0166: invoke-virtual {v0}, Lcom/qq/e/ads/splash/SplashAD;.fetchAdOnly:()V // method@9c80
+10929	31c16e: 1a01 0ea5                              |016d: const-string v1, "fetchYLHDirectAd: fetchAdOnly triggered" // string@a50e
+11003	31c1de: 6e10 809c 0600                         |0029: invoke-virtual {v6}, Lcom/qq/e/ads/splash/SplashAD;.fetchAdOnly:()V // method@9c80
+11916	31b5e6: 6e10 829c 0900                         |003d: invoke-virtual {v9}, Lcom/qq/e/ads/splash/SplashAD;.getECPM:()I // method@9c82
+12043	31c50a: 6e20 859c 9800                         |004d: invoke-virtual {v8, v9}, Lcom/qq/e/ads/splash/SplashAD;.sendLossNotification:(Ljava/util/Map;)V // method@9c85
+12611	31cc4c: 6e20 869c 5400                         |0020: invoke-virtual {v4, v5}, Lcom/qq/e/ads/splash/SplashAD;.sendWinNotification:(Ljava/util/Map;)V // method@9c86
+13052	31cf34: 6e10 809c 0000                         |002e: invoke-virtual {v0}, Lcom/qq/e/ads/splash/SplashAD;.fetchAdOnly:()V // method@9c80
+15320	330964: 1a0a f9f6                              |0078: const-string v10, "server_bidding_real_time" // string@f6f9
+15400	330a88: 1a00 f8f6                              |010a: const-string v0, "server_bidding_prefetch" // string@f6f8
+15624	330d34: 1a0a f9f6                              |0078: const-string v10, "server_bidding_real_time" // string@f6f9
+15693	330e30: 1a00 f8f6                              |00f6: const-string v0, "server_bidding_prefetch" // string@f6f8
+20384	31940e: 6e10 829c 0e00                         |008d: invoke-virtual {v14}, Lcom/qq/e/ads/splash/SplashAD;.getECPM:()I // method@9c82
+24678	      name          : 'deleteAllPreloadSplashByForbidShake'
+24686	1c68f0:                                        |[1c68f0] com.cainiao.wireless.components.hybrid.windvane.CNHybridForbidSplashShakeApi.deleteAllPreloadSplashByForbidShake:()V
+24822	1c67d6: 1a07 6f90                              |0083: const-string v7, "isShakeClose" // string@906f
+24829	1c67f2: 1a06 4c77                              |0091: const-string v6, "enter forbid splash shake hybrid，set refresh, but isShakeClose content empty" // string@774c
+24841	1c6824: 7010 ed24 0500                         |00aa: invoke-direct {v5}, Lcom/cainiao/wireless/components/hybrid/windvane/CNHybridForbidSplashShakeApi;.deleteAllPreloadSplashByForbidShake:()V // method@24ed
+27706	1ce4a6: 7120 988d 0400                         |0021: invoke-static {v4, v0}, Ljava/util/Collections;.sort:(Ljava/util/List;Ljava/util/Comparator;)V // method@8d98
+37996	      name          : 'sendLossNotification'
+38002	      name          : 'sendWinNotification'
+39244	1d7538: 7230 9122 ba0c                         |001c: invoke-interface {v10, v11, v12}, Lcom/cainiao/wireless/homepage/rpc/rtb/sdkbidding/ISDKBiddingSplashAdLoader;.sendLossNotification:(Lcom/cainiao/wireless/homepage/rpc/rtb/sdkbidding/SdkBiddingLossReason;Lcom/cainiao/wireless/mtop/datamodel/SdkSplashAdsDTO;)V // method@2291
+39286	1d75e6: 1a01 c3f5                              |0073: const-string v1, "sendLossNotification reportBiddingLoss: monitorParams=" // string@f5c3
+39373	1d76d6: 7220 9222 cb00                         |0019: invoke-interface {v11, v12}, Lcom/cainiao/wireless/homepage/rpc/rtb/sdkbidding/ISDKBiddingSplashAdLoader;.sendWinNotification:(Lcom/cainiao/wireless/mtop/datamodel/SdkSplashAdsDTO;)V // method@2292
+39413	1d777a: 1a02 daf5                              |006b: const-string v2, "sendWinNotification reportBiddingWin: monitorParams=" // string@f5da
+39867	1d7b84: 1a06 c4f5                              |005c: const-string v6, "sendLossNotification 并发异常" // string@f5c4
+39882	1d7bc8: 1a01 ad07                              |007e: const-string v1, "-> sendLossNotification 并发异常" // string@07ad
+40946	      value         : "key_sdk_bidding_floor_price"
+41049	1d8274: 1a02 d7ce                              |001c: const-string v2, "key_sdk_bidding_floor_price" // string@ced7
+42813	1d9e78: 1a03 78f4                              |0028: const-string v3, "sdk_server_bidding_ad" // string@f478
+42870	1d9f10: 1a03 20eb                              |0028: const-string v3, "preload_sdk_server_bidding_ad" // string@eb20
+45114	1da36a: 1a03 78f4                              |002d: const-string v3, "sdk_server_bidding_ad" // string@f478
+45128	1da3a2: 1a03 20eb                              |0049: const-string v3, "preload_sdk_server_bidding_ad" // string@eb20
+46145	      value         : "sdk_server_bidding_ad"
+46155	      value         : "preload_sdk_server_bidding_ad"
+47232	1dd4d4: 1a01 59f6                              |0086: const-string v1, "server_bidding_prefetch" // string@f659
+47245	1dd508: 1a01 5af6                              |00a0: const-string v1, "server_bidding_real_time" // string@f65a
+47353	1dd632: 1a03 5af6                              |0079: const-string v3, "server_bidding_real_time" // string@f65a
+47457	1dd872: 1a04 5af6                              |0079: const-string v4, "server_bidding_real_time" // string@f65a
+48552	1dcb58: 1b03 0401 0100                         |004e: const-string/jumbo v3, "splash_rtb_request_at_homepage_idle" // string@00010104
+56085	1e45b8: 1a0d 5af6                              |0048: const-string v13, "server_bidding_real_time" // string@f65a
+56091	1e45cc: 1a0d 59f6                              |0052: const-string v13, "server_bidding_prefetch" // string@f659
+56379	1e2970: 1a02 59f6                              |00ac: const-string v2, "server_bidding_prefetch" // string@f659
+56509	1e3d10: 1a04 5af6                              |006a: const-string v4, "server_bidding_real_time" // string@f65a
+56665	1e3efe: 1a02 59f6                              |007f: const-string v2, "server_bidding_prefetch" // string@f659
+57113	1e352e: 1a01 5af6                              |0019: const-string v1, "server_bidding_real_time" // string@f65a
+57152	1e358e: 1a01 59f6                              |0019: const-string v1, "server_bidding_prefetch" // string@f659
+57369	1e36c4: 1a0a 59f6                              |0044: const-string v10, "server_bidding_prefetch" // string@f659
+57371	1e36ca: 1a0a 5af6                              |0047: const-string v10, "server_bidding_real_time" // string@f65a
+57486	1e2cba: 1a0a 59f6                              |009f: const-string v10, "server_bidding_prefetch" // string@f659
+57491	1e2cce: 1a08 5af6                              |00a9: const-string v8, "server_bidding_real_time" // string@f65a
+63026	1d0886: 1a00 a9dc                              |0003: const-string v0, "mtop.cainiao.guoguo.nbnetflow.ads.show.cn" // string@dca9
+65378	1d80d0: 1a02 d7ce                              |0070: const-string v2, "key_sdk_bidding_floor_price" // string@ced7
