@@ -93,6 +93,9 @@ fun AppDetailScreen(pkg: String, modifier: Modifier = Modifier,
             }
         }
 
+        com.sentinel.app.launch.LaunchShortcutCard(pkg)
+        com.sentinel.app.launch.PopupControlCard(pkg)
+
         HorizontalDivider()
         Row(
             Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable { advanced = !advanced }.testTag("app-detail:advanced"),

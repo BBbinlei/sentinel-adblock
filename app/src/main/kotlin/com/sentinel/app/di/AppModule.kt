@@ -49,6 +49,7 @@ val appModule = module {
             requestShizuku = { gateway?.requestPermission() },
         )
     }
+    single { com.sentinel.app.launch.PopupRuleControl(get(), get()) }
     factory { OnboardingViewModel(get(), get()) }
     factory {
         val context = androidContext()
