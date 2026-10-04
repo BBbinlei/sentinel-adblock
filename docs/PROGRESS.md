@@ -274,3 +274,10 @@
 - 验证：先运行 scripts/apk-ad-scan/tests/run_tests.py 全部通过，无跳过；关键调用回读定位、APK 指纹/版本记录、git diff --check。未改生产实现，无需 Gradle 测试。临时 APK/Manifest 删除，保留脱敏文本证据及提取脚本。
 - 下一步：本次静态研究完成；实时请求、广告选择/频率、设置页与拦截兼容性未测，不宣称已验证可安全拦截。DI/AC 仍等用户，不自动装载规则。
 - 已知问题：现有扫描器不识别 CMG，还会误把部分 MTOP 方法名当疑似域名；报告按字节码解释，不将扫描结果直接当阻断清单。动态热补丁/native/广告插件内部代码未完整覆盖。
+
+### [yangshipin-cainiao-survey] Task 2：免开屏入口可行性补充（2026-10-04）
+
+- 完成静态补充，报告为 docs/device-survey/yangshipin-cainiao/bypass-feasibility.md。重新 pull 两个 APK，SHA-256 与 Task 1 一致；保存五个菜鸟方法、四个央视频方法与关键 Manifest 组件声明，保留方法名/指令偏移。
+- 菜鸟 HomePageActivity 明确 exported=true，有 home_page 深链；WelcomeActivity 内有开屏请求，是直接进首页候选，但未验证 Application/父类/热启动是否再次触发广告。isHotLaunch 的 true 分支仍请求广告，不当作免广告参数。
+- 央视频 parseIntent 的 from=push_* / third_* 会设置 needHideADSplash，initSplash 的 true 分支隐藏开屏并进首页；HomeActivity 非导出，需追踪导出的 OpenActivity 能否转发所需 extra。SplashActivity 新 Intent 仅写 ImUrFather，不据此假设外部 extra 自动传递。
+- 修正用户前提：仓库百度网盘报告没有证实免开屏成功，冷启动缺对照、热启动 filterad 无效。下一步优先菜鸟候选对照验证、央视频路由追踪；未执行 DI/AC 或设置修改，尚无实机通过的方案。仅静态材料，无生产修改或新增测试需求；临时 APK/完整转储已清理，git diff --check 通过，不 push。

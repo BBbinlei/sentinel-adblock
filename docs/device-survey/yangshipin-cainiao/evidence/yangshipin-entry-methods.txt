@@ -1,0 +1,691 @@
+Selected DEX methods from the same SHA-256 APK as metadata.json. dexdump -d; offsets retained.
+
+    #113              : (in Lcom/tencent/videolite/android/ui/HomeActivity;)
+      name          : 'initSplash'
+      type          : '()V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 4
+      ins           : 1
+      outs          : 4
+      insns size    : 71 16-bit code units
+551c24:                                        |[551c24] com.tencent.videolite.android.ui.HomeActivity.initSplash:()V
+551c34: 1300 ff44                              |0000: const/16 v0, #int 17663 // #44ff
+551c38: 1301 5a00                              |0002: const/16 v1, #int 90 // #5a
+551c3c: 7120 8824 1000                         |0004: invoke-static {v0, v1}, Lcom/tencent/mobileqq/qfix/redirect/PatchRedirectCenter;.getRedirector:(IS)Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector; // method@2488
+551c42: 0c00                                   |0007: move-result-object v0
+551c44: 3800 0600                              |0008: if-eqz v0, 000e // +0006
+551c48: 7230 7e24 1003                         |000a: invoke-interface {v0, v1, v3}, Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector;.redirect:(SLjava/lang/Object;)Ljava/lang/Object; // method@247e
+551c4e: 0e00                                   |000d: return-void
+551c50: 5530 290d                              |000e: iget-boolean v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.needHideADSplash:Z // field@0d29
+551c54: 3900 2100                              |0010: if-nez v0, 0031 // +0021
+551c58: 2200 5626                              |0012: new-instance v0, Lu/y/k0/a/m3/d5/g1/i; // type@2656
+551c5c: 5431 360d                              |0014: iget-object v1, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.splashContainerView:Landroid/widget/FrameLayout; // field@0d36
+551c60: 5432 fc0c                              |0016: iget-object v2, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.callBack:Lu/y/k0/a/m3/d5/g1/i$c; // field@0cfc
+551c64: 7040 42e5 3021                         |0018: invoke-direct {v0, v3, v1, v2}, Lu/y/k0/a/m3/d5/g1/i;.<init>:(Landroid/content/Context;Landroid/widget/FrameLayout;Lu/y/k0/a/m3/d5/g1/i$c;)V // method@e542
+551c6a: 5b30 370d                              |001b: iput-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.splashManager:Lu/y/k0/a/m3/d5/g1/i; // field@0d37
+551c6e: 7010 672f 0300                         |001d: invoke-direct {v3}, Lcom/tencent/videolite/android/ui/HomeActivity;.showHomeMainMask:()V // method@2f67
+551c74: 5430 040d                              |0020: iget-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.homeMainMask:Landroid/widget/ImageView; // field@0d04
+551c78: 1201                                   |0022: const/4 v1, #int 0 // #0
+551c7a: 7120 be25 1000                         |0023: invoke-static {v0, v1}, Lcom/tencent/videolite/android/basicapi/helper/UIHelper;.B0:(Landroid/view/View;I)V // method@25be
+551c80: 5430 360d                              |0026: iget-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.splashContainerView:Landroid/widget/FrameLayout; // field@0d36
+551c84: 7120 be25 1000                         |0028: invoke-static {v0, v1}, Lcom/tencent/videolite/android/basicapi/helper/UIHelper;.B0:(Landroid/view/View;I)V // method@25be
+551c8a: 5430 370d                              |002b: iget-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.splashManager:Lu/y/k0/a/m3/d5/g1/i; // field@0d37
+551c8e: 6e10 5de5 0000                         |002d: invoke-virtual {v0}, Lu/y/k0/a/m3/d5/g1/i;.z:()V // method@e55d
+551c94: 2816                                   |0030: goto 0046 // +0016
+551c96: 5430 040d                              |0031: iget-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.homeMainMask:Landroid/widget/ImageView; // field@0d04
+551c9a: 1301 0800                              |0033: const/16 v1, #int 8 // #8
+551c9e: 7120 be25 1000                         |0035: invoke-static {v0, v1}, Lcom/tencent/videolite/android/basicapi/helper/UIHelper;.B0:(Landroid/view/View;I)V // method@25be
+551ca4: 5430 360d                              |0038: iget-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.splashContainerView:Landroid/widget/FrameLayout; // field@0d36
+551ca8: 7120 be25 1000                         |003a: invoke-static {v0, v1}, Lcom/tencent/videolite/android/basicapi/helper/UIHelper;.B0:(Landroid/view/View;I)V // method@25be
+551cae: 1200                                   |003d: const/4 v0, #int 0 // #0
+551cb0: 6e20 392f 0300                         |003e: invoke-virtual {v3, v0}, Lcom/tencent/videolite/android/ui/HomeActivity;.onGoHomeEvent:(Lu/y/k0/a/v/i/f/e;)V // method@2f39
+551cb6: 5430 fc0c                              |0041: iget-object v0, v3, Lcom/tencent/videolite/android/ui/HomeActivity;.callBack:Lu/y/k0/a/m3/d5/g1/i$c; // field@0cfc
+551cba: 7210 41e5 0000                         |0043: invoke-interface {v0}, Lu/y/k0/a/m3/d5/g1/i$c;.a:()V // method@e541
+551cc0: 0e00                                   |0046: return-void
+      catches       : (none)
+      positions     :
+        0x000e line=1
+        0x0012 line=2
+        0x001d line=3
+        0x0020 line=4
+        0x0026 line=5
+        0x002b line=6
+        0x0031 line=7
+        0x0038 line=8
+        0x003e line=9
+        0x0041 line=10
+      locals        :
+        0x0000 - 0x0047 reg=3 this Lcom/tencent/videolite/android/ui/HomeActivity;
+
+
+    #129              : (in Lcom/tencent/videolite/android/ui/HomeActivity;)
+      name          : 'parseIntent'
+      type          : '(Landroid/content/Intent;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 15
+      ins           : 2
+      outs          : 4
+      insns size    : 510 16-bit code units
+5523c0:                                        |[5523c0] com.tencent.videolite.android.ui.HomeActivity.parseIntent:(Landroid/content/Intent;)V
+5523d0: 1b00 15c8 0000                         |0000: const-string/jumbo v0, "source_tab" // string@0000c815
+5523d6: 1b01 3f85 0000                         |0003: const-string/jumbo v1, "commentClick" // string@0000853f
+5523dc: 1b02 8ed2 0000                         |0006: const-string/jumbo v2, "vid" // string@0000d28e
+5523e2: 1b03 33ca 0000                         |0009: const-string/jumbo v3, "switch_tab" // string@0000ca33
+5523e8: 1b04 d592 0000                         |000c: const-string/jumbo v4, "from" // string@000092d5
+5523ee: 1305 ff44                              |000f: const/16 v5, #int 17663 // #44ff
+5523f2: 1306 2a00                              |0011: const/16 v6, #int 42 // #2a
+5523f6: 7120 8824 6500                         |0013: invoke-static {v5, v6}, Lcom/tencent/mobileqq/qfix/redirect/PatchRedirectCenter;.getRedirector:(IS)Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector; // method@2488
+5523fc: 0c05                                   |0016: move-result-object v5
+5523fe: 3805 0600                              |0017: if-eqz v5, 001d // +0006
+552402: 7240 8224 65ed                         |0019: invoke-interface {v5, v6, v13, v14}, Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector;.redirect:(SLjava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@2482
+552408: 0e00                                   |001c: return-void
+55240a: 6e10 8213 0d00                         |001d: invoke-virtual {v13}, Landroid/app/Activity;.getIntent:()Landroid/content/Intent; // method@1382
+552410: 0c05                                   |0020: move-result-object v5
+552412: 1216                                   |0021: const/4 v6, #int 1 // #1
+552414: 380e 0500                              |0022: if-eqz v14, 0027 // +0005
+552418: 5cd6 290d                              |0024: iput-boolean v6, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.needHideADSplash:Z // field@0d29
+55241c: 07e5                                   |0026: move-object v5, v14
+55241e: 2207 0819                              |0027: new-instance v7, Ljava/lang/StringBuilder; // type@1908
+552422: 7010 7990 0700                         |0029: invoke-direct {v7}, Ljava/lang/StringBuilder;.<init>:()V // method@9079
+552428: 1b08 1db7 0000                         |002c: const-string/jumbo v8, "parseIntent start, source=" // string@0000b71d
+55242e: 6e20 8590 8700                         |002f: invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+552434: 390e 0600                              |0032: if-nez v14, 0038 // +0006
+552438: 1b08 3bb3 0000                         |0034: const-string/jumbo v8, "onCreate" // string@0000b33b
+55243e: 2804                                   |0037: goto 003b // +0004
+552440: 1b08 2fb4 0000                         |0038: const-string/jumbo v8, "onNewIntent" // string@0000b42f
+552446: 6e20 8590 8700                         |003b: invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+55244c: 1b08 0b13 0000                         |003e: const-string/jumbo v8, ", data=" // string@0000130b
+552452: 6e20 8590 8700                         |0041: invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+552458: 3905 0600                              |0044: if-nez v5, 004a // +0006
+55245c: 1b08 80b1 0000                         |0046: const-string/jumbo v8, "null" // string@0000b180
+552462: 2809                                   |0049: goto 0052 // +0009
+552464: 6e10 ac14 0500                         |004a: invoke-virtual {v5}, Landroid/content/Intent;.getData:()Landroid/net/Uri; // method@14ac
+55246a: 0c08                                   |004d: move-result-object v8
+55246c: 7110 5e90 0800                         |004e: invoke-static {v8}, Ljava/lang/String;.valueOf:(Ljava/lang/Object;)Ljava/lang/String; // method@905e
+552472: 0c08                                   |0051: move-result-object v8
+552474: 6e20 8590 8700                         |0052: invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+55247a: 1b08 7613 0000                         |0055: const-string/jumbo v8, ", needHideADSplash=" // string@00001376
+552480: 6e20 8590 8700                         |0058: invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+552486: 55d8 290d                              |005b: iget-boolean v8, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.needHideADSplash:Z // field@0d29
+55248a: 6e20 8790 8700                         |005d: invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;.append:(Z)Ljava/lang/StringBuilder; // method@9087
+552490: 6e10 9f90 0700                         |0060: invoke-virtual {v7}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@909f
+552496: 0c07                                   |0063: move-result-object v7
+552498: 1b08 a926 0000                         |0064: const-string/jumbo v8, "HomeActivity" // string@000026a9
+55249e: 7120 a728 7800                         |0067: invoke-static {v8, v7}, Lcom/tencent/videolite/android/component/log/LogTools;.F:(Ljava/lang/String;Ljava/lang/String;)I // method@28a7
+5524a4: 6e20 bb14 4500                         |006a: invoke-virtual {v5, v4}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+5524aa: 0a07                                   |006d: move-result v7
+5524ac: 1209                                   |006e: const/4 v9, #int 0 // #0
+5524ae: 3807 1e00                              |006f: if-eqz v7, 008d // +001e
+5524b2: 6e20 b914 4500                         |0071: invoke-virtual {v5, v4}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+5524b8: 0c04                                   |0074: move-result-object v4
+5524ba: 1b07 e9b9 0000                         |0075: const-string/jumbo v7, "push_" // string@0000b9e9
+5524c0: 6e20 4d90 7400                         |0078: invoke-virtual {v4, v7}, Ljava/lang/String;.startsWith:(Ljava/lang/String;)Z // method@904d
+5524c6: 0a07                                   |007b: move-result v7
+5524c8: 3907 0e00                              |007c: if-nez v7, 008a // +000e
+5524cc: 1b07 9ecb 0000                         |007e: const-string/jumbo v7, "third_" // string@0000cb9e
+5524d2: 6e20 4d90 7400                         |0081: invoke-virtual {v4, v7}, Ljava/lang/String;.startsWith:(Ljava/lang/String;)Z // method@904d
+5524d8: 0a04                                   |0084: move-result v4
+5524da: 3804 0300                              |0085: if-eqz v4, 0088 // +0003
+5524de: 2803                                   |0087: goto 008a // +0003
+5524e0: 1204                                   |0088: const/4 v4, #int 0 // #0
+5524e2: 2802                                   |0089: goto 008b // +0002
+5524e4: 1214                                   |008a: const/4 v4, #int 1 // #1
+5524e6: 5cd4 290d                              |008b: iput-boolean v4, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.needHideADSplash:Z // field@0d29
+5524ea: 6e20 bb14 3500                         |008d: invoke-virtual {v5, v3}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+5524f0: 0a04                                   |0090: move-result v4
+5524f2: 3804 9300                              |0091: if-eqz v4, 0124 // +0093
+5524f6: 5cd6 290d                              |0093: iput-boolean v6, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.needHideADSplash:Z // field@0d29
+5524fa: 6e20 b914 3500                         |0095: invoke-virtual {v5, v3}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+552500: 0c03                                   |0098: move-result-object v3
+552502: 12f4                                   |0099: const/4 v4, #int -1 // #ff
+552504: 6e10 3790 0300                         |009a: invoke-virtual {v3}, Ljava/lang/String;.hashCode:()I // method@9037
+55250a: 0a07                                   |009d: move-result v7
+55250c: 140a 7fc7 9bca                         |009e: const v10, #float -5.10458e+06 // #ca9bc77f
+552512: 123b                                   |00a1: const/4 v11, #int 3 // #3
+552514: 122c                                   |00a2: const/4 v12, #int 2 // #2
+552516: 32a7 3100                              |00a3: if-eq v7, v10, 00d4 // +0031
+55251a: 130a 820e                              |00a5: const/16 v10, #int 3714 // #e82
+55251e: 32a7 2300                              |00a7: if-eq v7, v10, 00ca // +0023
+552522: 1409 7b14 b006                         |00a9: const v9, #float 6.62339e-35 // #06b0147b
+552528: 3297 1300                              |00ac: if-eq v7, v9, 00bf // +0013
+55252c: 1409 4026 6a1a                         |00ae: const v9, #float 4.8421e-23 // #1a6a2640
+552532: 3297 0300                              |00b1: if-eq v7, v9, 00b4 // +0003
+552536: 282c                                   |00b3: goto 00df // +002c
+552538: 1b07 b7b7 0000                         |00b4: const-string/jumbo v7, "personal" // string@0000b7b7
+55253e: 6e20 2f90 7300                         |00b7: invoke-virtual {v3, v7}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@902f
+552544: 0a03                                   |00ba: move-result v3
+552546: 3803 2400                              |00bb: if-eqz v3, 00df // +0024
+55254a: 1239                                   |00bd: const/4 v9, #int 3 // #3
+55254c: 2822                                   |00be: goto 00e0 // +0022
+55254e: 1b07 92d2 0000                         |00bf: const-string/jumbo v7, "video" // string@0000d292
+552554: 6e20 2f90 7300                         |00c2: invoke-virtual {v3, v7}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@902f
+55255a: 0a03                                   |00c5: move-result v3
+55255c: 3803 1900                              |00c6: if-eqz v3, 00df // +0019
+552560: 1229                                   |00c8: const/4 v9, #int 2 // #2
+552562: 2817                                   |00c9: goto 00e0 // +0017
+552564: 1b07 3cce 0000                         |00ca: const-string/jumbo v7, "tv" // string@0000ce3c
+55256a: 6e20 2f90 7300                         |00cd: invoke-virtual {v3, v7}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@902f
+552570: 0a03                                   |00d0: move-result v3
+552572: 3803 0e00                              |00d1: if-eqz v3, 00df // +000e
+552576: 280d                                   |00d3: goto 00e0 // +000d
+552578: 1b07 54c8 0000                         |00d4: const-string/jumbo v7, "sports" // string@0000c854
+55257e: 6e20 2f90 7300                         |00d7: invoke-virtual {v3, v7}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@902f
+552584: 0a03                                   |00da: move-result v3
+552586: 3803 0400                              |00db: if-eqz v3, 00df // +0004
+55258a: 1219                                   |00dd: const/4 v9, #int 1 // #1
+55258c: 2802                                   |00de: goto 00e0 // +0002
+55258e: 12f9                                   |00df: const/4 v9, #int -1 // #ff
+552590: 3809 1c00                              |00e0: if-eqz v9, 00fc // +001c
+552594: 3269 1500                              |00e2: if-eq v9, v6, 00f7 // +0015
+552598: 32c9 0e00                              |00e4: if-eq v9, v12, 00f2 // +000e
+55259c: 32b9 0700                              |00e6: if-eq v9, v11, 00ed // +0007
+5525a0: 6003 b50a                              |00e8: sget v3, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.TAB_HOME_INDEX:I // field@0ab5
+5525a4: 59d3 210d                              |00ea: iput v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5525a8: 2838                                   |00ec: goto 0124 // +0038
+5525aa: 6003 b70a                              |00ed: sget v3, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.TAB_PERSONAL_INDEX:I // field@0ab7
+5525ae: 59d3 210d                              |00ef: iput v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5525b2: 2833                                   |00f1: goto 0124 // +0033
+5525b4: 6003 b80a                              |00f2: sget v3, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.TAB_PORTRAIT_INDEX:I // field@0ab8
+5525b8: 59d3 210d                              |00f4: iput v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5525bc: 282e                                   |00f6: goto 0124 // +002e
+5525be: 6003 b90a                              |00f7: sget v3, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.TAB_SPORT_INDEX:I // field@0ab9
+5525c2: 59d3 210d                              |00f9: iput v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5525c6: 2829                                   |00fb: goto 0124 // +0029
+5525c8: 6003 ba0a                              |00fc: sget v3, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.TAB_TV_INDEX:I // field@0aba
+5525cc: 59d3 210d                              |00fe: iput v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5525d0: 1b03 65a3 0000                         |0100: const-string/jumbo v3, "isShortCutJump" // string@0000a365
+5525d6: 6e20 b914 3500                         |0103: invoke-virtual {v5, v3}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+5525dc: 0c03                                   |0106: move-result-object v3
+5525de: 7110 9c8e 0300                         |0107: invoke-static {v3}, Ljava/lang/Boolean;.parseBoolean:(Ljava/lang/String;)Z // method@8e9c
+5525e4: 0a03                                   |010a: move-result v3
+5525e6: 6a03 f00a                              |010b: sput-boolean v3, Lcom/tencent/videolite/android/oneclickcast/OneClickCastUtils;.p:Z // field@0af0
+5525ea: 2203 0819                              |010d: new-instance v3, Ljava/lang/StringBuilder; // type@1908
+5525ee: 7010 7990 0300                         |010f: invoke-direct {v3}, Ljava/lang/StringBuilder;.<init>:()V // method@9079
+5525f4: 1b04 1eb7 0000                         |0112: const-string/jumbo v4, "parseIntent: 快捷方式投屏 " // string@0000b71e
+5525fa: 6e20 8590 4300                         |0115: invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+552600: 6304 f00a                              |0118: sget-boolean v4, Lcom/tencent/videolite/android/oneclickcast/OneClickCastUtils;.p:Z // field@0af0
+552604: 6e20 8790 4300                         |011a: invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;.append:(Z)Ljava/lang/StringBuilder; // method@9087
+55260a: 6e10 9f90 0300                         |011d: invoke-virtual {v3}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@909f
+552610: 0c03                                   |0120: move-result-object v3
+552612: 7120 af28 3800                         |0121: invoke-static {v8, v3}, Lcom/tencent/videolite/android/component/log/LogTools;.v:(Ljava/lang/String;Ljava/lang/String;)I // method@28af
+552618: 1b03 eb92 0000                         |0124: const-string/jumbo v3, "from_back_play_service" // string@000092eb
+55261e: 6e20 bb14 3500                         |0127: invoke-virtual {v5, v3}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+552624: 0a03                                   |012a: move-result v3
+552626: 3803 0400                              |012b: if-eqz v3, 012f // +0004
+55262a: 6a06 0c07                              |012d: sput-boolean v6, Lcom/tencent/videolite/android/component/player/common/mgr/AdDataCenter;.IS_FROM_PLAY_SERVICE:Z // field@070c
+55262e: 1b03 1181 0000                         |012f: const-string/jumbo v3, "channel" // string@00008111
+552634: 6e20 bb14 3500                         |0132: invoke-virtual {v5, v3}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+55263a: 0a03                                   |0135: move-result v3
+55263c: 3803 0400                              |0136: if-eqz v3, 013a // +0004
+552640: 5cd6 290d                              |0138: iput-boolean v6, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.needHideADSplash:Z // field@0d29
+552644: 52d3 210d                              |013a: iget v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+552648: 6004 b80a                              |013c: sget v4, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.TAB_PORTRAIT_INDEX:I // field@0ab8
+55264c: 3343 6200                              |013e: if-ne v3, v4, 01a0 // +0062
+552650: 380e 6000                              |0140: if-eqz v14, 01a0 // +0060
+552654: 6e20 bb14 2500                         |0142: invoke-virtual {v5, v2}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+55265a: 0a0e                                   |0145: move-result v14
+55265c: 1b03 0000 0000                         |0146: const-string/jumbo v3, "" // string@00000000
+552662: 380e 0900                              |0149: if-eqz v14, 0152 // +0009
+552666: 6e20 b914 2500                         |014b: invoke-virtual {v5, v2}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+55266c: 0c0e                                   |014e: move-result-object v14
+55266e: 5bde 250d                              |014f: iput-object v14, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSourceVid:Ljava/lang/String; // field@0d25
+552672: 2803                                   |0151: goto 0154 // +0003
+552674: 5bd3 250d                              |0152: iput-object v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSourceVid:Ljava/lang/String; // field@0d25
+552678: 6e20 bb14 1500                         |0154: invoke-virtual {v5, v1}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+55267e: 0a0e                                   |0157: move-result v14
+552680: 380e 0900                              |0158: if-eqz v14, 0161 // +0009
+552684: 6e20 b914 1500                         |015a: invoke-virtual {v5, v1}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+55268a: 0c0e                                   |015d: move-result-object v14
+55268c: 5bde 120d                              |015e: iput-object v14, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mCommentClick:Ljava/lang/String; // field@0d12
+552690: 2803                                   |0160: goto 0163 // +0003
+552692: 5bd3 120d                              |0161: iput-object v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mCommentClick:Ljava/lang/String; // field@0d12
+552696: 6e20 bb14 0500                         |0163: invoke-virtual {v5, v0}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+55269c: 0a0e                                   |0166: move-result v14
+55269e: 380e 0900                              |0167: if-eqz v14, 0170 // +0009
+5526a2: 6e20 b914 0500                         |0169: invoke-virtual {v5, v0}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+5526a8: 0c0e                                   |016c: move-result-object v14
+5526aa: 5bde 240d                              |016d: iput-object v14, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSourceTab:Ljava/lang/String; // field@0d24
+5526ae: 2803                                   |016f: goto 0172 // +0003
+5526b0: 5bd3 240d                              |0170: iput-object v3, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSourceTab:Ljava/lang/String; // field@0d24
+5526b4: 220e 0819                              |0172: new-instance v14, Ljava/lang/StringBuilder; // type@1908
+5526b8: 7010 7990 0e00                         |0174: invoke-direct {v14}, Ljava/lang/StringBuilder;.<init>:()V // method@9079
+5526be: 1b00 1cb7 0000                         |0177: const-string/jumbo v0, "parseIntent portrait params, mSourceTab=" // string@0000b71c
+5526c4: 6e20 8590 0e00                         |017a: invoke-virtual {v14, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5526ca: 54d0 240d                              |017d: iget-object v0, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSourceTab:Ljava/lang/String; // field@0d24
+5526ce: 6e20 8590 0e00                         |017f: invoke-virtual {v14, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5526d4: 1b00 6613 0000                         |0182: const-string/jumbo v0, ", mSourceVid=" // string@00001366
+5526da: 6e20 8590 0e00                         |0185: invoke-virtual {v14, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5526e0: 54d0 250d                              |0188: iget-object v0, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mSourceVid:Ljava/lang/String; // field@0d25
+5526e4: 6e20 8590 0e00                         |018a: invoke-virtual {v14, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5526ea: 1b00 4f13 0000                         |018d: const-string/jumbo v0, ", mCommentClick=" // string@0000134f
+5526f0: 6e20 8590 0e00                         |0190: invoke-virtual {v14, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5526f6: 54d0 120d                              |0193: iget-object v0, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mCommentClick:Ljava/lang/String; // field@0d12
+5526fa: 6e20 8590 0e00                         |0195: invoke-virtual {v14, v0}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+552700: 6e10 9f90 0e00                         |0198: invoke-virtual {v14}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@909f
+552706: 0c0e                                   |019b: move-result-object v14
+552708: 7120 a728 e800                         |019c: invoke-static {v8, v14}, Lcom/tencent/videolite/android/component/log/LogTools;.F:(Ljava/lang/String;Ljava/lang/String;)I // method@28a7
+55270e: 280a                                   |019f: goto 01a9 // +000a
+552710: 7010 e52e 0d00                         |01a0: invoke-direct {v13}, Lcom/tencent/videolite/android/ui/HomeActivity;.clearSchemeSourceInfo:()V // method@2ee5
+552716: 1b0e 1bb7 0000                         |01a3: const-string/jumbo v14, "parseIntent clear scheme source info" // string@0000b71b
+55271c: 7120 a728 e800                         |01a6: invoke-static {v8, v14}, Lcom/tencent/videolite/android/component/log/LogTools;.F:(Ljava/lang/String;Ljava/lang/String;)I // method@28a7
+552722: 1b0e 25b0 0000                         |01a9: const-string/jumbo v14, "next_action" // string@0000b025
+552728: 6e20 b914 e500                         |01ac: invoke-virtual {v5, v14}, Landroid/content/Intent;.getStringExtra:(Ljava/lang/String;)Ljava/lang/String; // method@14b9
+55272e: 0c0e                                   |01af: move-result-object v14
+552730: 5bde 1d0d                              |01b0: iput-object v14, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mNextActionUrl:Ljava/lang/String; // field@0d1d
+552734: 1b0e 2482 0000                         |01b2: const-string/jumbo v14, "cjz" // string@00008224
+55273a: 2200 0819                              |01b5: new-instance v0, Ljava/lang/StringBuilder; // type@1908
+55273e: 7010 7990 0000                         |01b7: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@9079
+552744: 1b01 cdd7 0000                         |01ba: const-string/jumbo v1, "跳入首页得到 mNextActionUrl=" // string@0000d7cd
+55274a: 6e20 8590 1000                         |01bd: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+552750: 54d1 1d0d                              |01c0: iget-object v1, v13, Lcom/tencent/videolite/android/ui/HomeActivity;.mNextActionUrl:Ljava/lang/String; // field@0d1d
+552754: 6e20 8590 1000                         |01c2: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+55275a: 6e10 9f90 0000                         |01c5: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@909f
+552760: 0c00                                   |01c8: move-result-object v0
+552762: 7120 af28 0e00                         |01c9: invoke-static {v14, v0}, Lcom/tencent/videolite/android/component/log/LogTools;.v:(Ljava/lang/String;Ljava/lang/String;)I // method@28af
+552768: 1b0e d3c6 0000                         |01cc: const-string/jumbo v14, "showNotFoundScheme" // string@0000c6d3
+55276e: 6e20 bb14 e500                         |01cf: invoke-virtual {v5, v14}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+552774: 0a0e                                   |01d2: move-result v14
+552776: 380e 2a00                              |01d3: if-eqz v14, 01fd // +002a
+55277a: 140e 8d03 127f                         |01d5: const v14, #float 1.94086e+38 // #7f12038d
+552780: 6e20 8813 ed00                         |01d8: invoke-virtual {v13, v14}, Landroid/app/Activity;.getString:(I)Ljava/lang/String; // method@1388
+552786: 0c0e                                   |01db: move-result-object v14
+552788: 7120 db25 ed00                         |01dc: invoke-static {v13, v14}, Lcom/tencent/videolite/android/basicapi/helper/toast/ToastHelper;.i:(Landroid/content/Context;Ljava/lang/String;)V // method@25db
+55278e: 281e                                   |01df: goto 01fd // +001e
+552790: 0d0e                                   |01e0: move-exception v14
+552792: 6e10 468f 0e00                         |01e1: invoke-virtual {v14}, Ljava/lang/Exception;.printStackTrace:()V // method@8f46
+552798: 2200 0819                              |01e4: new-instance v0, Ljava/lang/StringBuilder; // type@1908
+55279c: 7010 7990 0000                         |01e6: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@9079
+5527a2: 1b01 1ab7 0000                         |01e9: const-string/jumbo v1, "parseIntent Exception: " // string@0000b71a
+5527a8: 6e20 8590 1000                         |01ec: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5527ae: 6e10 448f 0e00                         |01ef: invoke-virtual {v14}, Ljava/lang/Exception;.getMessage:()Ljava/lang/String; // method@8f44
+5527b4: 0c0e                                   |01f2: move-result-object v14
+5527b6: 6e20 8590 e000                         |01f3: invoke-virtual {v0, v14}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+5527bc: 6e10 9f90 0000                         |01f6: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@909f
+5527c2: 0c0e                                   |01f9: move-result-object v14
+5527c4: 7120 b228 e800                         |01fa: invoke-static {v8, v14}, Lcom/tencent/videolite/android/component/log/LogTools;.y:(Ljava/lang/String;Ljava/lang/String;)I // method@28b2
+5527ca: 0e00                                   |01fd: return-void
+      catches       : 2
+        0x006a - 0x0146
+          Ljava/lang/Exception; -> 0x01e0
+        0x014b - 0x01df
+          Ljava/lang/Exception; -> 0x01e0
+      positions     :
+        0x001d line=1
+        0x0024 line=2
+        0x0027 line=3
+        0x004a line=4
+        0x0067 line=5
+        0x006a line=6
+        0x0071 line=7
+        0x0078 line=8
+        0x0081 line=9
+        0x008d line=10
+        0x0093 line=11
+        0x0095 line=12
+        0x009a line=13
+        0x00e8 line=14
+        0x00ed line=15
+        0x00f2 line=16
+        0x00f7 line=17
+        0x00fc line=18
+        0x0103 line=19
+        0x0107 line=20
+        0x010d line=21
+        0x0127 line=22
+        0x012d line=23
+        0x0132 line=24
+        0x0138 line=25
+        0x013a line=26
+        0x0142 line=27
+        0x014b line=28
+        0x0152 line=29
+        0x0154 line=30
+        0x015a line=31
+        0x0161 line=32
+        0x0163 line=33
+        0x0169 line=34
+        0x0170 line=35
+        0x0172 line=36
+        0x01a0 line=37
+        0x01a6 line=38
+        0x01ac line=39
+        0x01b5 line=40
+        0x01cf line=41
+        0x01d8 line=42
+        0x01e1 line=43
+        0x01e4 line=44
+      locals        :
+        0x0000 - 0x01fe reg=13 this Lcom/tencent/videolite/android/ui/HomeActivity;
+        0x0000 - 0x01fe reg=14 (null) Landroid/content/Intent;
+
+
+    #40              : (in Lcom/tencent/videolite/android/ui/HomeActivity;)
+      name          : 'onCreate'
+      type          : '(Landroid/os/Bundle;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 9
+      ins           : 2
+      outs          : 4
+      insns size    : 383 16-bit code units
+5557e0:                                        |[5557e0] com.tencent.videolite.android.ui.HomeActivity.onCreate:(Landroid/os/Bundle;)V
+5557f0: 1300 ff44                              |0000: const/16 v0, #int 17663 // #44ff
+5557f4: 1301 1600                              |0002: const/16 v1, #int 22 // #16
+5557f8: 7120 8824 1000                         |0004: invoke-static {v0, v1}, Lcom/tencent/mobileqq/qfix/redirect/PatchRedirectCenter;.getRedirector:(IS)Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector; // method@2488
+5557fe: 0c00                                   |0007: move-result-object v0
+555800: 3800 0600                              |0008: if-eqz v0, 000e // +0006
+555804: 7240 8224 1087                         |000a: invoke-interface {v0, v1, v7, v8}, Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector;.redirect:(SLjava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@2482
+55580a: 0e00                                   |000d: return-void
+55580c: 7110 4629 0700                         |000e: invoke-static {v7}, Lcom/tencent/videolite/android/component/player/utils/PipControllerUtils;.isInPip:(Landroid/app/Activity;)Z // method@2946
+555812: 0a00                                   |0011: move-result v0
+555814: 3800 0500                              |0012: if-eqz v0, 0017 // +0005
+555818: 7100 4529 0000                         |0014: invoke-static {}, Lcom/tencent/videolite/android/component/player/utils/PipControllerUtils;.exitPip:()V // method@2945
+55581e: 6f20 f425 8700                         |0017: invoke-super {v7, v8}, Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity;.onCreate:(Landroid/os/Bundle;)V // method@25f4
+555824: 7110 27e2 0700                         |001a: invoke-static {v7}, Lu/i/a/d/b;.v:(Landroid/app/Activity;)V // method@e227
+55582a: 1b08 bc81 0000                         |001d: const-string/jumbo v8, "check_sign_valid" // string@000081bc
+555830: 1b00 c78d 0000                         |0020: const-string/jumbo v0, "enable" // string@00008dc7
+555836: 1201                                   |0023: const/4 v1, #int 0 // #0
+555838: 7130 d8eb 0801                         |0024: invoke-static {v8, v0, v1}, Lu/y/k0/a/v/f/e/g;.d:(Ljava/lang/String;Ljava/lang/String;I)I // method@ebd8
+55583e: 0a08                                   |0027: move-result v8
+555840: 1210                                   |0028: const/4 v0, #int 1 // #1
+555842: 3308 1c00                              |0029: if-ne v8, v0, 0045 // +001c
+555846: 2208 6128                              |002b: new-instance v8, Lu/y/k0/a/t/t/z; // type@2861
+55584a: 7020 3deb 7800                         |002d: invoke-direct {v8, v7}, Lu/y/k0/a/t/t/z;.<init>:(Landroid/content/Context;)V // method@eb3d
+555850: 6e10 3eeb 0800                         |0030: invoke-virtual {v8}, Lu/y/k0/a/t/t/z;.b:()Z // method@eb3e
+555856: 0a08                                   |0033: move-result v8
+555858: 3908 1100                              |0034: if-nez v8, 0045 // +0011
+55585c: 1b08 a926 0000                         |0036: const-string/jumbo v8, "HomeActivity" // string@000026a9
+555862: 1b02 5981 0000                         |0039: const-string/jumbo v2, "check sign fail" // string@00008159
+555868: 7120 b228 2800                         |003c: invoke-static {v8, v2}, Lcom/tencent/videolite/android/component/log/LogTools;.y:(Ljava/lang/String;Ljava/lang/String;)I // method@28b2
+55586e: 1b08 06d7 0000                         |003f: const-string/jumbo v8, "当前包签名不一致，请前往应用商店下载使用" // string@0000d706
+555874: 7120 db25 8700                         |0042: invoke-static {v7, v8}, Lcom/tencent/videolite/android/basicapi/helper/toast/ToastHelper;.i:(Landroid/content/Context;Ljava/lang/String;)V // method@25db
+55587a: 6e10 8b13 0700                         |0045: invoke-virtual {v7}, Landroid/app/Activity;.getTaskId:()I // method@138b
+555880: 0a08                                   |0048: move-result v8
+555882: 6708 bb0a                              |0049: sput v8, Lcom/tencent/videolite/android/datamodel/model/HomeActivityConstants;.homeActivityTaskId:I // field@0abb
+555886: 6208 949a                              |004b: sget-object v8, Lu/y/k0/a/v/f/e/d;.c1:Lu/y/k0/a/m1/f/b; // field@9a94
+55588a: 6202 d462                              |004d: sget-object v2, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@62d4
+55588e: 6e20 88e3 2800                         |004f: invoke-virtual {v8, v2}, Lu/y/k0/a/m1/f/b;.h:(Ljava/lang/Boolean;)V // method@e388
+555894: 6208 aa9a                              |0052: sget-object v8, Lu/y/k0/a/v/f/e/d;.k1:Lu/y/k0/a/m1/f/b; // field@9aaa
+555898: 6202 d462                              |0054: sget-object v2, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@62d4
+55589c: 6e20 88e3 2800                         |0056: invoke-virtual {v8, v2}, Lu/y/k0/a/m1/f/b;.h:(Ljava/lang/Boolean;)V // method@e388
+5558a2: 6208 ab9a                              |0059: sget-object v8, Lu/y/k0/a/v/f/e/d;.l1:Lu/y/k0/a/m1/f/b; // field@9aab
+5558a6: 6202 d462                              |005b: sget-object v2, Ljava/lang/Boolean;.FALSE:Ljava/lang/Boolean; // field@62d4
+5558aa: 6e20 88e3 2800                         |005d: invoke-virtual {v8, v2}, Lu/y/k0/a/m1/f/b;.h:(Ljava/lang/Boolean;)V // method@e388
+5558b0: 6e10 8213 0700                         |0060: invoke-virtual {v7}, Landroid/app/Activity;.getIntent:()Landroid/content/Intent; // method@1382
+5558b6: 0c08                                   |0063: move-result-object v8
+5558b8: 1b02 c828 0000                         |0064: const-string/jumbo v2, "ImUrFather" // string@000028c8
+5558be: 6e20 bb14 2800                         |0067: invoke-virtual {v8, v2}, Landroid/content/Intent;.hasExtra:(Ljava/lang/String;)Z // method@14bb
+5558c4: 0a08                                   |006a: move-result v8
+5558c6: 3908 1700                              |006b: if-nez v8, 0082 // +0017
+5558ca: 6208 c99a                              |006d: sget-object v8, Lu/y/k0/a/v/f/e/j;.o:Lu/y/k0/a/m1/f/b; // field@9ac9
+5558ce: 6e10 86e3 0800                         |006f: invoke-virtual {v8}, Lu/y/k0/a/m1/f/a;.b:()Ljava/lang/Object; // method@e386
+5558d4: 0c08                                   |0072: move-result-object v8
+5558d6: 1f08 ce18                              |0073: check-cast v8, Ljava/lang/Boolean; // type@18ce
+5558da: 6e10 978e 0800                         |0075: invoke-virtual {v8}, Ljava/lang/Boolean;.booleanValue:()Z // method@8e97
+5558e0: 0a08                                   |0078: move-result v8
+5558e2: 3808 0300                              |0079: if-eqz v8, 007c // +0003
+5558e6: 2807                                   |007b: goto 0082 // +0007
+5558e8: 6a00 a89a                              |007c: sput-boolean v0, Lu/y/k0/a/v/f/e/d;.j4:Z // field@9aa8
+5558ec: 7010 2f2f 0700                         |007e: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.needUpdateUpdateRegister:()V // method@2f2f
+5558f2: 2830                                   |0081: goto 00b1 // +0030
+5558f4: 7010 e92e 0700                         |0082: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.dealPrivacyPolicy:()Z // method@2ee9
+5558fa: 0a08                                   |0085: move-result v8
+5558fc: 2202 0819                              |0086: new-instance v2, Ljava/lang/StringBuilder; // type@1908
+555900: 7010 7990 0200                         |0088: invoke-direct {v2}, Ljava/lang/StringBuilder;.<init>:()V // method@9079
+555906: 1b03 a826 0000                         |008b: const-string/jumbo v3, "Home onCreate 隐私协议处理，dealPrivacyPolicy=" // string@000026a8
+55590c: 6e20 8590 3200                         |008e: invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@9085
+555912: 6e20 8790 8200                         |0091: invoke-virtual {v2, v8}, Ljava/lang/StringBuilder;.append:(Z)Ljava/lang/StringBuilder; // method@9087
+555918: 6e10 9f90 0200                         |0094: invoke-virtual {v2}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@909f
+55591e: 0c02                                   |0097: move-result-object v2
+555920: 1b03 2482 0000                         |0098: const-string/jumbo v3, "cjz" // string@00008224
+555926: 1b04 0000 0000                         |009b: const-string/jumbo v4, "" // string@00000000
+55592c: 7140 ac28 4324                         |009e: invoke-static {v3, v4, v4, v2}, Lcom/tencent/videolite/android/component/log/LogTools;.V:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V // method@28ac
+555932: 3808 0b00                              |00a1: if-eqz v8, 00ac // +000b
+555936: 6e30 0026 1701                         |00a3: invoke-virtual {v7, v1, v1}, Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity;.overridePendingTransition:(II)V // method@2600
+55593c: 6e10 f22e 0700                         |00a6: invoke-virtual {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.finish:()V // method@2ef2
+555942: 5c70 010d                              |00a9: iput-boolean v0, v7, Lcom/tencent/videolite/android/ui/HomeActivity;.destroyByPrivacyPolicy:Z // field@0d01
+555946: 0e00                                   |00ab: return-void
+555948: 6a00 a89a                              |00ac: sput-boolean v0, Lu/y/k0/a/v/f/e/d;.j4:Z // field@9aa8
+55594c: 7010 2f2f 0700                         |00ae: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.needUpdateUpdateRegister:()V // method@2f2f
+555952: 7100 6fec 0000                         |00b1: invoke-static {}, Lu/y/k0/a/v/z/a0/r;.d:()Lu/y/k0/a/v/z/a0/r; // method@ec6f
+555958: 0c08                                   |00b4: move-result-object v8
+55595a: 6e10 70ec 0800                         |00b5: invoke-virtual {v8}, Lu/y/k0/a/v/z/a0/r;.g:()V // method@ec70
+555960: 1b08 d464 0000                         |00b8: const-string/jumbo v8, "SPEED_UP_TIME" // string@000064d4
+555966: 1b02 6018 0000                         |00bb: const-string/jumbo v2, "===================================onCreate" // string@00001860
+55596c: 7120 b228 2800                         |00be: invoke-static {v8, v2}, Lcom/tencent/videolite/android/component/log/LogTools;.y:(Ljava/lang/String;Ljava/lang/String;)I // method@28b2
+555972: 7100 a490 0000                         |00c1: invoke-static {}, Ljava/lang/System;.currentTimeMillis:()J // method@90a4
+555978: 0b02                                   |00c4: move-result-wide v2
+55597a: 7010 d42e 0700                         |00c5: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.asyncInit:()V // method@2ed4
+555980: 7100 a490 0000                         |00c8: invoke-static {}, Ljava/lang/System;.currentTimeMillis:()J // method@90a4
+555986: 7100 3ee3 0000                         |00cb: invoke-static {}, Lu/y/k0/a/i1/b;.d:()Z // method@e33e
+55598c: 0a08                                   |00ce: move-result v8
+55598e: 3808 1400                              |00cf: if-eqz v8, 00e3 // +0014
+555992: 1c08 6c0a                              |00d1: const-class v8, Lcom/tencent/videolite/android/ui/HomeActivity; // type@0a6c
+555996: 6e10 f68e 0800                         |00d3: invoke-virtual {v8}, Ljava/lang/Class;.getSimpleName:()Ljava/lang/String; // method@8ef6
+55599c: 0c08                                   |00d6: move-result-object v8
+55599e: 1b04 bf5f 0000                         |00d7: const-string/jumbo v4, "PlayerTracer" // string@00005fbf
+5559a4: 1b05 e3a7 0000                         |00da: const-string/jumbo v5, "launch_activity" // string@0000a7e3
+5559aa: 1b06 3cb3 0000                         |00dd: const-string/jumbo v6, "onCreate()" // string@0000b33c
+5559b0: 7140 ae28 5468                         |00e0: invoke-static {v4, v5, v8, v6}, Lcom/tencent/videolite/android/component/log/LogTools;.u:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V // method@28ae
+5559b6: 7100 f1eb 0000                         |00e3: invoke-static {}, Lu/y/k0/a/v/i/i/a;.d:()V // method@ebf1
+5559bc: 1408 4f00 0d7f                         |00e6: const v8, #float 1.87423e+38 // #7f0d004f
+5559c2: 6e20 841a 8700                         |00e9: invoke-virtual {v7, v8}, Landroidx/activity/ComponentActivity;.setContentView:(I)V // method@1a84
+5559c8: 1c08 e728                              |00ec: const-class v8, Lu/y/k0/a/v/s/b; // type@28e7
+5559cc: 7110 65ec 0800                         |00ee: invoke-static {v8}, Lu/y/k0/a/v/s/o;.a:(Ljava/lang/Class;)Ljava/lang/Object; // method@ec65
+5559d2: 0c08                                   |00f1: move-result-object v8
+5559d4: 1f08 e728                              |00f2: check-cast v8, Lu/y/k0/a/v/s/b; // type@28e7
+5559d8: 3808 0500                              |00f4: if-eqz v8, 00f9 // +0005
+5559dc: 7220 4eec 1800                         |00f6: invoke-interface {v8, v1}, Lu/y/k0/a/v/s/b;.m:(Z)V // method@ec4e
+5559e2: 6e10 922a 0700                         |00f9: invoke-virtual {v7}, Lcom/tencent/videolite/android/reportapi/FontLockActivity;.getResources:()Landroid/content/res/Resources; // method@2a92
+5559e8: 0c08                                   |00fc: move-result-object v8
+5559ea: 6e10 1815 0800                         |00fd: invoke-virtual {v8}, Landroid/content/res/Resources;.getConfiguration:()Landroid/content/res/Configuration; // method@1518
+5559f0: 0c08                                   |0100: move-result-object v8
+5559f2: 5288 cb02                              |0101: iget v8, v8, Landroid/content/res/Configuration;.orientation:I // field@02cb
+5559f6: 1221                                   |0103: const/4 v1, #int 2 // #2
+5559f8: 3318 0b00                              |0104: if-ne v8, v1, 010f // +000b
+5559fc: 7110 e623 0700                         |0106: invoke-static {v7}, Lcom/cctvvideo/ysp/adaptive/AdaptiveDevices;.j:(Landroid/content/Context;)Z // method@23e6
+555a02: 0a08                                   |0109: move-result v8
+555a04: 3908 0500                              |010a: if-nez v8, 010f // +0005
+555a08: 6e20 0726 0700                         |010c: invoke-virtual {v7, v0}, Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity;.setRequestedOrientation:(I)V // method@2607
+555a0e: 7100 3981 0000                         |010f: invoke-static {}, Lf0/d/a/a;.f:()Lf0/d/a/a; // method@8139
+555a14: 0c08                                   |0112: move-result-object v8
+555a16: 6e20 4a81 7800                         |0113: invoke-virtual {v8, v7}, Lf0/d/a/a;.v:(Ljava/lang/Object;)V // method@814a
+555a1c: 1208                                   |0116: const/4 v8, #int 0 // #0
+555a1e: 7020 562f 8700                         |0117: invoke-direct {v7, v8}, Lcom/tencent/videolite/android/ui/HomeActivity;.parseIntent:(Landroid/content/Intent;)V // method@2f56
+555a24: 6e10 f12e 0700                         |011a: invoke-virtual {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.findView:()V // method@2ef1
+555a2a: 7110 afeb 0700                         |011d: invoke-static {v7}, Lu/y/k0/a/u2/a;.b:(Landroid/app/Activity;)V // method@ebaf
+555a30: 7010 172f 0700                         |0120: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.initSchemeSwitchTabIndex:()V // method@2f17
+555a36: 7010 792f 0700                         |0123: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.switchTabFragment:()V // method@2f79
+555a3c: 7100 b628 0000                         |0126: invoke-static {}, Lcom/tencent/videolite/android/component/login/LoginServer;.i:()Lcom/tencent/videolite/android/component/login/LoginServer; // method@28b6
+555a42: 0c08                                   |0129: move-result-object v8
+555a44: 5470 1b0d                              |012a: iget-object v0, v7, Lcom/tencent/videolite/android/ui/HomeActivity;.mLoginCallback:Lu/y/k0/a/c0/h/b/a; // field@0d1b
+555a48: 6e20 b928 0800                         |012c: invoke-virtual {v8, v0}, Lcom/tencent/videolite/android/component/login/LoginServer;.s:(Lu/y/k0/a/c0/h/b/a;)V // method@28b9
+555a4e: 5478 fa0c                              |012f: iget-object v8, v7, Lcom/tencent/videolite/android/ui/HomeActivity;.backPressProxy:Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity$d; // field@0cfa
+555a52: 6e20 0126 8700                         |0131: invoke-virtual {v7, v8}, Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity;.registerBackPressProxy:(Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity$d;)V // method@2601
+555a58: 7100 b325 0000                         |0134: invoke-static {}, Lcom/tencent/videolite/android/basicapi/PlayerScreenStyleObserver;.b:()Lcom/tencent/videolite/android/basicapi/PlayerScreenStyleObserver; // method@25b3
+555a5e: 0c08                                   |0137: move-result-object v8
+555a60: 5470 200d                              |0138: iget-object v0, v7, Lcom/tencent/videolite/android/ui/HomeActivity;.mPlayerScreenStyleListener:Lcom/tencent/videolite/android/basicapi/PlayerScreenStyleObserver$b; // field@0d20
+555a64: 6e20 b825 0800                         |013a: invoke-virtual {v8, v0}, Lcom/tencent/videolite/android/basicapi/PlayerScreenStyleObserver;.l:(Lcom/tencent/videolite/android/basicapi/PlayerScreenStyleObserver$b;)V // method@25b8
+555a6a: 5478 1e0d                              |013d: iget-object v8, v7, Lcom/tencent/videolite/android/ui/HomeActivity;.mOnPictureInPictureListener:Lcom/tencent/videolite/android/component/player/utils/PictureInPictureModeObserver$IOnPictureInPictureListener; // field@0d1e
+555a6e: 7110 3b29 0800                         |013f: invoke-static {v8}, Lcom/tencent/videolite/android/component/player/utils/PictureInPictureModeObserver;.register:(Lcom/tencent/videolite/android/component/player/utils/PictureInPictureModeObserver$IOnPictureInPictureListener;)V // method@293b
+555a74: 7010 e02e 0700                         |0142: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.checkSnapshotPicture:()V // method@2ee0
+555a7a: 7100 c7eb 0000                         |0145: invoke-static {}, Lu/y/k0/a/v/e/a/c/a;.h:()Lu/y/k0/a/v/e/a/c/a; // method@ebc7
+555a80: 0c08                                   |0148: move-result-object v8
+555a82: 6e10 c8eb 0800                         |0149: invoke-virtual {v8}, Lu/y/k0/a/v/e/a/c/a;.i:()V // method@ebc8
+555a88: 7100 5940 0000                         |014c: invoke-static {}, Lcom/tencent/videolite/android/ui/fragment/persenter/MsgCenterLooperServer;.i:()Lcom/tencent/videolite/android/ui/fragment/persenter/MsgCenterLooperServer; // method@4059
+555a8e: 0c08                                   |014f: move-result-object v8
+555a90: 6e20 5740 7800                         |0150: invoke-virtual {v8, v7}, Lcom/tencent/videolite/android/ui/fragment/persenter/MsgCenterLooperServer;.g:(Lcom/tencent/videolite/android/ui/fragment/persenter/MsgCenterLooperServer$c;)V // method@4057
+555a96: 7100 7540 0000                         |0153: invoke-static {}, Lcom/tencent/videolite/android/ui/fragment/persenter/MyBadgePollServer;.i:()Lcom/tencent/videolite/android/ui/fragment/persenter/MyBadgePollServer; // method@4075
+555a9c: 0c08                                   |0156: move-result-object v8
+555a9e: 6e20 7340 7800                         |0157: invoke-virtual {v8, v7}, Lcom/tencent/videolite/android/ui/fragment/persenter/MyBadgePollServer;.g:(Lcom/tencent/videolite/android/ui/fragment/persenter/MyBadgePollServer$c;)V // method@4073
+555aa4: 7100 90e2 0000                         |015a: invoke-static {}, Lu/y/k0/a/c0/d/b;.a:()Lu/y/k0/a/c0/d/b; // method@e290
+555aaa: 0c08                                   |015d: move-result-object v8
+555aac: 5470 f90c                              |015e: iget-object v0, v7, Lcom/tencent/videolite/android/ui/HomeActivity;.appLifeCycleObserver:Lu/y/k0/a/c0/d/b$b; // field@0cf9
+555ab0: 6e20 42e3 0800                         |0160: invoke-virtual {v8, v0}, Lu/y/k0/a/i1/d/a;.registerObserver:(Ljava/lang/Object;)V // method@e342
+555ab6: 7100 61ea 0000                         |0163: invoke-static {}, Lu/y/k0/a/s3/l;.f:()Lu/y/k0/a/s3/l; // method@ea61
+555abc: 0c08                                   |0166: move-result-object v8
+555abe: 7100 a490 0000                         |0167: invoke-static {}, Ljava/lang/System;.currentTimeMillis:()J // method@90a4
+555ac4: 0b00                                   |016a: move-result-wide v0
+555ac6: bc20                                   |016b: sub-long/2addr v0, v2
+555ac8: 6e30 5eea 0801                         |016c: invoke-virtual {v8, v0, v1}, Lu/y/k0/a/s3/l;.c:(J)V // method@ea5e
+555ace: 7010 2b2f 0700                         |016f: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.logRFixInfo:()V // method@2f2b
+555ad4: 7010 5e2f 0700                         |0172: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.reportChannelInfo:()V // method@2f5e
+555ada: 7010 5f2f 0700                         |0175: invoke-direct {v7}, Lcom/tencent/videolite/android/ui/HomeActivity;.reportUserSetting:()V // method@2f5f
+555ae0: 7100 23ea 0000                         |0178: invoke-static {}, Lu/y/k0/a/s3/e;.a:()V // method@ea23
+555ae6: 7100 6ceb 0000                         |017b: invoke-static {}, Lu/y/k0/a/u/h/a;.b:()V // method@eb6c
+555aec: 0e00                                   |017e: return-void
+      catches       : (none)
+      positions     :
+        0x000e line=1
+        0x0014 line=2
+        0x0017 line=3
+        0x001a line=4
+        0x0024 line=5
+        0x002b line=6
+        0x003c line=7
+        0x0042 line=8
+        0x0045 line=9
+        0x004b line=10
+        0x0052 line=11
+        0x0059 line=12
+        0x0060 line=13
+        0x006d line=14
+        0x007c line=15
+        0x007e line=16
+        0x0082 line=17
+        0x0086 line=18
+        0x00a3 line=19
+        0x00a6 line=20
+        0x00a9 line=21
+        0x00ac line=22
+        0x00ae line=23
+        0x00b1 line=24
+        0x00be line=25
+        0x00c1 line=26
+        0x00c5 line=27
+        0x00c8 line=28
+        0x00cb line=29
+        0x00d1 line=30
+        0x00e0 line=31
+        0x00e3 line=32
+        0x00e9 line=33
+        0x00ec line=34
+        0x00f6 line=35
+        0x00f9 line=36
+        0x0106 line=37
+        0x010c line=38
+        0x010f line=39
+        0x0117 line=40
+        0x011a line=41
+        0x011d line=42
+        0x0120 line=43
+        0x0123 line=44
+        0x0126 line=45
+        0x012f line=46
+        0x0134 line=47
+        0x013d line=48
+        0x0142 line=49
+        0x0145 line=50
+        0x014c line=51
+        0x0153 line=52
+        0x015a line=53
+        0x0163 line=54
+        0x016f line=55
+        0x0172 line=56
+        0x0175 line=57
+        0x0178 line=58
+        0x017b line=59
+      locals        :
+        0x0000 - 0x017f reg=7 this Lcom/tencent/videolite/android/ui/HomeActivity;
+        0x0000 - 0x017f reg=8 (null) Landroid/os/Bundle;
+
+
+    #52              : (in Lcom/tencent/videolite/android/ui/HomeActivity;)
+      name          : 'onNewIntent'
+      type          : '(Landroid/content/Intent;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 4
+      insns size    : 118 16-bit code units
+556134:                                        |[556134] com.tencent.videolite.android.ui.HomeActivity.onNewIntent:(Landroid/content/Intent;)V
+556144: 1300 ff44                              |0000: const/16 v0, #int 17663 // #44ff
+556148: 1301 2600                              |0002: const/16 v1, #int 38 // #26
+55614c: 7120 8824 1000                         |0004: invoke-static {v0, v1}, Lcom/tencent/mobileqq/qfix/redirect/PatchRedirectCenter;.getRedirector:(IS)Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector; // method@2488
+556152: 0c00                                   |0007: move-result-object v0
+556154: 3800 0600                              |0008: if-eqz v0, 000e // +0006
+556158: 7240 8224 1032                         |000a: invoke-interface {v0, v1, v2, v3}, Lcom/tencent/mobileqq/qfix/redirect/IPatchRedirector;.redirect:(SLjava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@2482
+55615e: 0e00                                   |000d: return-void
+556160: 1b00 a926 0000                         |000e: const-string/jumbo v0, "HomeActivity" // string@000026a9
+556166: 1b01 2fb4 0000                         |0011: const-string/jumbo v1, "onNewIntent" // string@0000b42f
+55616c: 7120 b228 1000                         |0014: invoke-static {v0, v1}, Lcom/tencent/videolite/android/component/log/LogTools;.y:(Ljava/lang/String;Ljava/lang/String;)I // method@28b2
+556172: 6f20 f825 3200                         |0017: invoke-super {v2, v3}, Lcom/tencent/videolite/android/basiccomponent/activity/CommonActivity;.onNewIntent:(Landroid/content/Intent;)V // method@25f8
+556178: 7020 562f 3200                         |001a: invoke-direct {v2, v3}, Lcom/tencent/videolite/android/ui/HomeActivity;.parseIntent:(Landroid/content/Intent;)V // method@2f56
+55617e: 7010 852f 0200                         |001d: invoke-direct {v2}, Lcom/tencent/videolite/android/ui/HomeActivity;.updateUserVisibleHint:()V // method@2f85
+556184: 7010 5d2f 0200                         |0020: invoke-direct {v2}, Lcom/tencent/videolite/android/ui/HomeActivity;.releaseTvFeedPlayerIfNeed:()V // method@2f5d
+55618a: 6e10 e61a 0200                         |0023: invoke-virtual {v2}, Landroidx/fragment/app/FragmentActivity;.getSupportFragmentManager:()Landroidx/fragment/app/FragmentManager; // method@1ae6
+556190: 0c00                                   |0026: move-result-object v0
+556192: 7020 592f 0200                         |0027: invoke-direct {v2, v0}, Lcom/tencent/videolite/android/ui/HomeActivity;.popStack:(Landroidx/fragment/app/FragmentManager;)V // method@2f59
+556198: 1200                                   |002a: const/4 v0, #int 0 // #0
+55619a: 5c20 070d                              |002b: iput-boolean v0, v2, Lcom/tencent/videolite/android/ui/HomeActivity;.inSmoothPage:Z // field@0d07
+55619e: 7010 f72e 0200                         |002d: invoke-direct {v2}, Lcom/tencent/videolite/android/ui/HomeActivity;.getHomeTabFragment:()Lcom/tencent/videolite/android/ui/fragment/homeTab/HomeTabFragment; // method@2ef7
+5561a4: 0c00                                   |0030: move-result-object v0
+5561a6: 3800 0500                              |0031: if-eqz v0, 0036 // +0005
+5561aa: 6e10 e63f 0000                         |0033: invoke-virtual {v0}, Lcom/tencent/videolite/android/ui/fragment/homeTab/HomeTabFragment;.resetSmoothPage:()V // method@3fe6
+5561b0: 5220 210d                              |0036: iget v0, v2, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5561b4: 5221 1a0d                              |0038: iget v1, v2, Lcom/tencent/videolite/android/ui/HomeActivity;.mLastTabIndex:I // field@0d1a
+5561b8: 3210 1000                              |003a: if-eq v0, v1, 004a // +0010
+5561bc: 7020 7b2f 0200                         |003c: invoke-direct {v2, v0}, Lcom/tencent/videolite/android/ui/HomeActivity;.switchTabWithChangeIcon:(I)V // method@2f7b
+5561c2: 6200 b59a                              |003f: sget-object v0, Lu/y/k0/a/v/f/e/d;.u1:Lu/y/k0/a/m1/f/e; // field@9ab5
+5561c6: 5221 210d                              |0041: iget v1, v2, Lcom/tencent/videolite/android/ui/HomeActivity;.mSchemeSwitchTabIndex:I // field@0d21
+5561ca: 7110 848f 0100                         |0043: invoke-static {v1}, Ljava/lang/Integer;.valueOf:(I)Ljava/lang/Integer; // method@8f84
+5561d0: 0c01                                   |0046: move-result-object v1
+5561d2: 6e20 8be3 1000                         |0047: invoke-virtual {v0, v1}, Lu/y/k0/a/m1/f/e;.h:(Ljava/lang/Integer;)V // method@e38b
+5561d8: 5420 190d                              |004a: iget-object v0, v2, Lcom/tencent/videolite/android/ui/HomeActivity;.mLastFragmentRef:Ljava/lang/ref/WeakReference; // field@0d19
+5561dc: 3800 1800                              |004c: if-eqz v0, 0064 // +0018
+5561e0: 6e10 ff90 0000                         |004e: invoke-virtual {v0}, Ljava/lang/ref/WeakReference;.get:()Ljava/lang/Object; // method@90ff
+5561e6: 0c00                                   |0051: move-result-object v0
+5561e8: 1f00 c106                              |0052: check-cast v0, Lcom/tencent/videolite/android/basiccomponent/fragment/CommonFragment; // type@06c1
+5561ec: 3800 1000                              |0054: if-eqz v0, 0064 // +0010
+5561f0: 6e10 ae14 0300                         |0056: invoke-virtual {v3}, Landroid/content/Intent;.getExtras:()Landroid/os/Bundle; // method@14ae
+5561f6: 0c01                                   |0059: move-result-object v1
+5561f8: 6e20 e11a 1000                         |005a: invoke-virtual {v0, v1}, Landroidx/fragment/app/Fragment;.setArguments:(Landroid/os/Bundle;)V // method@1ae1
+5561fe: 6e10 ae14 0300                         |005d: invoke-virtual {v3}, Landroid/content/Intent;.getExtras:()Landroid/os/Bundle; // method@14ae
+556204: 0c03                                   |0060: move-result-object v3
+556206: 6e20 1026 3000                         |0061: invoke-virtual {v0, v3}, Lcom/tencent/videolite/android/basiccomponent/fragment/CommonFragment;.onNewArguments:(Landroid/os/Bundle;)V // method@2610
+55620c: 6203 c19a                              |0064: sget-object v3, Lu/y/k0/a/v/f/e/j;.d:Lu/y/k0/a/m1/f/b; // field@9ac1
+556210: 6e10 86e3 0300                         |0066: invoke-virtual {v3}, Lu/y/k0/a/m1/f/a;.b:()Ljava/lang/Object; // method@e386
+556216: 0c03                                   |0069: move-result-object v3
+556218: 1f03 ce18                              |006a: check-cast v3, Ljava/lang/Boolean; // type@18ce
+55621c: 6e10 978e 0300                         |006c: invoke-virtual {v3}, Ljava/lang/Boolean;.booleanValue:()Z // method@8e97
+556222: 0a03                                   |006f: move-result v3
+556224: 3803 0500                              |0070: if-eqz v3, 0075 // +0005
+556228: 7010 702f 0200                         |0072: invoke-direct {v2}, Lcom/tencent/videolite/android/ui/HomeActivity;.splashInit:()V // method@2f70
+55622e: 0e00                                   |0075: return-void
+      catches       : (none)
+      positions     :
+        0x0014 line=1
+        0x0017 line=2
+        0x001a line=3
+        0x001d line=4
+        0x0020 line=5
+        0x0023 line=6
+        0x002b line=7
+        0x002d line=8
+        0x0033 line=9
+        0x0036 line=10
+        0x003c line=11
+        0x003f line=12
+        0x004a line=13
+        0x004e line=14
+        0x0056 line=15
+        0x005d line=16
+        0x0064 line=17
+        0x0072 line=18
+      locals        :
+        0x0000 - 0x0076 reg=2 this Lcom/tencent/videolite/android/ui/HomeActivity;
+        0x0000 - 0x0076 reg=3 (null) Landroid/content/Intent;
+

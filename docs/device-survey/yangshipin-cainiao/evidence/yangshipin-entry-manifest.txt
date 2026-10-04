@@ -1,0 +1,47 @@
+    E: activity (line=205)
+        A: android:theme(0x01010000)=@0x7f13016f
+        A: android:name(0x01010003)="com.tencent.videolite.android.ui.SplashActivity" (Raw: "com.tencent.videolite.android.ui.SplashActivity")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:screenOrientation(0x0101001e)=(type 0x10)0x3
+        A: android:windowSoftInputMode(0x0101022b)=(type 0x11)0x3
+        A: android:supportsPictureInPicture(0x010104f7)=(type 0x12)0xffffffff
+        E: intent-filter (line=212)
+          E: action (line=213)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=215)
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+        E: intent-filter (line=217)
+          E: action (line=218)
+            A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+          E: category (line=220)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          E: category (line=221)
+            A: android:name(0x01010003)="android.intent.category.BROWSABLE" (Raw: "android.intent.category.BROWSABLE")
+          E: data (line=223)
+            A: android:scheme(0x01010027)="atm.Ql5uwulCzBAiTF0a" (Raw: "atm.Ql5uwulCzBAiTF0a")
+  
+    E: activity (line=226)
+        A: android:theme(0x01010000)=@0x7f130115
+        A: android:name(0x01010003)="com.tencent.videolite.android.ui.HomeActivity" (Raw: "com.tencent.videolite.android.ui.HomeActivity")
+        A: android:launchMode(0x0101001d)=(type 0x10)0x2
+        A: android:screenOrientation(0x0101001e)=(type 0x10)0x3
+        A: android:configChanges(0x0101001f)=(type 0x11)0x40000fa0
+        A: android:windowSoftInputMode(0x0101022b)=(type 0x11)0x30
+        A: android:supportsPictureInPicture(0x010104f7)=(type 0x12)0xffffffff
+  
+    E: activity (line=994)
+        A: android:theme(0x01010000)=@0x7f13000c
+        A: android:name(0x01010003)="com.tencent.videolite.android.component.literoute.OpenActivity" (Raw: "com.tencent.videolite.android.component.literoute.OpenActivity")
+        A: android:exported(0x01010010)=(type 0x12)0xffffffff
+        A: android:configChanges(0x0101001f)=(type 0x11)0x40000fa0
+        A: android:allowTaskReparenting(0x01010204)=(type 0x12)0xffffffff
+        E: intent-filter (line=1000)
+          E: action (line=1001)
+            A: android:name(0x01010003)="android.intent.action.VIEW" (Raw: "android.intent.action.VIEW")
+          E: category (line=1003)
+            A: android:name(0x01010003)="android.intent.category.BROWSABLE" (Raw: "android.intent.category.BROWSABLE")
+          E: category (line=1004)
+            A: android:name(0x01010003)="android.intent.category.DEFAULT" (Raw: "android.intent.category.DEFAULT")
+          E: data (line=1006)
+            A: android:scheme(0x01010027)="cctvvideo" (Raw: "cctvvideo")
+  

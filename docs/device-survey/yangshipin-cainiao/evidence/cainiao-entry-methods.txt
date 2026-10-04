@@ -1,0 +1,911 @@
+Selected DEX methods from the same SHA-256 APK as metadata.json. dexdump -d; offsets retained.
+
+    #11              : (in Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;)
+      name          : 'onCreateImpl'
+      type          : '(Landroid/os/Bundle;)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 10
+      ins           : 2
+      outs          : 6
+      insns size    : 129 16-bit code units
+223afc:                                        |[223afc] com.cainiao.wireless.homepage.view.activity.WelcomeActivity.onCreateImpl:(Landroid/os/Bundle;)V
+223b0c: 6200 9366                              |0000: sget-object v0, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.$ipChange:Lcom/android/alibaba/ip/runtime/IpChange; // field@6693
+223b10: 1201                                   |0002: const/4 v1, #int 0 // #0
+223b12: 3800 1400                              |0003: if-eqz v0, 0017 // +0014
+223b16: 2002 b302                              |0005: instance-of v2, v0, Lcom/android/alibaba/ip/runtime/IpChange; // type@02b3
+223b1a: 3802 1000                              |0007: if-eqz v2, 0017 // +0010
+223b1e: 1222                                   |0009: const/4 v2, #int 2 // #2
+223b20: 2322 d91e                              |000a: new-array v2, v2, [Ljava/lang/Object; // type@1ed9
+223b24: 4d08 0201                              |000c: aput-object v8, v2, v1
+223b28: 1211                                   |000e: const/4 v1, #int 1 // #1
+223b2a: 4d09 0201                              |000f: aput-object v9, v2, v1
+223b2e: 1a09 257a                              |0011: const-string v9, "c2c31a12" // string@7a25
+223b32: 7230 1b09 9002                         |0013: invoke-interface {v0, v9, v2}, Lcom/android/alibaba/ip/runtime/IpChange;.ipc$dispatch:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object; // method@091b
+223b38: 0e00                                   |0016: return-void
+223b3a: 7100 987d 0000                         |0017: invoke-static {}, Lcom/cainiao/wireless/utils/SimpleLaunchSP;.hasPrivacyAgreed:()Z // method@7d98
+223b40: 0a09                                   |001a: move-result v9
+223b42: 3809 6200                              |001b: if-eqz v9, 007d // +0062
+223b46: 6209 70ea                              |001d: sget-object v9, Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper;.INSTANCE:Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper; // field@ea70
+223b4a: 1b00 9600 0100                         |001f: const-string/jumbo v0, "splash_ad" // string@00010096
+223b50: 6e20 e27d 0900                         |0022: invoke-virtual {v9, v0}, Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper;.starTrace:(Ljava/lang/String;)V // method@7de2
+223b56: 7100 e246 0000                         |0025: invoke-static {}, Lcom/cainiao/wireless/l;.Jl:()V // method@46e2
+223b5c: 7100 3e25 0000                         |0028: invoke-static {}, Lcom/cainiao/wireless/homepage/util/h;.avK:()Lcom/cainiao/wireless/homepage/util/h; // method@253e
+223b62: 6e10 7c2d 0800                         |002b: invoke-virtual {v8}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.getIntent:()Landroid/content/Intent; // method@2d7c
+223b68: 0c09                                   |002e: move-result-object v9
+223b6a: 1a00 c1ca                              |002f: const-string v0, "isHotLaunch" // string@cac1
+223b6e: 6e30 4a01 0901                         |0031: invoke-virtual {v9, v0, v1}, Landroid/content/Intent;.getBooleanExtra:(Ljava/lang/String;Z)Z // method@014a
+223b74: 0a09                                   |0034: move-result v9
+223b76: 5c89 9466                              |0035: iput-boolean v9, v8, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.isHotLaunch:Z // field@6694
+223b7a: 6202 e808                              |0037: sget-object v2, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223b7e: 6203 d108                              |0039: sget-object v3, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$ActionName;.APP_INIT_REQUEST_ID:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$ActionName; // field@08d1
+223b82: 6209 e808                              |003b: sget-object v9, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223b86: 6e10 3b0b 0900                         |003d: invoke-virtual {v9}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.Ox:()Ljava/lang/String; // method@0b3b
+223b8c: 0c04                                   |0040: move-result-object v4
+223b8e: 6209 e808                              |0041: sget-object v9, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223b92: 6e10 390b 0900                         |0043: invoke-virtual {v9}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.Or:()Ljava/lang/String; // method@0b39
+223b98: 0c05                                   |0046: move-result-object v5
+223b9a: 1206                                   |0047: const/4 v6, #int 0 // #0
+223b9c: 6209 e808                              |0048: sget-object v9, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223ba0: 6e10 360b 0900                         |004a: invoke-virtual {v9}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.OB:()Ljava/lang/String; // method@0b36
+223ba6: 0c07                                   |004d: move-result-object v7
+223ba8: 7406 3e0b 0200                         |004e: invoke-virtual/range {v2, v3, v4, v5, v6, v7}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.a:(Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$ActionName;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V // method@0b3e
+223bae: 5589 9466                              |0051: iget-boolean v9, v8, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.isHotLaunch:Z // field@6694
+223bb2: 3909 0600                              |0053: if-nez v9, 0059 // +0006
+223bb6: 6e10 772d 0800                         |0055: invoke-virtual {v8}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.checkForcePermissionForApp:()V // method@2d77
+223bbc: 2804                                   |0058: goto 005c // +0004
+223bbe: 7020 8f2d 1800                         |0059: invoke-direct {v8, v1}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.requestMamaAndRtbSplash:(Z)Z // method@2d8f
+223bc4: 6202 e808                              |005c: sget-object v2, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223bc8: 6203 d008                              |005e: sget-object v3, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$ActionName;.APP_GET_REQUEST:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$ActionName; // field@08d0
+223bcc: 6209 e808                              |0060: sget-object v9, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223bd0: 6e10 3b0b 0900                         |0062: invoke-virtual {v9}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.Ox:()Ljava/lang/String; // method@0b3b
+223bd6: 0c04                                   |0065: move-result-object v4
+223bd8: 6209 e808                              |0066: sget-object v9, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223bdc: 6e10 390b 0900                         |0068: invoke-virtual {v9}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.Or:()Ljava/lang/String; // method@0b39
+223be2: 0c05                                   |006b: move-result-object v5
+223be4: 1206                                   |006c: const/4 v6, #int 0 // #0
+223be6: 6209 e808                              |006d: sget-object v9, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils;.bnU:Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a; // field@08e8
+223bea: 6e10 360b 0900                         |006f: invoke-virtual {v9}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.OB:()Ljava/lang/String; // method@0b36
+223bf0: 0c07                                   |0072: move-result-object v7
+223bf2: 7406 3e0b 0200                         |0073: invoke-virtual/range {v2, v3, v4, v5, v6, v7}, Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$a;.a:(Lcom/cainiao/wireless/ads/utils/AdsHttpReportUtils$ActionName;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V // method@0b3e
+223bf8: 7100 3d03 0000                         |0076: invoke-static {}, Landroid/os/SystemClock;.elapsedRealtime:()J // method@033d
+223bfe: 0b00                                   |0079: move-result-wide v0
+223c00: 6800 a409                              |007a: sput-wide v0, Lcom/cainiao/wireless/d;.aYb:J // field@09a4
+223c04: 2804                                   |007c: goto 0080 // +0004
+223c06: 7010 832d 0800                         |007d: invoke-direct {v8}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.handlePrivacyProtect:()V // method@2d83
+223c0c: 0e00                                   |0080: return-void
+      catches       : (none)
+      positions     :
+        0x0017 line=92
+        0x001d line=93
+        0x0025 line=96
+        0x0028 line=98
+        0x002b line=102
+        0x0031 line=103
+        0x0037 line=105
+        0x003d line=106
+        0x0043 line=107
+        0x004a line=108
+        0x004e line=105
+        0x0051 line=109
+        0x0055 line=111
+        0x0059 line=113
+        0x005c line=116
+        0x0062 line=117
+        0x0068 line=118
+        0x006f line=119
+        0x0073 line=116
+        0x0076 line=121
+        0x007d line=126
+      locals        :
+        0x0000 - 0x0081 reg=8 this Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;
+        0x0000 - 0x0081 reg=9 (null) Landroid/os/Bundle;
+
+
+    #12              : (in Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;)
+      name          : 'realGoHomeActivity'
+      type          : '()V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 8
+      ins           : 1
+      outs          : 3
+      insns size    : 146 16-bit code units
+223d54:                                        |[223d54] com.cainiao.wireless.homepage.view.activity.WelcomeActivity.realGoHomeActivity:()V
+223d64: 6200 9366                              |0000: sget-object v0, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.$ipChange:Lcom/android/alibaba/ip/runtime/IpChange; // field@6693
+223d68: 1211                                   |0002: const/4 v1, #int 1 // #1
+223d6a: 1202                                   |0003: const/4 v2, #int 0 // #0
+223d6c: 3800 1000                              |0004: if-eqz v0, 0014 // +0010
+223d70: 2003 b302                              |0006: instance-of v3, v0, Lcom/android/alibaba/ip/runtime/IpChange; // type@02b3
+223d74: 3803 0c00                              |0008: if-eqz v3, 0014 // +000c
+223d78: 2311 d91e                              |000a: new-array v1, v1, [Ljava/lang/Object; // type@1ed9
+223d7c: 4d07 0102                              |000c: aput-object v7, v1, v2
+223d80: 1a02 3eae                              |000e: const-string v2, "fd4ef5db" // string@ae3e
+223d84: 7230 1b09 2001                         |0010: invoke-interface {v0, v2, v1}, Lcom/android/alibaba/ip/runtime/IpChange;.ipc$dispatch:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object; // method@091b
+223d8a: 0e00                                   |0013: return-void
+223d8c: 1a00 222a                              |0014: const-string v0, "CnRtbAdController" // string@2a22
+223d90: 1a03 69bc                              |0016: const-string v3, "gotoMainActivityInternal: " // string@bc69
+223d94: 7120 e304 3000                         |0018: invoke-static {v0, v3}, Landroid/util/Log;.d:(Ljava/lang/String;Ljava/lang/String;)I // method@04e3
+223d9a: 6e10 7c2d 0700                         |001b: invoke-virtual {v7}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.getIntent:()Landroid/content/Intent; // method@2d7c
+223da0: 0c00                                   |001e: move-result-object v0
+223da2: 1a03 e456                              |001f: const-string v3, "Router" // string@56e4
+223da6: 1a04 046e                              |0021: const-string v4, "android.intent.action.VIEW" // string@6e04
+223daa: 3800 4a00                              |0023: if-eqz v0, 006d // +004a
+223dae: 6e10 7c2d 0700                         |0025: invoke-virtual {v7}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.getIntent:()Landroid/content/Intent; // method@2d7c
+223db4: 0c00                                   |0028: move-result-object v0
+223db6: 6e10 4d01 0000                         |0029: invoke-virtual {v0}, Landroid/content/Intent;.getExtras:()Landroid/os/Bundle; // method@014d
+223dbc: 0c00                                   |002c: move-result-object v0
+223dbe: 3800 4000                              |002d: if-eqz v0, 006d // +0040
+223dc2: 6e10 7c2d 0700                         |002f: invoke-virtual {v7}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.getIntent:()Landroid/content/Intent; // method@2d7c
+223dc8: 0c00                                   |0032: move-result-object v0
+223dca: 6e10 4d01 0000                         |0033: invoke-virtual {v0}, Landroid/content/Intent;.getExtras:()Landroid/os/Bundle; // method@014d
+223dd0: 0c00                                   |0036: move-result-object v0
+223dd2: 1a05 a5e3                              |0037: const-string v5, "outer_data_string" // string@e3a5
+223dd6: 6e20 ee02 5000                         |0039: invoke-virtual {v0, v5}, Landroid/os/Bundle;.getString:(Ljava/lang/String;)Ljava/lang/String; // method@02ee
+223ddc: 0c05                                   |003c: move-result-object v5
+223dde: 7110 d204 0500                         |003d: invoke-static {v5}, Landroid/text/TextUtils;.isEmpty:(Ljava/lang/CharSequence;)Z // method@04d2
+223de4: 0a06                                   |0040: move-result v6
+223de6: 3906 2c00                              |0041: if-nez v6, 006d // +002c
+223dea: 7110 da02 0500                         |0043: invoke-static {v5}, Landroid/net/Uri;.parse:(Ljava/lang/String;)Landroid/net/Uri; // method@02da
+223df0: 0c01                                   |0046: move-result-object v1
+223df2: 2206 7500                              |0047: new-instance v6, Landroid/content/Intent; // type@0075
+223df6: 7030 4501 4601                         |0049: invoke-direct {v6, v4, v1}, Landroid/content/Intent;.<init>:(Ljava/lang/String;Landroid/net/Uri;)V // method@0145
+223dfc: 6e20 5f01 0600                         |004c: invoke-virtual {v6, v0}, Landroid/content/Intent;.putExtras:(Landroid/os/Bundle;)Landroid/content/Intent; // method@015f
+223e02: 6e20 962d 6700                         |004f: invoke-virtual {v7, v6}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.startActivity:(Landroid/content/Intent;)V // method@2d96
+223e08: 6e30 8d2d 2702                         |0052: invoke-virtual {v7, v2, v2}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.overridePendingTransition:(II)V // method@2d8d
+223e0e: 6e10 792d 0700                         |0055: invoke-virtual {v7}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.finish:()V // method@2d79
+223e14: 2200 421c                              |0058: new-instance v0, Ljava/lang/StringBuilder; // type@1c42
+223e18: 7010 c58c 0000                         |005a: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@8cc5
+223e1e: 1a01 a7dd                              |005d: const-string v1, "navTo=" // string@dda7
+223e22: 6e20 cf8c 1000                         |005f: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@8ccf
+223e28: 6e20 cf8c 5000                         |0062: invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@8ccf
+223e2e: 6e10 da8c 0000                         |0065: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@8cda
+223e34: 0c00                                   |0068: move-result-object v0
+223e36: 7120 5b0a 0300                         |0069: invoke-static {v3, v0}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+223e3c: 0e00                                   |006c: return-void
+223e3e: 7020 8f2d 1700                         |006d: invoke-direct {v7, v1}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.requestMamaAndRtbSplash:(Z)Z // method@2d8f
+223e44: 0a00                                   |0070: move-result v0
+223e46: 3900 2000                              |0071: if-nez v0, 0091 // +0020
+223e4a: 2200 7500                              |0073: new-instance v0, Landroid/content/Intent; // type@0075
+223e4e: 1a01 34bd                              |0075: const-string v1, "guoguo://go/home_page" // string@bd34
+223e52: 7110 da02 0100                         |0077: invoke-static {v1}, Landroid/net/Uri;.parse:(Ljava/lang/String;)Landroid/net/Uri; // method@02da
+223e58: 0c01                                   |007a: move-result-object v1
+223e5a: 7030 4501 4001                         |007b: invoke-direct {v0, v4, v1}, Landroid/content/Intent;.<init>:(Ljava/lang/String;Landroid/net/Uri;)V // method@0145
+223e60: 1501 0004                              |007e: const/high16 v1, #int 67108864 // #400
+223e64: 6e20 4701 1000                         |0080: invoke-virtual {v0, v1}, Landroid/content/Intent;.addFlags:(I)Landroid/content/Intent; // method@0147
+223e6a: 6e20 962d 0700                         |0083: invoke-virtual {v7, v0}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.startActivity:(Landroid/content/Intent;)V // method@2d96
+223e70: 6e30 8d2d 2702                         |0086: invoke-virtual {v7, v2, v2}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.overridePendingTransition:(II)V // method@2d8d
+223e76: 6e10 792d 0700                         |0089: invoke-virtual {v7}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.finish:()V // method@2d79
+223e7c: 1a00 a8dd                              |008c: const-string v0, "navTo=guoguo://go/home_page" // string@dda8
+223e80: 7120 5b0a 0300                         |008e: invoke-static {v3, v0}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+223e86: 0e00                                   |0091: return-void
+      catches       : (none)
+      positions     :
+        0x0018 line=566
+        0x001b line=568
+        0x002f line=569
+        0x0039 line=570
+        0x003d line=571
+        0x0043 line=572
+        0x0047 line=573
+        0x004c line=574
+        0x004f line=575
+        0x0052 line=576
+        0x0055 line=577
+        0x0058 line=578
+        0x006d line=584
+        0x0073 line=587
+        0x0080 line=588
+        0x0083 line=589
+        0x0086 line=590
+        0x0089 line=591
+        0x008e line=592
+      locals        :
+        0x0000 - 0x0092 reg=7 this Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;
+
+
+    #13              : (in Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;)
+      name          : 'requestMamaAndRtbSplash'
+      type          : '(Z)Z'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 10
+      ins           : 2
+      outs          : 5
+      insns size    : 340 16-bit code units
+2231dc:                                        |[2231dc] com.cainiao.wireless.homepage.view.activity.WelcomeActivity.requestMamaAndRtbSplash:(Z)Z
+2231ec: 6200 9366                              |0000: sget-object v0, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.$ipChange:Lcom/android/alibaba/ip/runtime/IpChange; // field@6693
+2231f0: 1201                                   |0002: const/4 v1, #int 0 // #0
+2231f2: 1212                                   |0003: const/4 v2, #int 1 // #1
+2231f4: 3800 1f00                              |0004: if-eqz v0, 0023 // +001f
+2231f8: 2003 b302                              |0006: instance-of v3, v0, Lcom/android/alibaba/ip/runtime/IpChange; // type@02b3
+2231fc: 3803 1b00                              |0008: if-eqz v3, 0023 // +001b
+223200: 1223                                   |000a: const/4 v3, #int 2 // #2
+223202: 2333 d91e                              |000b: new-array v3, v3, [Ljava/lang/Object; // type@1ed9
+223206: 4d08 0301                              |000d: aput-object v8, v3, v1
+22320a: 2201 1a1c                              |000f: new-instance v1, Ljava/lang/Boolean; // type@1c1a
+22320e: 7020 058c 9100                         |0011: invoke-direct {v1, v9}, Ljava/lang/Boolean;.<init>:(Z)V // method@8c05
+223214: 4d01 0302                              |0014: aput-object v1, v3, v2
+223218: 1a09 757d                              |0016: const-string v9, "cc9d9bca" // string@7d75
+22321c: 7230 1b09 9003                         |0018: invoke-interface {v0, v9, v3}, Lcom/android/alibaba/ip/runtime/IpChange;.ipc$dispatch:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object; // method@091b
+223222: 0c09                                   |001b: move-result-object v9
+223224: 1f09 1a1c                              |001c: check-cast v9, Ljava/lang/Boolean; // type@1c1a
+223228: 6e10 068c 0900                         |001e: invoke-virtual {v9}, Ljava/lang/Boolean;.booleanValue:()Z // method@8c06
+22322e: 0a09                                   |0021: move-result v9
+223230: 0f09                                   |0022: return v9
+223232: 1a00 e57e                              |0023: const-string v0, "checkWhiteConfig" // string@7ee5
+223236: 7100 1434 0000                         |0025: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/AdsUtil;.azu:()Z // method@3414
+22323c: 0a03                                   |0028: move-result v3
+22323e: 1b04 9600 0100                         |0029: const-string/jumbo v4, "splash_ad" // string@00010096
+223244: 1a05 3d53                              |002c: const-string v5, "New_MmSplashUtil" // string@533d
+223248: 3803 1500                              |002e: if-eqz v3, 0043 // +0015
+22324c: 1a02 1f5d                              |0030: const-string v2, "WelcomeActivity, 被广告不请求白名单命中" // string@5d1f
+223250: 7120 5e0a 2500                         |0032: invoke-static {v5, v2}, Lcom/cainiao/log/CainiaoLog;.w:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5e
+223256: 6202 70ea                              |0035: sget-object v2, Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper;.INSTANCE:Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper; // field@ea70
+22325a: 1b03 cd14 0100                         |0037: const-string/jumbo v3, "被广告不请求白名单命中" // string@000114cd
+223260: 6e30 e07d 4203                         |003a: invoke-virtual {v2, v4, v3}, Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper;.cancelTrace:(Ljava/lang/String;Ljava/lang/String;)V // method@7de0
+223266: 6202 54ea                              |003d: sget-object v2, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+22326a: 6e10 857c 0200                         |003f: invoke-virtual {v2}, Lcom/cainiao/wireless/thirdroute/c$a;.aWX:()V // method@7c85
+223270: 0f01                                   |0042: return v1
+223272: 1a00 01eb                              |0043: const-string v0, "prefetch" // string@eb01
+223276: 7100 4a7d 0000                         |0045: invoke-static {}, Lcom/cainiao/wireless/utils/MmAdSdkUtil;.isMmSdkEnable:()Z // method@7d4a
+22327c: 0a03                                   |0048: move-result v3
+22327e: 3803 0b00                              |0049: if-eqz v3, 0054 // +000b
+223282: 3809 0900                              |004b: if-eqz v9, 0054 // +0009
+223286: 7100 7534 0000                         |004d: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.azU:()Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil; // method@3475
+22328c: 0c03                                   |0050: move-result-object v3
+22328e: 6e20 8734 2300                         |0051: invoke-virtual {v3, v2}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.fO:(Z)V // method@3487
+223294: 1a00 0f98                              |0054: const-string v0, "deletingInvalidPrefetchCache" // string@980f
+223298: 7100 7534 0000                         |0056: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.azU:()Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil; // method@3475
+22329e: 0c03                                   |0059: move-result-object v3
+2232a0: 6e10 7634 0300                         |005a: invoke-virtual {v3}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.azV:()V // method@3476
+2232a6: 1a00 067f                              |005d: const-string v0, "checkingFatigue" // string@7f06
+2232aa: 7100 1034 0000                         |005f: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/AdsUtil;.azq:()Z // method@3410
+2232b0: 0a03                                   |0062: move-result v3
+2232b2: 7110 8c34 0300                         |0063: invoke-static {v3}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.fT:(Z)Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil$a; // method@348c
+2232b8: 0c03                                   |0066: move-result-object v3
+2232ba: 7100 4a7d 0000                         |0067: invoke-static {}, Lcom/cainiao/wireless/utils/MmAdSdkUtil;.isMmSdkEnable:()Z // method@7d4a
+2232c0: 0a06                                   |006a: move-result v6
+2232c2: 3806 9d00                              |006b: if-eqz v6, 0108 // +009d
+2232c6: 6e10 5934 0300                         |006d: invoke-virtual {v3}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil$a;.aAe:()Z // method@3459
+2232cc: 0a06                                   |0070: move-result v6
+2232ce: 3806 0400                              |0071: if-eqz v6, 0075 // +0004
+2232d2: 2900 9500                              |0073: goto/16 0108 // +0095
+2232d6: 1a00 097f                              |0075: const-string v0, "checkingSkipConfig" // string@7f09
+2232da: 3809 1c00                              |0077: if-eqz v9, 0093 // +001c
+2232de: 6203 54ea                              |0079: sget-object v3, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+2232e2: 6e10 847c 0300                         |007b: invoke-virtual {v3}, Lcom/cainiao/wireless/thirdroute/c$a;.aWW:()Z // method@7c84
+2232e8: 0a03                                   |007e: move-result v3
+2232ea: 3803 1400                              |007f: if-eqz v3, 0093 // +0014
+2232ee: 1a03 1b5d                              |0081: const-string v3, "WelcomeActivity, 冷启动，通过唤端方式进入 app，不展示广告" // string@5d1b
+2232f2: 7120 5e0a 3500                         |0083: invoke-static {v5, v3}, Lcom/cainiao/log/CainiaoLog;.w:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5e
+2232f8: 6203 54ea                              |0086: sget-object v3, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+2232fc: 1a04 387c                              |0088: const-string v4, "callApp" // string@7c38
+223300: 6e30 877c 2304                         |008a: invoke-virtual {v3, v2, v4}, Lcom/cainiao/wireless/thirdroute/c$a;.t:(ZLjava/lang/String;)V // method@7c87
+223306: 6202 54ea                              |008d: sget-object v2, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+22330a: 6e10 857c 0200                         |008f: invoke-virtual {v2}, Lcom/cainiao/wireless/thirdroute/c$a;.aWX:()V // method@7c85
+223310: 0f01                                   |0092: return v1
+223312: 3809 0400                              |0093: if-eqz v9, 0097 // +0004
+223316: 6a02 ab09                              |0095: sput-boolean v2, Lcom/cainiao/wireless/d;.aYi:Z // field@09ab
+22331a: 7100 a80c 0000                         |0097: invoke-static {}, Lcom/cainiao/wireless/components/ScreenReceiver;.acW:()Lcom/cainiao/wireless/components/ScreenReceiver; // method@0ca8
+223320: 0c03                                   |009a: move-result-object v3
+223322: 6e10 a90c 0300                         |009b: invoke-virtual {v3}, Lcom/cainiao/wireless/components/ScreenReceiver;.acZ:()Z // method@0ca9
+223328: 0a03                                   |009e: move-result v3
+22332a: 3803 4300                              |009f: if-eqz v3, 00e2 // +0043
+22332e: 2203 8a1c                              |00a1: new-instance v3, Ljava/util/HashMap; // type@1c8a
+223332: 7010 a08d 0300                         |00a3: invoke-direct {v3}, Ljava/util/HashMap;.<init>:()V // method@8da0
+223338: 1a04 1fca                              |00a6: const-string v4, "isCold" // string@ca1f
+22333c: 1a05 fb07                              |00a8: const-string v5, "1" // string@07fb
+223340: 1a06 eb07                              |00aa: const-string v6, "0" // string@07eb
+223344: 3809 0400                              |00ac: if-eqz v9, 00b0 // +0004
+223348: 0757                                   |00ae: move-object v7, v5
+22334a: 2802                                   |00af: goto 00b1 // +0002
+22334c: 0767                                   |00b0: move-object v7, v6
+22334e: 6e30 a98d 4307                         |00b1: invoke-virtual {v3, v4, v7}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+223354: 1a04 0fcb                              |00b4: const-string v4, "isLowerScoreDevice" // string@cb0f
+223358: 7100 4b7d 0000                         |00b6: invoke-static {}, Lcom/cainiao/wireless/utils/MmAdSdkUtil;.isRtbAdEnable:()Z // method@7d4b
+22335e: 0a07                                   |00b9: move-result v7
+223360: 3807 0300                              |00ba: if-eqz v7, 00bd // +0003
+223364: 0765                                   |00bc: move-object v5, v6
+223366: 6e30 a98d 4305                         |00bd: invoke-virtual {v3, v4, v5}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+22336c: 1a04 0455                              |00c0: const-string v4, "Page_CNHome" // string@5504
+223370: 1a05 14d0                              |00c2: const-string v5, "launch_request_splash_with_push" // string@d014
+223374: 7130 fe91 5403                         |00c4: invoke-static {v4, v5, v3}, Lvk;.ctrlClick:(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;)V // method@91fe
+22337a: 1b04 9700 0100                         |00c7: const-string/jumbo v4, "splash_ads" // string@00010097
+223380: 1b05 2713 0100                         |00ca: const-string/jumbo v5, "启动，点击push，进入 app，请求了广告" // string@00011327
+223386: 7120 5b0a 5400                         |00cd: invoke-static {v4, v5}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+22338c: 7100 6e18 0000                         |00d0: invoke-static {}, Lcom/cainiao/wireless/h;.IV:()Lcom/cainiao/wireless/h; // method@186e
+223392: 0c04                                   |00d3: move-result-object v4
+223394: 1a05 3255                              |00d4: const-string v5, "Page_Screen_Cpm" // string@5532
+223398: 1a06 da55                              |00d6: const-string v6, "PushRequestCpm" // string@55da
+22339c: 6e40 7418 5436                         |00d8: invoke-virtual {v4, v5, v6, v3}, Lcom/cainiao/wireless/h;.e:(Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V // method@1874
+2233a2: 6203 54ea                              |00db: sget-object v3, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+2233a6: 1a04 10ec                              |00dd: const-string v4, "push" // string@ec10
+2233aa: 6e30 877c 2304                         |00df: invoke-virtual {v3, v2, v4}, Lcom/cainiao/wireless/thirdroute/c$a;.t:(ZLjava/lang/String;)V // method@7c87
+2233b0: 1a00 7fc8                              |00e2: const-string v0, "initAdsShowSplashListener" // string@c87f
+2233b4: 7100 7534 0000                         |00e4: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.azU:()Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil; // method@3475
+2233ba: 0c03                                   |00e7: move-result-object v3
+2233bc: 6e20 6d34 8300                         |00e8: invoke-virtual {v3, v8}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.ad:(Landroid/app/Activity;)V // method@346d
+2233c2: 1a00 2af0                              |00eb: const-string v0, "requestRtbSplash" // string@f02a
+2233c6: 7030 912d 8809                         |00ed: invoke-direct {v8, v8, v9}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.requestRtbSplash:(Landroid/app/Activity;Z)V // method@2d91
+2233cc: 1a00 15f0                              |00f0: const-string v0, "requestMamaSplash" // string@f015
+2233d0: 7020 902d 9800                         |00f2: invoke-direct {v8, v9}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.requestMamaSplash:(Z)V // method@2d90
+2233d6: 1a00 33f0                              |00f5: const-string v0, "requestSdkBiddingOrCsjSplash" // string@f033
+2233da: 7020 922d 9800                         |00f7: invoke-direct {v8, v9}, Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;.requestSdkBiddingOrCsjSplash:(Z)V // method@2d92
+2233e0: 1b00 8d0d 0100                         |00fa: const-string/jumbo v0, "updateTimeFatigue" // string@00010d8d
+2233e6: 7100 7534 0000                         |00fd: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.azU:()Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil; // method@3475
+2233ec: 0c03                                   |0100: move-result-object v3
+2233ee: 1b04 3b13 0100                         |0101: const-string/jumbo v4, "均请求完成" // string@0001133b
+2233f4: 6e30 9134 2304                         |0104: invoke-virtual {v3, v2, v4}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil;.o:(ZLjava/lang/String;)V // method@3491
+2233fa: 0f02                                   |0107: return v2
+2233fc: 1a06 205d                              |0108: const-string v6, "WelcomeActivity, 被疲劳度命中" // string@5d20
+223400: 7120 5b0a 6500                         |010a: invoke-static {v5, v6}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+223406: 6205 70ea                              |010d: sget-object v5, Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper;.INSTANCE:Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper; // field@ea70
+22340a: 1b06 ce14 0100                         |010f: const-string/jumbo v6, "被疲劳度命中" // string@000114ce
+223410: 6e30 e07d 4506                         |0112: invoke-virtual {v5, v4, v6}, Lcom/cainiao/wireless/utils/falco/ad/AdsFalcoHelper;.cancelTrace:(Ljava/lang/String;Ljava/lang/String;)V // method@7de0
+223416: 6204 54ea                              |0115: sget-object v4, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+22341a: 1a05 cac1                              |0117: const-string v5, "hitFatigue" // string@c1ca
+22341e: 6e10 5a34 0300                         |0119: invoke-virtual {v3}, Lcom/cainiao/wireless/homepage/view/util/MmSplashUtil$a;.aAf:()Ljava/lang/String; // method@345a
+223424: 0c03                                   |011c: move-result-object v3
+223426: 6e40 867c 2435                         |011d: invoke-virtual {v4, v2, v5, v3}, Lcom/cainiao/wireless/thirdroute/c$a;.j:(ZLjava/lang/String;Ljava/lang/String;)V // method@7c86
+22342c: 6202 54ea                              |0120: sget-object v2, Lcom/cainiao/wireless/thirdroute/c;.fPZ:Lcom/cainiao/wireless/thirdroute/c$a; // field@ea54
+223430: 6e10 857c 0200                         |0122: invoke-virtual {v2}, Lcom/cainiao/wireless/thirdroute/c$a;.aWX:()V // method@7c85
+223436: 0f01                                   |0125: return v1
+223438: 0d02                                   |0126: move-exception v2
+22343a: 2804                                   |0127: goto 012b // +0004
+22343c: 0d02                                   |0128: move-exception v2
+22343e: 1a00 fbc6                              |0129: const-string v0, "idle" // string@c6fb
+223442: 2203 8a1c                              |012b: new-instance v3, Ljava/util/HashMap; // type@1c8a
+223446: 7010 a08d 0300                         |012d: invoke-direct {v3}, Ljava/util/HashMap;.<init>:()V // method@8da0
+22344c: 6e10 eb8c 0200                         |0130: invoke-virtual {v2}, Ljava/lang/Throwable;.getMessage:()Ljava/lang/String; // method@8ceb
+223452: 0c04                                   |0133: move-result-object v4
+223454: 1a05 85a8                              |0134: const-string v5, "errorMsg" // string@a885
+223458: 6e30 a98d 5304                         |0136: invoke-virtual {v3, v5, v4}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+22345e: 1a04 a9f2                              |0139: const-string v4, "runState" // string@f2a9
+223462: 6e30 a98d 4300                         |013b: invoke-virtual {v3, v4, v0}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+223468: 7110 bc8c 0900                         |013e: invoke-static {v9}, Ljava/lang/String;.valueOf:(Z)Ljava/lang/String; // method@8cbc
+22346e: 0c09                                   |0141: move-result-object v9
+223470: 1a00 20ca                              |0142: const-string v0, "isColdLaunch" // string@ca20
+223474: 6e30 a98d 0309                         |0144: invoke-virtual {v3, v0, v9}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+22347a: 7100 6e18 0000                         |0147: invoke-static {}, Lcom/cainiao/wireless/h;.IV:()Lcom/cainiao/wireless/h; // method@186e
+223480: 0c09                                   |014a: move-result-object v9
+223482: 6200 2d01                              |014b: sget-object v0, Lcom/cainiao/wireless/CNBMonitorExceptionPoint;.AdsBusiness:Lcom/cainiao/wireless/CNBMonitorExceptionPoint; // field@012d
+223486: 1b04 8800 0100                         |014d: const-string/jumbo v4, "splash ads welcome.requestMamaAndRtbSplash error" // string@00010088
+22348c: 6e53 6f18 0924                         |0150: invoke-virtual {v9, v0, v4, v2, v3}, Lcom/cainiao/wireless/h;.a:(Lcom/cainiao/wireless/CNBMonitorExceptionPoint;Ljava/lang/String;Ljava/lang/Throwable;Ljava/util/Map;)V // method@186f
+223492: 0f01                                   |0153: return v1
+      catches       : 4
+        0x0023 - 0x0025
+          Ljava/lang/Throwable; -> 0x0128
+        0x0025 - 0x0029
+          Ljava/lang/Throwable; -> 0x0126
+        0x0030 - 0x00a8
+          Ljava/lang/Throwable; -> 0x0126
+        0x00b1 - 0x0125
+          Ljava/lang/Throwable; -> 0x0126
+      positions     :
+        0x0025 line=168
+        0x0032 line=169
+        0x0035 line=170
+        0x003d line=171
+        0x0045 line=177
+        0x004d line=178
+        0x0056 line=185
+        0x005f line=188
+        0x0067 line=189
+        0x0079 line=203
+        0x0083 line=204
+        0x0086 line=205
+        0x008d line=206
+        0x0095 line=211
+        0x0097 line=213
+        0x00a1 line=214
+        0x00b1 line=215
+        0x00b6 line=216
+        0x00c4 line=217
+        0x00cd line=218
+        0x00d0 line=219
+        0x00db line=220
+        0x00e4 line=225
+        0x00ed line=229
+        0x00f2 line=233
+        0x00f7 line=237
+        0x00fd line=244
+        0x010a line=190
+        0x010d line=191
+        0x0115 line=192
+        0x0120 line=193
+        0x012b line=247
+        0x0130 line=248
+        0x013b line=249
+        0x013e line=250
+        0x0147 line=251
+      locals        :
+        0x0000 - 0x0154 reg=8 this Lcom/cainiao/wireless/homepage/view/activity/WelcomeActivity;
+        0x0000 - 0x0154 reg=9 (null) Z
+
+
+    #24              : (in Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;)
+      name          : 'onCreate'
+      type          : '(Landroid/os/Bundle;)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 11
+      ins           : 2
+      outs          : 5
+      insns size    : 534 16-bit code units
+219738:                                        |[219738] com.cainiao.wireless.homepage.view.activity.HomePageActivity.onCreate:(Landroid/os/Bundle;)V
+219748: 1a00 0455                              |0000: const-string v0, "Page_CNHome" // string@5504
+21974c: 1a01 586f                              |0002: const-string v1, "ar_show" // string@6f58
+219750: 6202 e165                              |0004: sget-object v2, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.$ipChange:Lcom/android/alibaba/ip/runtime/IpChange; // field@65e1
+219754: 1203                                   |0006: const/4 v3, #int 0 // #0
+219756: 1214                                   |0007: const/4 v4, #int 1 // #1
+219758: 3802 1300                              |0008: if-eqz v2, 001b // +0013
+21975c: 2025 b302                              |000a: instance-of v5, v2, Lcom/android/alibaba/ip/runtime/IpChange; // type@02b3
+219760: 3805 0f00                              |000c: if-eqz v5, 001b // +000f
+219764: 1220                                   |000e: const/4 v0, #int 2 // #2
+219766: 2300 d91e                              |000f: new-array v0, v0, [Ljava/lang/Object; // type@1ed9
+21976a: 4d09 0003                              |0011: aput-object v9, v0, v3
+21976e: 4d0a 0004                              |0013: aput-object v10, v0, v4
+219772: 1a0a 1890                              |0015: const-string v10, "d9c272d2" // string@9018
+219776: 7230 1b09 a200                         |0017: invoke-interface {v2, v10, v0}, Lcom/android/alibaba/ip/runtime/IpChange;.ipc$dispatch:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object; // method@091b
+21977c: 0e00                                   |001a: return-void
+21977e: 6a04 f165                              |001b: sput-boolean v4, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.homePageLaunched:Z // field@65f1
+219782: 1202                                   |001d: const/4 v2, #int 0 // #0
+219784: 1a05 7a2f                              |001e: const-string v5, "INIT_SCHEDULER" // string@2f7a
+219788: 1b06 4915 0100                         |0020: const-string/jumbo v6, "首页onCreate加载" // string@00011549
+21978e: 7120 5b0a 6500                         |0023: invoke-static {v5, v6}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+219794: 6205 74ea                              |0026: sget-object v5, Lcom/cainiao/wireless/utils/toast/CoreBizMonitorMgr;.INSTANCE:Lcom/cainiao/wireless/utils/toast/CoreBizMonitorMgr; // field@ea74
+219798: 1606 0100                              |0028: const-wide/16 v6, #int 1 // #1
+21979c: 6e30 f17d 6507                         |002a: invoke-virtual {v5, v6, v7}, Lcom/cainiao/wireless/utils/toast/CoreBizMonitorMgr;.beginMonitor:(J)V // method@7df1
+2197a2: 6205 d109                              |002d: sget-object v5, Lcom/cainiao/wireless/g;.aZn:Lcom/cainiao/wireless/g; // field@09d1
+2197a6: 6e10 df0e 0500                         |002f: invoke-virtual {v5}, Lcom/cainiao/wireless/g;.IJ:()Lcom/cainiao/wireless/cnb_interface/cnb_utils/ICNBEnvironmentService; // method@0edf
+2197ac: 0c05                                   |0032: move-result-object v5
+2197ae: 7210 3f0c 0500                         |0033: invoke-interface {v5}, Lcom/cainiao/wireless/cnb_interface/cnb_utils/ICNBEnvironmentService;.getApplication:()Landroid/app/Application; // method@0c3f
+2197b4: 0c05                                   |0036: move-result-object v5
+2197b6: 7110 6747 0500                         |0037: invoke-static {v5}, Lcom/cainiao/wireless/location/CNLocationManager;.getInstance:(Landroid/app/Application;)Lcom/cainiao/wireless/location/CNLocationManager; // method@4767
+2197bc: 0c05                                   |003a: move-result-object v5
+2197be: 6206 74ea                              |003b: sget-object v6, Lcom/cainiao/wireless/utils/toast/CoreBizMonitorMgr;.INSTANCE:Lcom/cainiao/wireless/utils/toast/CoreBizMonitorMgr; // field@ea74
+2197c2: 6e20 7047 6500                         |003d: invoke-virtual {v5, v6}, Lcom/cainiao/wireless/location/CNLocationManager;.setLocationInvokeMonitor:(Lcom/cainiao/wireless/location/monitor/ILocationInvokeMonitor;)V // method@4770
+2197c8: 7100 810d 0000                         |0040: invoke-static {}, Lcom/cainiao/wireless/components/init/Initscheduler/initjob/orange/a;.afY:()Lcom/cainiao/wireless/components/init/Initscheduler/initjob/orange/a; // method@0d81
+2197ce: 0c05                                   |0043: move-result-object v5
+2197d0: 1a06 90d3                              |0044: const-string v6, "location_cache_duration" // string@d390
+2197d4: 1a07 7c15                              |0046: const-string v7, "600000" // string@157c
+2197d8: 6e40 820d 1576                         |0048: invoke-virtual {v5, v1, v6, v7}, Lcom/cainiao/wireless/components/init/Initscheduler/initjob/orange/a;.getConfig:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; // method@0d82
+2197de: 0c05                                   |004b: move-result-object v5
+2197e0: 7100 650a 0000                         |004c: invoke-static {}, Lcom/cainiao/wireless/CainiaoApplication;.getInstance:()Lcom/cainiao/wireless/CainiaoApplication; // method@0a65
+2197e6: 0c06                                   |004f: move-result-object v6
+2197e8: 7110 6747 0600                         |0050: invoke-static {v6}, Lcom/cainiao/wireless/location/CNLocationManager;.getInstance:(Landroid/app/Application;)Lcom/cainiao/wireless/location/CNLocationManager; // method@4767
+2197ee: 0c06                                   |0053: move-result-object v6
+2197f0: 7110 568c 0500                         |0054: invoke-static {v5}, Ljava/lang/Long;.valueOf:(Ljava/lang/String;)Ljava/lang/Long; // method@8c56
+2197f6: 0c05                                   |0057: move-result-object v5
+2197f8: 6e10 528c 0500                         |0058: invoke-virtual {v5}, Ljava/lang/Long;.longValue:()J // method@8c52
+2197fe: 0b07                                   |005b: move-result-wide v7
+219800: 6e30 6f47 7608                         |005c: invoke-virtual {v6, v7, v8}, Lcom/cainiao/wireless/location/CNLocationManager;.setLocateCacheDuration:(J)V // method@476f
+219806: 7100 810d 0000                         |005f: invoke-static {}, Lcom/cainiao/wireless/components/init/Initscheduler/initjob/orange/a;.afY:()Lcom/cainiao/wireless/components/init/Initscheduler/initjob/orange/a; // method@0d81
+21980c: 0c05                                   |0062: move-result-object v5
+21980e: 1a06 74a8                              |0063: const-string v6, "err_location_cache_duration" // string@a874
+219812: 1a07 6e08                              |0065: const-string v7, "120000" // string@086e
+219816: 6e40 820d 1576                         |0067: invoke-virtual {v5, v1, v6, v7}, Lcom/cainiao/wireless/components/init/Initscheduler/initjob/orange/a;.getConfig:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; // method@0d82
+21981c: 0c01                                   |006a: move-result-object v1
+21981e: 7100 650a 0000                         |006b: invoke-static {}, Lcom/cainiao/wireless/CainiaoApplication;.getInstance:()Lcom/cainiao/wireless/CainiaoApplication; // method@0a65
+219824: 0c05                                   |006e: move-result-object v5
+219826: 7110 6747 0500                         |006f: invoke-static {v5}, Lcom/cainiao/wireless/location/CNLocationManager;.getInstance:(Landroid/app/Application;)Lcom/cainiao/wireless/location/CNLocationManager; // method@4767
+21982c: 0c05                                   |0072: move-result-object v5
+21982e: 7110 568c 0100                         |0073: invoke-static {v1}, Ljava/lang/Long;.valueOf:(Ljava/lang/String;)Ljava/lang/Long; // method@8c56
+219834: 0c01                                   |0076: move-result-object v1
+219836: 6e10 528c 0100                         |0077: invoke-virtual {v1}, Ljava/lang/Long;.longValue:()J // method@8c52
+21983c: 0b06                                   |007a: move-result-wide v6
+21983e: 6e30 6e47 6507                         |007b: invoke-virtual {v5, v6, v7}, Lcom/cainiao/wireless/location/CNLocationManager;.setErrorCacheDuration:(J)V // method@476e
+219844: 280d                                   |007e: goto 008b // +000d
+219846: 0d01                                   |007f: move-exception v1
+219848: 7100 6e18 0000                         |0080: invoke-static {}, Lcom/cainiao/wireless/h;.IV:()Lcom/cainiao/wireless/h; // method@186e
+21984e: 0c05                                   |0083: move-result-object v5
+219850: 6206 2e01                              |0084: sget-object v6, Lcom/cainiao/wireless/CNBMonitorExceptionPoint;.Launch:Lcom/cainiao/wireless/CNBMonitorExceptionPoint; // field@012e
+219854: 1a07 dc2e                              |0086: const-string v7, "HomePageActivity onCreate 位置请求信息的缓存时长" // string@2edc
+219858: 6e52 6f18 6517                         |0088: invoke-virtual {v5, v6, v7, v1, v2}, Lcom/cainiao/wireless/h;.a:(Lcom/cainiao/wireless/CNBMonitorExceptionPoint;Ljava/lang/String;Ljava/lang/Throwable;Ljava/util/Map;)V // method@186f
+21985e: 7100 3d03 0000                         |008b: invoke-static {}, Landroid/os/SystemClock;.elapsedRealtime:()J // method@033d
+219864: 0b05                                   |008e: move-result-wide v5
+219866: 6805 a709                              |008f: sput-wide v5, Lcom/cainiao/wireless/d;.aYe:J // field@09a7
+21986a: 7010 962c 0900                         |0091: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.startCalculate:()V // method@2c96
+219870: 7010 842c 0900                         |0094: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.setFrontBackgroundSwitchListener:()V // method@2c84
+219876: 7100 aa2d 0000                         |0097: invoke-static {}, Lcom/cainiao/wireless/homepage/view/activity/c;.awH:()V // method@2daa
+21987c: 380a 0f00                              |009a: if-eqz v10, 00a9 // +000f
+219880: 7100 c009 0000                         |009c: invoke-static {}, Lcom/cainiao/commonlibrary/navigation/NavigationTabDefaultConfig;.resetDefaultConfig:()V // method@09c0
+219886: 7100 f609 0000                         |009f: invoke-static {}, Lcom/cainiao/commonlibrary/navigation/preLoad/TabbarPreLoader;.getInstance:()Lcom/cainiao/commonlibrary/navigation/preLoad/TabbarPreLoader; // method@09f6
+21988c: 0c01                                   |00a2: move-result-object v1
+21988e: 6e10 f709 0100                         |00a3: invoke-virtual {v1}, Lcom/cainiao/commonlibrary/navigation/preLoad/TabbarPreLoader;.preload:()V // method@09f7
+219894: 7020 0d2c a900                         |00a6: invoke-direct {v9, v10}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.discardOldFragments:(Landroid/os/Bundle;)V // method@2c0d
+21989a: 6e20 8a2c 4900                         |00a9: invoke-virtual {v9, v4}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.setNeedFillActionBar:(Z)V // method@2c8a
+2198a0: 5c93 1066                              |00ac: iput-boolean v3, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.needUnregisteOnPause:Z // field@6610
+2198a4: 5c94 0e66                              |00ae: iput-boolean v4, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.needRegisteSticky:Z // field@660e
+2198a8: 6f20 6655 a900                         |00b0: invoke-super {v9, v10}, Lcom/cainiao/wireless/mvp/activities/base/BaseFragmentActivity;.onCreate:(Landroid/os/Bundle;)V // method@5566
+2198ae: 2201 8a1c                              |00b3: new-instance v1, Ljava/util/HashMap; // type@1c8a
+2198b2: 7010 a08d 0100                         |00b5: invoke-direct {v1}, Ljava/util/HashMap;.<init>:()V // method@8da0
+2198b8: 1b05 9001 0100                         |00b8: const-string/jumbo v5, "startMode" // string@00010190
+2198be: 1a06 6a83                              |00bb: const-string v6, "cold" // string@836a
+2198c2: 6e30 a98d 5106                         |00bd: invoke-virtual {v1, v5, v6}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+2198c8: 1a05 427c                              |00c0: const-string v5, "call_app" // string@7c42
+2198cc: 7130 fe91 5001                         |00c2: invoke-static {v0, v5, v1}, Lvk;.ctrlClick:(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;)V // method@91fe
+2198d2: 1b01 f710 0100                         |00c5: const-string/jumbo v1, "widget_version" // string@000110f7
+2198d8: 7120 fb91 1000                         |00c8: invoke-static {v0, v1}, Lvk;.cP:(Ljava/lang/String;Ljava/lang/String;)V // method@91fb
+2198de: 7100 7431 0000                         |00cb: invoke-static {}, Lcom/cainiao/wireless/homepage/view/manager/c;.axL:()Lcom/cainiao/wireless/homepage/view/manager/c; // method@3174
+2198e4: 0c00                                   |00ce: move-result-object v0
+2198e6: 6e10 7731 0000                         |00cf: invoke-virtual {v0}, Lcom/cainiao/wireless/homepage/view/manager/c;.axO:()V // method@3177
+2198ec: 7100 7c4d 0000                         |00d2: invoke-static {}, Lcom/cainiao/wireless/mtop/combine/c;.aFK:()Lcom/cainiao/wireless/mtop/combine/c; // method@4d7c
+2198f2: 0c00                                   |00d5: move-result-object v0
+2198f4: 6e20 804d 4000                         |00d6: invoke-virtual {v0, v4}, Lcom/cainiao/wireless/mtop/combine/c;.gE:(Z)V // method@4d80
+2198fa: 6200 82d3                              |00d9: sget-object v0, Lcom/cainiao/wireless/ocr/OCRDecoderManager;.INSTANCE:Lcom/cainiao/wireless/ocr/OCRDecoderManager; // field@d382
+2198fe: 6e10 9f5e 0000                         |00db: invoke-virtual {v0}, Lcom/cainiao/wireless/ocr/OCRDecoderManager;.init:()V // method@5e9f
+219904: 7010 292c 0900                         |00de: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.handlePrivacyNotAgreed:()Z // method@2c29
+21990a: 0a00                                   |00e1: move-result v0
+21990c: 3800 0300                              |00e2: if-eqz v0, 00e5 // +0003
+219910: 0e00                                   |00e4: return-void
+219912: 7100 8d09 0000                         |00e5: invoke-static {}, Lcom/cainiao/cnloginsdk/customer/sdk/CnmcLogin;.checkSessionValid:()Z // method@098d
+219918: 0a00                                   |00e8: move-result v0
+21991a: 3900 0d00                              |00e9: if-nez v0, 00f6 // +000d
+21991e: 1a00 cc28                              |00eb: const-string v0, "CN_Login" // string@28cc
+219922: 1b01 550e 0100                         |00ed: const-string/jumbo v1, "user login status = false,want use autoLogin or login" // string@00010e55
+219928: 7120 5b0a 1000                         |00f0: invoke-static {v0, v1}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+21992e: 7100 8e09 0000                         |00f3: invoke-static {}, Lcom/cainiao/cnloginsdk/customer/sdk/CnmcLogin;.login:()V // method@098e
+219934: 7100 5231 0000                         |00f6: invoke-static {}, Lcom/cainiao/wireless/homepage/view/manager/SoLoaderEventManager;.getInstance:()Lcom/cainiao/wireless/homepage/view/manager/SoLoaderEventManager; // method@3152
+21993a: 0c00                                   |00f9: move-result-object v0
+21993c: 6e10 5631 0000                         |00fa: invoke-virtual {v0}, Lcom/cainiao/wireless/homepage/view/manager/SoLoaderEventManager;.register:()V // method@3156
+219942: 6e10 1a2c 0900                         |00fd: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getIntent:()Landroid/content/Intent; // method@2c1a
+219948: 0c00                                   |0100: move-result-object v0
+21994a: 7020 2b2c 0900                         |0101: invoke-direct {v9, v0}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.handleShortcuts:(Landroid/content/Intent;)V // method@2c2b
+219950: 6e10 1a2c 0900                         |0104: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getIntent:()Landroid/content/Intent; // method@2c1a
+219956: 0c00                                   |0107: move-result-object v0
+219958: 7020 282c 0900                         |0108: invoke-direct {v9, v0}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.handleNfcTag:(Landroid/content/Intent;)V // method@2c28
+21995e: 6e10 852c 0900                         |010b: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.setGlobalProperty:()V // method@2c85
+219964: 6000 5507                              |010e: sget v0, Lcom/cainiao/wireless/R$layout;.navtest_activity_frame:I // field@0755
+219968: 6e20 812c 0900                         |0110: invoke-virtual {v9, v0}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.setContentView:(I)V // method@2c81
+21996e: 6e10 1a2c 0900                         |0113: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getIntent:()Landroid/content/Intent; // method@2c1a
+219974: 0c00                                   |0116: move-result-object v0
+219976: 7020 342c 0900                         |0117: invoke-direct {v9, v0}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.initTab:(Landroid/content/Intent;)V // method@2c34
+21997c: 7010 352c 0900                         |011a: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.initView:()V // method@2c35
+219982: 6e10 242c 0900                         |011d: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getWindow:()Landroid/view/Window; // method@2c24
+219988: 0c00                                   |0120: move-result-object v0
+21998a: 6e20 d105 2000                         |0121: invoke-virtual {v0, v2}, Landroid/view/Window;.setBackgroundDrawable:(Landroid/graphics/drawable/Drawable;)V // method@05d1
+219990: 6e10 1a2c 0900                         |0124: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getIntent:()Landroid/content/Intent; // method@2c1a
+219996: 0c00                                   |0127: move-result-object v0
+219998: 7020 972c 0900                         |0128: invoke-direct {v9, v0}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.startEntrustActivity:(Landroid/content/Intent;)Z // method@2c97
+21999e: 0a00                                   |012b: move-result v0
+2199a0: 3900 1300                              |012c: if-nez v0, 013f // +0013
+2199a4: 390a 1100                              |012e: if-nez v10, 013f // +0011
+2199a8: 7100 4a7d 0000                         |0130: invoke-static {}, Lcom/cainiao/wireless/utils/MmAdSdkUtil;.isMmSdkEnable:()Z // method@7d4a
+2199ae: 0a0a                                   |0133: move-result v10
+2199b0: 390a 0b00                              |0134: if-nez v10, 013f // +000b
+2199b4: 549a 0a66                              |0136: iget-object v10, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mPresenter:Lcom/cainiao/wireless/homepage/presenter/d; // field@660a
+2199b8: 7100 1034 0000                         |0138: invoke-static {}, Lcom/cainiao/wireless/homepage/view/util/AdsUtil;.azq:()Z // method@3410
+2199be: 0a00                                   |013b: move-result v0
+2199c0: 6e30 3320 9a00                         |013c: invoke-virtual {v10, v9, v0}, Lcom/cainiao/wireless/homepage/presenter/d;.m:(Landroid/content/Context;Z)V // method@2033
+2199c6: 7100 687c 0000                         |013f: invoke-static {}, Lcom/cainiao/wireless/shop/task/guide/TaskGuideManager;.aUq:()Lcom/cainiao/wireless/shop/task/guide/TaskGuideManager; // method@7c68
+2199cc: 0c0a                                   |0142: move-result-object v10
+2199ce: 6e10 6a7c 0a00                         |0143: invoke-virtual {v10}, Lcom/cainiao/wireless/shop/task/guide/TaskGuideManager;.init:()V // method@7c6a
+2199d4: 549a ee65                              |0146: iget-object v10, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.TAG:Ljava/lang/String; // field@65ee
+2199d8: 1a00 16e1                              |0148: const-string v0, "onCreate ---- switchFragment" // string@e116
+2199dc: 7120 5b0a 0a00                         |014a: invoke-static {v10, v0}, Lcom/cainiao/log/CainiaoLog;.i:(Ljava/lang/String;Ljava/lang/String;)V // method@0a5b
+2199e2: 7020 9c2c 3900                         |014d: invoke-direct {v9, v3}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.switchFragment:(Z)V // method@2c9c
+2199e8: 7100 8f8b 0000                         |0150: invoke-static {}, Lde/greenrobot/event/EventBus;.getDefault:()Lde/greenrobot/event/EventBus; // method@8b8f
+2199ee: 0c0a                                   |0153: move-result-object v10
+2199f0: 6e20 938b 9a00                         |0154: invoke-virtual {v10, v9}, Lde/greenrobot/event/EventBus;.register:(Ljava/lang/Object;)V // method@8b93
+2199f6: 549a 0a66                              |0157: iget-object v10, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mPresenter:Lcom/cainiao/wireless/homepage/presenter/d; // field@660a
+2199fa: 6e20 0920 9a00                         |0159: invoke-virtual {v10, v9}, Lcom/cainiao/wireless/homepage/presenter/d;.a:(Lcom/cainiao/wireless/homepage/view/IHomepageActivityView;)V // method@2009
+219a00: 7010 722c 0900                         |015c: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.registerFragmentLifecycleListener:()V // method@2c72
+219a06: 7100 737d 0000                         |015f: invoke-static {}, Lcom/cainiao/wireless/utils/RuntimeUtils;.isLogin:()Z // method@7d73
+219a0c: 0a0a                                   |0162: move-result v10
+219a0e: 380a 2800                              |0163: if-eqz v10, 018b // +0028
+219a12: 549a 0a66                              |0165: iget-object v10, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mPresenter:Lcom/cainiao/wireless/homepage/presenter/d; // field@660a
+219a16: 6e10 1520 0a00                         |0167: invoke-virtual {v10}, Lcom/cainiao/wireless/homepage/presenter/d;.atF:()V // method@2015
+219a1c: 6a04 0200                              |016a: sput-boolean v4, Laap;.etW:Z // field@0002
+219a20: 7100 f51b 0000                         |016c: invoke-static {}, Lcom/cainiao/wireless/homepage/manager/b;.ase:()Lcom/cainiao/wireless/homepage/manager/b; // method@1bf5
+219a26: 0c0a                                   |016f: move-result-object v10
+219a28: 6e10 f11b 0a00                         |0170: invoke-virtual {v10}, Lcom/cainiao/wireless/homepage/manager/b;.asa:()V // method@1bf1
+219a2e: 7100 340a 0000                         |0173: invoke-static {}, Lcom/cainiao/commonlibrary/router/biz/CubeXFlowConfig;.queryRelationFlowConfig:()V // method@0a34
+219a34: 7100 b27d 0000                         |0176: invoke-static {}, Lcom/cainiao/wireless/utils/ThirdPackagePlatformSwitchManager;.queryKuaishouSwitch:()V // method@7db2
+219a3a: 7110 0235 0900                         |0179: invoke-static {v9}, Lcom/cainiao/wireless/homepage/view/util/i;.aa:(Landroid/app/Activity;)V // method@3502
+219a40: 7100 5b0d 0000                         |017c: invoke-static {}, Lcom/cainiao/wireless/components/hybrid/windvane/preload/PreInitMonitor;.getInstance:()Lcom/cainiao/wireless/components/hybrid/windvane/preload/PreInitMonitor; // method@0d5b
+219a46: 0c0a                                   |017f: move-result-object v10
+219a48: 6e10 5c0d 0a00                         |0180: invoke-virtual {v10}, Lcom/cainiao/wireless/components/hybrid/windvane/preload/PreInitMonitor;.homeCreate:()V // method@0d5c
+219a4e: 7010 332c 0900                         |0183: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.initShareABTest:()V // method@2c33
+219a54: 620a bd09                              |0186: sget-object v10, Lcom/cainiao/wireless/dialog/relation/RelationManualPhoneDialogManager;.dpz:Lcom/cainiao/wireless/dialog/relation/RelationManualPhoneDialogManager; // field@09bd
+219a58: 6e10 680e 0a00                         |0188: invoke-virtual {v10}, Lcom/cainiao/wireless/dialog/relation/RelationManualPhoneDialogManager;.amL:()V // method@0e68
+219a5e: 1a0a 3d55                              |018b: const-string v10, "Page_relation_virtual" // string@553d
+219a62: 1a00 dcee                              |018d: const-string v0, "relation_push_version_support" // string@eedc
+219a66: 7120 fb91 0a00                         |018f: invoke-static {v10, v0}, Lvk;.cP:(Ljava/lang/String;Ljava/lang/String;)V // method@91fb
+219a6c: 7010 322c 0900                         |0192: invoke-direct {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.homePageLoadComplate:()V // method@2c32
+219a72: 549a 0a66                              |0195: iget-object v10, v9, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mPresenter:Lcom/cainiao/wireless/homepage/presenter/d; // field@660a
+219a76: 6e10 2120 0a00                         |0197: invoke-virtual {v10}, Lcom/cainiao/wireless/homepage/presenter/d;.atR:()V // method@2021
+219a7c: 7100 578b 0000                         |019a: invoke-static {}, Lcom/taobao/orange/OrangeConfig;.getInstance:()Lcom/taobao/orange/OrangeConfig; // method@8b57
+219a82: 0c0a                                   |019d: move-result-object v10
+219a84: 1a00 02c2                              |019e: const-string v0, "home" // string@c202
+219a88: 1a01 3b1c                              |01a0: const-string v1, "840_pop_manager_strategy" // string@1c3b
+219a8c: 1b05 3d12 0100                         |01a2: const-string/jumbo v5, "{\"displayMode\":\"serial\",\"priorities\":[{\"type\":1,\"priority\":1},{\"type\":2,\"priority\":10},{\"type\":3,\"priority\":20},{\"type\":4,\"priority\":30},{\"type\":5,\"priority\":40},{\"type\":6,\"priority\":50},{\"type\":8,\"priority\":8},{\"type\":20,\"priority\":100}]}" // string@0001123d
+219a92: 6e40 558b 0a51                         |01a5: invoke-virtual {v10, v0, v1, v5}, Lcom/taobao/orange/OrangeConfig;.getConfig:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String; // method@8b55
+219a98: 0c0a                                   |01a8: move-result-object v10
+219a9a: 7110 0a0a 0a00                         |01a9: invoke-static {v10}, Lcom/cainiao/commonlibrary/popupmanager/strategy/b;.init:(Ljava/lang/String;)V // method@0a0a
+219aa0: 620a 1c01                              |01ac: sget-object v10, Lcom/cainiao/commonlibrary/utils/b;.aWg:Lcom/cainiao/commonlibrary/utils/b; // field@011c
+219aa4: 6e10 3f0a 0a00                         |01ae: invoke-virtual {v10}, Lcom/cainiao/commonlibrary/utils/b;.HI:()Z // method@0a3f
+219aaa: 0a0a                                   |01b1: move-result v10
+219aac: 390a 0d00                              |01b2: if-nez v10, 01bf // +000d
+219ab0: 7100 407c 0000                         |01b4: invoke-static {}, Lcom/cainiao/wireless/recommend/datasource/a;.aQU:()Lcom/cainiao/wireless/recommend/datasource/a; // method@7c40
+219ab6: 0c0a                                   |01b7: move-result-object v10
+219ab8: 1a00 c52e                              |01b8: const-string v0, "Home" // string@2ec5
+219abc: 1605 5802                              |01ba: const-wide/16 v5, #int 600 // #258
+219ac0: 6e40 417c 0a65                         |01bc: invoke-virtual {v10, v0, v5, v6}, Lcom/cainiao/wireless/recommend/datasource/a;.q:(Ljava/lang/String;J)V // method@7c41
+219ac6: 7100 3d03 0000                         |01bf: invoke-static {}, Landroid/os/SystemClock;.elapsedRealtime:()J // method@033d
+219acc: 0b00                                   |01c2: move-result-wide v0
+219ace: 6800 a809                              |01c3: sput-wide v0, Lcom/cainiao/wireless/d;.aYf:J // field@09a8
+219ad2: 6e10 1d2c 0900                         |01c5: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getResources:()Landroid/content/res/Resources; // method@2c1d
+219ad8: 0c0a                                   |01c8: move-result-object v10
+219ada: 6e10 8b01 0a00                         |01c9: invoke-virtual {v10}, Landroid/content/res/Resources;.getConfiguration:()Landroid/content/res/Configuration; // method@018b
+219ae0: 0c0a                                   |01cc: move-result-object v10
+219ae2: 7110 1f92 0a00                         |01cd: invoke-static {v10}, Lyd;.a:(Landroid/content/res/Configuration;)Z // method@921f
+219ae8: 0a0a                                   |01d0: move-result v10
+219aea: 380a 0300                              |01d1: if-eqz v10, 01d4 // +0003
+219aee: 1213                                   |01d3: const/4 v3, #int 1 // #1
+219af0: 7020 a12c 3900                         |01d4: invoke-direct {v9, v3}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.updateUTProperty:(I)V // method@2ca1
+219af6: 620a 6fdd                              |01d7: sget-object v10, Lcom/cainiao/wireless/packagelist/luckydraw/b;.eOL:Lcom/cainiao/wireless/packagelist/luckydraw/b; // field@dd6f
+219afa: 6e10 9869 0a00                         |01d9: invoke-virtual {v10}, Lcom/cainiao/wireless/packagelist/luckydraw/b;.init:()V // method@6998
+219b00: 620a d109                              |01dc: sget-object v10, Lcom/cainiao/wireless/g;.aZn:Lcom/cainiao/wireless/g; // field@09d1
+219b04: 6e10 e20e 0a00                         |01de: invoke-virtual {v10}, Lcom/cainiao/wireless/g;.IM:()Lcom/cainiao/wireless/cnb_interface/cnb_utils/ICNBUIHandleService; // method@0ee2
+219b0a: 0c0a                                   |01e1: move-result-object v10
+219b0c: 2200 a20a                              |01e2: new-instance v0, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity$1; // type@0aa2
+219b10: 7020 cf2b 9000                         |01e4: invoke-direct {v0, v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity$1;.<init>:(Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;)V // method@2bcf
+219b16: 1605 e803                              |01e7: const-wide/16 v5, #int 1000 // #3e8
+219b1a: 7240 460c 0a65                         |01e9: invoke-interface {v10, v0, v5, v6}, Lcom/cainiao/wireless/cnb_interface/cnb_utils/ICNBUIHandleService;.postTaskToUIThreadDelay:(Ljava/lang/Runnable;J)V // method@0c46
+219b20: 7100 865e 0000                         |01ec: invoke-static {}, Lcom/cainiao/wireless/network/c;.aIq:()Lcom/cainiao/wireless/network/c; // method@5e86
+219b26: 0c0a                                   |01ef: move-result-object v10
+219b28: 6e20 8b5e 9a00                         |01f0: invoke-virtual {v10, v9}, Lcom/cainiao/wireless/network/c;.init:(Landroid/content/Context;)V // method@5e8b
+219b2e: 7100 4425 0000                         |01f3: invoke-static {}, Lcom/cainiao/wireless/homepage/util/i;.avL:()Lcom/cainiao/wireless/homepage/util/i; // method@2544
+219b34: 0c0a                                   |01f6: move-result-object v10
+219b36: 6e10 4525 0a00                         |01f7: invoke-virtual {v10}, Lcom/cainiao/wireless/homepage/util/i;.avM:()V // method@2545
+219b3c: 6e10 1a2c 0900                         |01fa: invoke-virtual {v9}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getIntent:()Landroid/content/Intent; // method@2c1a
+219b42: 0c0a                                   |01fd: move-result-object v10
+219b44: 7030 762c a904                         |01fe: invoke-direct {v9, v10, v4}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.reportStartAppEntrance:(Landroid/content/Intent;Z)V // method@2c76
+219b4a: 0e00                                   |0201: return-void
+219b4c: 0d0a                                   |0202: move-exception v10
+219b4e: 7100 6e18 0000                         |0203: invoke-static {}, Lcom/cainiao/wireless/h;.IV:()Lcom/cainiao/wireless/h; // method@186e
+219b54: 0c00                                   |0206: move-result-object v0
+219b56: 6201 2e01                              |0207: sget-object v1, Lcom/cainiao/wireless/CNBMonitorExceptionPoint;.Launch:Lcom/cainiao/wireless/CNBMonitorExceptionPoint; // field@012e
+219b5a: 1a03 db2e                              |0209: const-string v3, "HomePageActivity onCreate error" // string@2edb
+219b5e: 6e52 6f18 10a3                         |020b: invoke-virtual {v0, v1, v3, v10, v2}, Lcom/cainiao/wireless/h;.a:(Lcom/cainiao/wireless/CNBMonitorExceptionPoint;Ljava/lang/String;Ljava/lang/Throwable;Ljava/util/Map;)V // method@186f
+219b64: 2200 3d1c                              |020e: new-instance v0, Ljava/lang/RuntimeException; // type@1c3d
+219b68: 1a01 17e1                              |0210: const-string v1, "onCreate 执行异常" // string@e117
+219b6c: 7030 858c 100a                         |0212: invoke-direct {v0, v1, v10}, Ljava/lang/RuntimeException;.<init>:(Ljava/lang/String;Ljava/lang/Throwable;)V // method@8c85
+219b72: 2700                                   |0215: throw v0
+      catches       : 3
+        0x001e - 0x0040
+          Ljava/lang/Throwable; -> 0x0202
+        0x0040 - 0x007e
+          Ljava/lang/Throwable; -> 0x007f
+        0x0080 - 0x0201
+          Ljava/lang/Throwable; -> 0x0202
+      positions     :
+        0x001b line=343
+        0x0023 line=349
+        0x0026 line=350
+        0x002d line=354
+        0x0040 line=360
+        0x004c line=362
+        0x0054 line=363
+        0x005c line=362
+        0x005f line=366
+        0x006b line=368
+        0x0073 line=369
+        0x007b line=368
+        0x0080 line=372
+        0x008b line=376
+        0x0091 line=378
+        0x0094 line=381
+        0x0097 line=383
+        0x009c line=386
+        0x009f line=387
+        0x00a6 line=388
+        0x00a9 line=392
+        0x00ac line=393
+        0x00ae line=394
+        0x00b0 line=395
+        0x00b3 line=397
+        0x00bd line=398
+        0x00c2 line=399
+        0x00c8 line=400
+        0x00cb line=401
+        0x00d2 line=404
+        0x00d9 line=406
+        0x00de line=409
+        0x00e5 line=417
+        0x00f0 line=418
+        0x00f3 line=419
+        0x00f6 line=422
+        0x00fd line=423
+        0x0104 line=424
+        0x010b line=426
+        0x010e line=427
+        0x0113 line=429
+        0x011a line=431
+        0x011d line=433
+        0x0124 line=435
+        0x0130 line=439
+        0x0136 line=440
+        0x013f line=448
+        0x0146 line=450
+        0x014d line=451
+        0x0150 line=453
+        0x0157 line=454
+        0x015c line=460
+        0x015f line=462
+        0x0165 line=464
+        0x016a line=466
+        0x016c line=467
+        0x0173 line=468
+        0x0176 line=469
+        0x0179 line=470
+        0x017c line=471
+        0x0183 line=472
+        0x0186 line=474
+        0x018f line=477
+        0x0192 line=479
+        0x0195 line=481
+        0x019a line=483
+        0x01a5 line=484
+        0x01a9 line=483
+        0x01ac line=487
+        0x01b4 line=488
+        0x01bf line=492
+        0x01c5 line=496
+        0x01d7 line=500
+        0x01dc line=502
+        0x01ec line=510
+        0x01f3 line=513
+        0x01fa line=515
+        0x0203 line=517
+        0x020e line=520
+      locals        :
+        0x0000 - 0x0216 reg=9 this Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;
+        0x0000 - 0x0216 reg=10 (null) Landroid/os/Bundle;
+
+
+    #51              : (in Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;)
+      name          : 'onResume'
+      type          : '()V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 7
+      ins           : 1
+      outs          : 5
+      insns size    : 219 16-bit code units
+21a954:                                        |[21a954] com.cainiao.wireless.homepage.view.activity.HomePageActivity.onResume:()V
+21a964: 6200 e165                              |0000: sget-object v0, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.$ipChange:Lcom/android/alibaba/ip/runtime/IpChange; // field@65e1
+21a968: 1201                                   |0002: const/4 v1, #int 0 // #0
+21a96a: 3800 1100                              |0003: if-eqz v0, 0014 // +0011
+21a96e: 2002 b302                              |0005: instance-of v2, v0, Lcom/android/alibaba/ip/runtime/IpChange; // type@02b3
+21a972: 3802 0d00                              |0007: if-eqz v2, 0014 // +000d
+21a976: 1212                                   |0009: const/4 v2, #int 1 // #1
+21a978: 2322 d91e                              |000a: new-array v2, v2, [Ljava/lang/Object; // type@1ed9
+21a97c: 4d06 0201                              |000c: aput-object v6, v2, v1
+21a980: 1a01 0c60                              |000e: const-string v1, "a5d6cd73" // string@600c
+21a984: 7230 1b09 1002                         |0010: invoke-interface {v0, v1, v2}, Lcom/android/alibaba/ip/runtime/IpChange;.ipc$dispatch:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object; // method@091b
+21a98a: 0e00                                   |0013: return-void
+21a98c: 6f10 6d55 0600                         |0014: invoke-super {v6}, Lcom/cainiao/wireless/mvp/activities/base/BaseFragmentActivity;.onResume:()V // method@556d
+21a992: 6200 c609                              |0017: sget-object v0, Lcom/cainiao/wireless/dpl/utils/e;.dtq:Lcom/cainiao/wireless/dpl/utils/e; // field@09c6
+21a996: 1c02 ad0a                              |0019: const-class v2, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity; // type@0aad
+21a99a: 6e10 228c 0200                         |001b: invoke-virtual {v2}, Ljava/lang/Class;.getName:()Ljava/lang/String; // method@8c22
+21a9a0: 0c02                                   |001e: move-result-object v2
+21a9a2: 6e30 710e 6002                         |001f: invoke-virtual {v0, v6, v2}, Lcom/cainiao/wireless/dpl/utils/e;.Z:(Landroid/content/Context;Ljava/lang/String;)V // method@0e71
+21a9a8: 7010 092c 0600                         |0022: invoke-direct {v6}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.changeTrackFragment:()V // method@2c09
+21a9ae: 7100 510d 0000                         |0025: invoke-static {}, Lcom/cainiao/wireless/components/hybrid/windvane/activity/WebViewExtraConfig;.getInstance:()Lcom/cainiao/wireless/components/hybrid/windvane/activity/WebViewExtraConfig; // method@0d51
+21a9b4: 0c00                                   |0028: move-result-object v0
+21a9b6: 6e10 520d 0000                         |0029: invoke-virtual {v0}, Lcom/cainiao/wireless/components/hybrid/windvane/activity/WebViewExtraConfig;.reset:()V // method@0d52
+21a9bc: 6300 f565                              |002c: sget-boolean v0, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.isFirstEnter:Z // field@65f5
+21a9c0: 3800 0c00                              |002e: if-eqz v0, 003a // +000c
+21a9c4: 7100 a80c 0000                         |0030: invoke-static {}, Lcom/cainiao/wireless/components/ScreenReceiver;.acW:()Lcom/cainiao/wireless/components/ScreenReceiver; // method@0ca8
+21a9ca: 0c00                                   |0033: move-result-object v0
+21a9cc: 6e10 b20c 0000                         |0034: invoke-virtual {v0}, Lcom/cainiao/wireless/components/ScreenReceiver;.refresh:()V // method@0cb2
+21a9d2: 6a01 f565                              |0037: sput-boolean v1, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.isFirstEnter:Z // field@65f5
+21a9d6: 280a                                   |0039: goto 0043 // +000a
+21a9d8: 6200 55ea                              |003a: sget-object v0, Lcom/cainiao/wireless/timeline/TimeLineReportLifecycleCallbacks;.fQf:Lcom/cainiao/wireless/timeline/TimeLineReportLifecycleCallbacks; // field@ea55
+21a9dc: 5462 fe65                              |003c: iget-object v2, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mCurrentFragment:Landroid/support/v4/app/Fragment; // field@65fe
+21a9e0: 5463 0d66                              |003e: iget-object v3, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mTabKey:Ljava/lang/String; // field@660d
+21a9e4: 6e30 897c 2003                         |0040: invoke-virtual {v0, v2, v3}, Lcom/cainiao/wireless/timeline/TimeLineReportLifecycleCallbacks;.a:(Landroid/support/v4/app/Fragment;Ljava/lang/String;)V // method@7c89
+21a9ea: 6e10 242c 0600                         |0043: invoke-virtual {v6}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.getWindow:()Landroid/view/Window; // method@2c24
+21a9f0: 0c00                                   |0046: move-result-object v0
+21a9f2: 6e10 cf05 0000                         |0047: invoke-virtual {v0}, Landroid/view/Window;.getDecorView:()Landroid/view/View; // method@05cf
+21a9f8: 0c00                                   |004a: move-result-object v0
+21a9fa: 2202 9b0a                              |004b: new-instance v2, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity$12; // type@0a9b
+21a9fe: 7020 be2b 6200                         |004d: invoke-direct {v2, v6}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity$12;.<init>:(Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;)V // method@2bbe
+21aa04: 6e20 6d05 2000                         |0050: invoke-virtual {v0, v2}, Landroid/view/View;.post:(Ljava/lang/Runnable;)Z // method@056d
+21aa0a: 5460 0a66                              |0053: iget-object v0, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mPresenter:Lcom/cainiao/wireless/homepage/presenter/d; // field@660a
+21aa0e: 6e10 2020 0000                         |0055: invoke-virtual {v0}, Lcom/cainiao/wireless/homepage/presenter/d;.atQ:()V // method@2020
+21aa14: 5560 0f66                              |0058: iget-boolean v0, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.needRequestPushMtop:Z // field@660f
+21aa18: 1202                                   |005a: const/4 v2, #int 0 // #0
+21aa1a: 3800 1700                              |005b: if-eqz v0, 0072 // +0017
+21aa1e: 2200 8a1c                              |005d: new-instance v0, Ljava/util/HashMap; // type@1c8a
+21aa22: 7010 a08d 0000                         |005f: invoke-direct {v0}, Ljava/util/HashMap;.<init>:()V // method@8da0
+21aa28: 1a03 1fca                              |0062: const-string v3, "isCold" // string@ca1f
+21aa2c: 1a04 35ad                              |0064: const-string v4, "false" // string@ad35
+21aa30: 6e30 a98d 3004                         |0066: invoke-virtual {v0, v3, v4}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+21aa36: 7100 b81b 0000                         |0069: invoke-static {}, Lcom/cainiao/wireless/homepage/manager/NotificateGuideManager;.asr:()Lcom/cainiao/wireless/homepage/manager/NotificateGuideManager; // method@1bb8
+21aa3c: 0c03                                   |006c: move-result-object v3
+21aa3e: 6204 8159                              |006d: sget-object v4, Lcom/cainiao/wireless/homepage/data/entity/NotifyGuidePageEnum;.Home:Lcom/cainiao/wireless/homepage/data/entity/NotifyGuidePageEnum; // field@5981
+21aa42: 6e52 af1b 6304                         |006f: invoke-virtual {v3, v6, v4, v0, v2}, Lcom/cainiao/wireless/homepage/manager/NotificateGuideManager;.a:(Landroid/app/Activity;Lcom/cainiao/wireless/homepage/data/entity/NotifyGuidePageEnum;Ljava/util/Map;Lcom/cainiao/wireless/homepage/manager/NotificateGuideManager$GuideRequstCallback;)V // method@1baf
+21aa48: 2200 8a1c                              |0072: new-instance v0, Ljava/util/HashMap; // type@1c8a
+21aa4c: 7010 a08d 0000                         |0074: invoke-direct {v0}, Ljava/util/HashMap;.<init>:()V // method@8da0
+21aa52: 5463 0d66                              |0077: iget-object v3, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mTabKey:Ljava/lang/String; // field@660d
+21aa56: 1b04 dc03 0100                         |0079: const-string/jumbo v4, "tabKey" // string@000103dc
+21aa5c: 6e30 a98d 4003                         |007c: invoke-virtual {v0, v4, v3}, Ljava/util/HashMap;.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; // method@8da9
+21aa62: 7100 8f8b 0000                         |007f: invoke-static {}, Lde/greenrobot/event/EventBus;.getDefault:()Lde/greenrobot/event/EventBus; // method@8b8f
+21aa68: 0c03                                   |0082: move-result-object v3
+21aa6a: 2204 b304                              |0083: new-instance v4, Lcom/cainiao/wireless/components/event/at; // type@04b3
+21aa6e: 1a05 1cc2                              |0085: const-string v5, "homeViewControllerDidAppearNotification" // string@c21c
+21aa72: 7030 020d 5400                         |0087: invoke-direct {v4, v5, v0}, Lcom/cainiao/wireless/components/event/at;.<init>:(Ljava/lang/String;Ljava/util/HashMap;)V // method@0d02
+21aa78: 6e20 918b 4300                         |008a: invoke-virtual {v3, v4}, Lde/greenrobot/event/EventBus;.post:(Ljava/lang/Object;)V // method@8b91
+21aa7e: 7010 a22c 0600                         |008d: invoke-direct {v6}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.zCacheForXiNiao:()V // method@2ca2
+21aa84: 5460 1166                              |0090: iget-object v0, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.packageImportHelper:Lcom/cainiao/wireless/packagelist/autoimport/d; // field@6611
+21aa88: 6e20 dc63 6000                         |0092: invoke-virtual {v0, v6}, Lcom/cainiao/wireless/packagelist/autoimport/d;.f:(Landroid/support/v4/app/FragmentActivity;)V // method@63dc
+21aa8e: 7100 865e 0000                         |0095: invoke-static {}, Lcom/cainiao/wireless/network/c;.aIq:()Lcom/cainiao/wireless/network/c; // method@5e86
+21aa94: 0c00                                   |0098: move-result-object v0
+21aa96: 6e10 875e 0000                         |0099: invoke-virtual {v0}, Lcom/cainiao/wireless/network/c;.aIr:()V // method@5e87
+21aa9c: 6200 17ea                              |009c: sget-object v0, Lcom/cainiao/wireless/pickup/sms/b;.fnn:Lcom/cainiao/wireless/pickup/sms/b$a; // field@ea17
+21aaa0: 6e20 0a7c 1000                         |009e: invoke-virtual {v0, v1}, Lcom/cainiao/wireless/pickup/sms/b$a;.hm:(Z)V // method@7c0a
+21aaa6: 5460 0d66                              |00a1: iget-object v0, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.mTabKey:Ljava/lang/String; // field@660d
+21aaaa: 1a03 fec2                              |00a3: const-string v3, "homepage" // string@c2fe
+21aaae: 7120 d004 0300                         |00a5: invoke-static {v3, v0}, Landroid/text/TextUtils;.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z // method@04d0
+21aab4: 0a00                                   |00a8: move-result v0
+21aab6: 3800 0800                              |00a9: if-eqz v0, 00b1 // +0008
+21aaba: 7100 3d03 0000                         |00ab: invoke-static {}, Landroid/os/SystemClock;.elapsedRealtime:()J // method@033d
+21aac0: 0b03                                   |00ae: move-result-wide v3
+21aac2: 6803 b409                              |00af: sput-wide v3, Lcom/cainiao/wireless/d;.aYu:J // field@09b4
+21aac6: 6200 c808                              |00b1: sget-object v0, Lcom/cainiao/wireless/ads/topview/AdxTopViewManager;.bka:Lcom/cainiao/wireless/ads/topview/AdxTopViewManager; // field@08c8
+21aaca: 6203 c808                              |00b3: sget-object v3, Lcom/cainiao/wireless/ads/topview/AdxTopViewManager;.bka:Lcom/cainiao/wireless/ads/topview/AdxTopViewManager; // field@08c8
+21aace: 6e10 e90a 0300                         |00b5: invoke-virtual {v3}, Lcom/cainiao/wireless/ads/topview/AdxTopViewManager;.Ma:()Ljava/lang/String; // method@0ae9
+21aad4: 0c03                                   |00b8: move-result-object v3
+21aad6: 2204 9c0a                              |00b9: new-instance v4, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity$13; // type@0a9c
+21aada: 7020 c02b 6400                         |00bb: invoke-direct {v4, v6}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity$13;.<init>:(Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;)V // method@2bc0
+21aae0: 6e40 f00a 1043                         |00be: invoke-virtual {v0, v1, v3, v4}, Lcom/cainiao/wireless/ads/topview/AdxTopViewManager;.a:(ZLjava/lang/String;Lcom/cainiao/wireless/ads/topview/AdxTopViewManager$RemoveTopViewDataCallBack;)V // method@0af0
+21aae6: 6200 79d5                              |00c1: sget-object v0, Lcom/cainiao/wireless/packagelist/ad/c;.eJJ:Lcom/cainiao/wireless/packagelist/ad/c; // field@d579
+21aaea: 2201 511c                              |00c3: new-instance v1, Ljava/lang/ref/WeakReference; // type@1c51
+21aaee: 7020 f38c 6100                         |00c5: invoke-direct {v1, v6}, Ljava/lang/ref/WeakReference;.<init>:(Ljava/lang/Object;)V // method@8cf3
+21aaf4: 6e30 2161 1002                         |00c8: invoke-virtual {v0, v1, v2}, Lcom/cainiao/wireless/packagelist/ad/c;.a:(Ljava/lang/ref/WeakReference;Lkotlin/jvm/functions/Function1;)Lcom/cainiao/wireless/packagelist/ad/d; // method@6121
+21aafa: 0c00                                   |00cb: move-result-object v0
+21aafc: 5b60 f265                              |00cc: iput-object v0, v6, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.importDeferredObserver:Lcom/cainiao/wireless/packagelist/ad/d; // field@65f2
+21ab00: 6300 f565                              |00ce: sget-boolean v0, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.isFirstEnter:Z // field@65f5
+21ab04: 7020 9e2c 0600                         |00d0: invoke-direct {v6, v0}, Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;.tryShowImportAnchorPop:(Z)V // method@2c9e
+21ab0a: 7100 827c 0000                         |00d3: invoke-static {}, Lcom/cainiao/wireless/thirdroute/a;.aWR:()Lcom/cainiao/wireless/thirdroute/a; // method@7c82
+21ab10: 0c00                                   |00d6: move-result-object v0
+21ab12: 6e10 817c 0000                         |00d7: invoke-virtual {v0}, Lcom/cainiao/wireless/thirdroute/a;.aWO:()V // method@7c81
+21ab18: 0e00                                   |00da: return-void
+      catches       : (none)
+      positions     :
+        0x0014 line=701
+        0x0017 line=702
+        0x0022 line=703
+        0x0025 line=705
+        0x002c line=706
+        0x0030 line=707
+        0x0037 line=708
+        0x003a line=710
+        0x0043 line=712
+        0x0053 line=724
+        0x0058 line=725
+        0x005d line=727
+        0x0066 line=728
+        0x0069 line=729
+        0x0072 line=733
+        0x0077 line=734
+        0x007f line=735
+        0x008d line=737
+        0x0090 line=739
+        0x0095 line=740
+        0x009c line=742
+        0x00a1 line=743
+        0x00ab line=744
+        0x00b1 line=748
+        0x00b5 line=750
+        0x00be line=748
+        0x00c1 line=760
+        0x00ce line=763
+        0x00d3 line=765
+      locals        :
+        0x0000 - 0x00db reg=6 this Lcom/cainiao/wireless/homepage/view/activity/HomePageActivity;
+
